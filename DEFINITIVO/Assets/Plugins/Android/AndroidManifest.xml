@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.seupacote.seuapp">
+	<!-- Altere para o seu pacote real -->
+
+	<!-- Permissões necessárias -->
+	<uses-permission android:name="android.permission.CAMERA" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+	<!-- Para acessar imagens e vídeos no Android 13+ -->
+	<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" tools:targetApi="33" />
+	<uses-permission android:name="android.permission.READ_MEDIA_VIDEO" tools:targetApi="33" />
+
+	<!-- Para Android abaixo da API 33 -->
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+
+	<application>
+		<!-- Atividade padrão do Unity (caso esteja usando a UnityPlayerActivity) -->
+		<activity android:name="com.unity3d.player.UnityPlayerActivity"
+                  android:theme="@style/UnityThemeSelector"
+                  android:launchMode="singleTask"
+                  android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+		</activity>
+
+		<!-- GameActivity (caso use GameActivity no lugar da padrão do Unity) -->
+		<activity android:name="com.unity3d.player.UnityPlayerGameActivity"
+                  android:theme="@style/BaseUnityGameActivityTheme"
+                  android:launchMode="singleTask"
+                  android:configChanges="keyboard|keyboardHidden|navigation|orientation|screenSize">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+			<meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+			<meta-data android:name="android.app.lib_name" android:value="game" />
+		</activity>
+	</application>
+</manifest>

@@ -1,0 +1,1 @@
+C:\Users\matheusgamba\GITHUB\BASE-GEOSPACIAL\DEFINITIVO\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\1x4p4l1u\obj\arm64-v8a
