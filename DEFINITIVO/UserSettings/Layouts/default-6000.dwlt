@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 117
+  controlID: 119
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 507
+    y: 562
     width: 425
     height: 244
   m_SerializedDataModeController:
@@ -431,7 +431,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 24
+    y: 79
     width: 425
     height: 457
   m_SerializedDataModeController:
@@ -988,9 +988,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 278.41013, y: 732.85956, z: -14.503997}
+    m_Target: {x: 396.17065, y: 802.9309, z: -12.780872}
     speed: 2
-    m_Value: {x: 278.41013, y: 732.85956, z: -14.503997}
+    m_Value: {x: 418.42166, y: 786.55756, z: -12.186113}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1040,9 +1040,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1553.4778
+    m_Target: 1381.1641
     speed: 2
-    m_Value: 1553.4778
+    m_Value: 1321.6881
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1205,8 +1205,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Hierarchy\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 24
+    x: 426
+    y: 79
     width: 625
     height: 450
   m_SerializedDataModeController:
@@ -1225,7 +1225,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: 2441ffff2c41ffff7a41ffff8441ffffc041ffffc841ffff0242ffff0c42ffffc655ffff5657fffffa59ffffd069ffff606bffff046effff9679ffff267bffffbc7dffff7491ffff0493ffffa895ffff3aa0ffffcaa1ffff6ea4ffff16b5ffffa6b6ffff6cb9ffffaec8ffffb6c8fffff2c8fffffcc8ffff3cc9ffff44c9ffff2ccaffff36caffff1ed3ffff28d3ffff1cfbffff8ea60000caa60000d6a7000032a8000034c50000bec6000026c7000072d20000e6d30000bade00002adf00007edf000094df0000e0df000070e0000084e00000a2e00000c4e00000e0e0000066e1000008ef0000ccef0000e2ef00002ef0000012f100002ef1000056f1000012fc00001cfc00002afc0000ccfc0000eefc0000fafc000004fd000050fd0000bcfd000014fe000034fe000050fe000070fe000078fe0000d6fe0000340a01004a0a01005a0b01001c0c0100
+      m_ExpandedIDs: aeeeffff3ef0ffff04f3ffff1cfbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1424,8 +1424,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Project\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1
-    y: 500
+    x: 426
+    y: 555
     width: 625
     height: 251
   m_SerializedDataModeController:
@@ -1440,7 +1440,7 @@ MonoBehaviour:
     m_ContainerData: []
     m_OverlaysVisible: 1
   m_SearchFilter:
-    m_NameFilter: androi
+    m_NameFilter: 
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -1450,26 +1450,26 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/PermissionScripts
+    - Assets
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
-    m_OriginalText: androi
+    m_OriginalText: 
     m_ImportLogFlags: 0
     m_FilterByTypeIntersection: 0
   m_ViewMode: 1
   m_StartGridSize: 67
   m_LastFolders:
-  - Assets/PermissionScripts
+  - Assets
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\matheusgamba\GITHUB\DEFINITIVO-AVAN-ADO\DEFINITIVO
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 77}
-    m_SelectedIDs: e2ab0000
-    m_LastClickedID: 44002
-    m_ExpandedIDs: 0000000086ab0000
+    m_SelectedIDs: 86ab0000
+    m_LastClickedID: 43910
+    m_ExpandedIDs: 0000000086ab000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1526,7 +1526,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 1
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: f45900001c5e0000385c00008e600000408f000000a80000faa70000a0a5000064ba000000000000beaa00003eac0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -1552,7 +1552,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 105}
     m_GridSize: 67
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 146
@@ -1577,8 +1577,8 @@ MonoBehaviour:
     m_TextWithWhitespace: "Inspector\u200B"
   m_Pos:
     serializedVersion: 2
-    x: 1054
-    y: 24
+    x: 1053
+    y: 79
     width: 546
     height: 727
   m_SerializedDataModeController:
