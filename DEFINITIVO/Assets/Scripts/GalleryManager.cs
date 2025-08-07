@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
 
 public class GalleryManager : MonoBehaviour
 {
@@ -22,33 +23,39 @@ public class GalleryManager : MonoBehaviour
     [Header("Painel da Galeria")]
     public GameObject galeriaPainel;
 
-    // Armazena as imagens salvas por área
+    // Armazena as imagens salvas em tempo de execução
     private Dictionary<string, Texture2D> savedImages = new Dictionary<string, Texture2D>();
 
     private void Start()
     {
-        AtualizarMiniaturas(); // Preenche os slots ao iniciar (caso tenha algo salvo)
+        AtualizarMiniaturas(); // Carrega imagens do disco e atualiza slots
     }
 
     public void SaveImage(string areaName, Texture2D image)
     {
+        savedImages[areaName] = image;
+
+        // Atualiza miniatura
         foreach (var slot in slots)
         {
             if (slot.areaName == areaName)
             {
                 slot.slotImage.texture = image;
-                savedImages[areaName] = image;
 
-                // Remove todos os ouvintes antigos e adiciona o correto
                 Button slotButton = slot.slotImage.GetComponent<Button>();
                 if (slotButton != null)
                 {
                     slotButton.onClick.RemoveAllListeners();
                     slotButton.onClick.AddListener(() => OpenFullScreen(areaName));
                 }
-                return;
+                break;
             }
         }
+
+        // SALVAR IMAGEM EM DISCO
+        string path = GetImageFilePath(areaName);
+        byte[] bytes = image.EncodeToPNG();
+        File.WriteAllBytes(path, bytes);
     }
 
     public void OpenFullScreen(string areaName)
@@ -80,16 +87,23 @@ public class GalleryManager : MonoBehaviour
     {
         foreach (var slot in slots)
         {
-            if (savedImages.ContainsKey(slot.areaName))
+            string path = GetImageFilePath(slot.areaName);
+
+            if (File.Exists(path))
             {
-                slot.slotImage.texture = savedImages[slot.areaName];
+                byte[] bytes = File.ReadAllBytes(path);
+                Texture2D tex = new Texture2D(2, 2);
+                tex.LoadImage(bytes);
+
+                slot.slotImage.texture = tex;
+                savedImages[slot.areaName] = tex;
             }
             else
             {
                 slot.slotImage.texture = slot.defaultTexture;
             }
 
-            // Garante que o botão funcione
+            // Garante que botão funcione
             Button slotButton = slot.slotImage.GetComponent<Button>();
             if (slotButton != null)
             {
@@ -98,5 +112,10 @@ public class GalleryManager : MonoBehaviour
                 slotButton.onClick.AddListener(() => OpenFullScreen(areaName));
             }
         }
+    }
+
+    private string GetImageFilePath(string areaName)
+    {
+        return Path.Combine(Application.persistentDataPath, $"{areaName}_photo.png");
     }
 }
