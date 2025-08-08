@@ -52,7 +52,7 @@ public class GalleryManager : MonoBehaviour
             }
         }
 
-        // SALVAR IMAGEM EM DISCO
+        // SALVAR IMAGEM EM DISCO (APENAS NO CACHE INTERNO)
         string path = GetImageFilePath(areaName);
         byte[] bytes = image.EncodeToPNG();
         File.WriteAllBytes(path, bytes);
@@ -114,8 +114,9 @@ public class GalleryManager : MonoBehaviour
         }
     }
 
+    // Agora salva no CACHE INTERNO (limpado ao desinstalar)
     private string GetImageFilePath(string areaName)
     {
-        return Path.Combine(Application.persistentDataPath, $"{areaName}_photo.png");
+        return Path.Combine(Application.temporaryCachePath, $"{areaName}_photo.png");
     }
 }
