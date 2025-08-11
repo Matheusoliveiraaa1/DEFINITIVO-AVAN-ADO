@@ -4423,10 +4423,6 @@ MonoBehaviour:
   detectionRadius: 15
   notificationDuration: 3
   areaPoints:
-  - latitude: -26.90561
-    longitude: -49.07916
-    message: "Voc\xEA chegou \xE0 \xE1rea 1!"
-    areaName: Area1
   - latitude: -26.92115
     longitude: -49.072
     message: "Voc\xEA chegou ao curso da \xE1gua!"
@@ -4451,6 +4447,10 @@ MonoBehaviour:
     longitude: -49.07984
     message: "Voc\xEA est\xE1 na \xE1rea teste"
     areaName: AreaTeste
+  - latitude: -26.90561
+    longitude: -49.07916
+    message: "Voc\xEA chegou \xE0 \xC1rea 1!"
+    areaName: Area1
   stickerPoints:
   - latitude: -26.90557
     longitude: -49.07982
@@ -4619,8 +4619,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1080, y: 1440}
+  m_AnchoredPosition: {x: 0, y: 136}
+  m_SizeDelta: {x: 900, y: 1200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1183170221
 GameObject:
@@ -7275,10 +7275,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 2037489354}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 414, y: 78}
-  m_SizeDelta: {x: -738.6077, y: 119.9234}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 96}
+  m_SizeDelta: {x: 161.39227, y: 119.9234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1656883259
 GameObject:
@@ -8034,8 +8034,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 98, y: -331}
-  m_SizeDelta: {x: 148.658, y: 120.3233}
+  m_AnchoredPosition: {x: 98.04462, y: -225.04468}
+  m_SizeDelta: {x: 130.7472, y: 102.4125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1771650030
 MonoBehaviour:
@@ -9266,7 +9266,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 59.5, y: 36.5}
+  m_AnchoredPosition: {x: 59.5, y: 86.5}
   m_SizeDelta: {x: 900, y: 1200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2037619524

@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using System.Linq;
+using System;
+using UnityEngine.Android;
 
 public class LocationServiceManager : MonoBehaviour
 {
@@ -26,6 +28,9 @@ public class LocationServiceManager : MonoBehaviour
 
     [Header("Inventory")]
     public InventoryManager inventoryManager;
+
+    // Evento público que notifica quando o conjunto de stickers mudou
+    public event Action OnCollectedStickersChanged;
 
     [System.Serializable]
     public class AreaPoint
@@ -71,17 +76,43 @@ public class LocationServiceManager : MonoBehaviour
         }
     }
 
+    [Serializable]
+    public class StickerSaveData
+    {
+        public List<AreaStickerData> areas = new List<AreaStickerData>();
+    }
+
+    [Serializable]
+    public class AreaStickerData
+    {
+        public string areaName;
+        public List<int> stickerIndices = new List<int>();
+    }
+
+    // CARREGA o estado antes de qualquer Start() - evita problema de ordem de execução.
+    private void Awake()
+    {
+        LoadCollectedStickers();
+    }
+
     private void Start()
     {
         InitializePoints();
         cameraButton.SetActive(false);
         if (stickerNotificationImage != null)
             stickerNotificationImage.gameObject.SetActive(false);
+
+        // Se o InventoryManager estiver referenciado via inspector, força uma atualização da UI (Start rodará depois do Awake).
+        inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
+        inventoryManager?.UpdateInventoryUI();
+
         StartCoroutine(StartLocationService());
     }
 
     private void InitializePoints()
     {
+        allPoints.Clear();
+
         foreach (var ap in areaPoints)
         {
             allPoints.Add(new PointOfInterest(
@@ -97,6 +128,13 @@ public class LocationServiceManager : MonoBehaviour
 
     private IEnumerator StartLocationService()
     {
+        // Adicione esta verificação inicial
+        while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation) ||
+               !Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
+        {
+            yield return new WaitForSeconds(0.5f);
+        }
+
         if (!Input.location.isEnabledByUser)
         {
             messageText.text = "Localização desativada.";
@@ -169,7 +207,6 @@ public class LocationServiceManager : MonoBehaviour
             }
             else
             {
-                // Reseta o alreadyTriggered apenas para AreaPoints quando sai do raio
                 if (!poi.isStickerPoint)
                 {
                     poi.alreadyTriggered = false;
@@ -207,7 +244,6 @@ public class LocationServiceManager : MonoBehaviour
         }
         else
         {
-            // Apenas registra novamente sem mostrar notificação
             RegisterStickerCollection(poi);
         }
     }
@@ -225,7 +261,7 @@ public class LocationServiceManager : MonoBehaviour
             {
                 stickerNotificationImage.sprite = stickerSprite;
                 stickerNotificationImage.gameObject.SetActive(true);
-                StartCoroutine(ScaleAnimation(true)); // Animação de entrada
+                StartCoroutine(ScaleAnimation(true));
             }
         }
 
@@ -238,6 +274,8 @@ public class LocationServiceManager : MonoBehaviour
         float endScale = isEntering ? 1f : 0.1f;
         float duration = 0.5f;
         float elapsedTime = 0f;
+
+        if (stickerNotificationImage == null) yield break;
 
         stickerNotificationImage.transform.localScale = Vector3.one * startScale;
 
@@ -260,7 +298,7 @@ public class LocationServiceManager : MonoBehaviour
 
         if (stickerNotificationImage != null && stickerNotificationImage.gameObject.activeSelf)
         {
-            yield return StartCoroutine(ScaleAnimation(false)); // Animação de saída
+            yield return StartCoroutine(ScaleAnimation(false));
             stickerNotificationImage.gameObject.SetActive(false);
         }
     }
@@ -286,6 +324,11 @@ public class LocationServiceManager : MonoBehaviour
         if (!collectedStickers[poi.areaName].Contains(poi.stickerIndex))
         {
             collectedStickers[poi.areaName].Add(poi.stickerIndex);
+
+            SaveCollectedStickers(); // salva imediatamente
+            OnCollectedStickersChanged?.Invoke(); // notifica listeners (InventoryManager, por exemplo)
+
+            // atualiza UI se referência estiver setada
             if (inventoryManager != null)
             {
                 inventoryManager.UpdateInventoryUI();
@@ -331,6 +374,57 @@ public class LocationServiceManager : MonoBehaviour
             return count;
         }
         return 0;
+    }
+
+    private void SaveCollectedStickers()
+    {
+        StickerSaveData data = new StickerSaveData();
+        foreach (var kvp in collectedStickers)
+        {
+            data.areas.Add(new AreaStickerData
+            {
+                areaName = kvp.Key,
+                stickerIndices = kvp.Value
+            });
+        }
+
+        string json = JsonUtility.ToJson(data);
+        PlayerPrefs.SetString("CollectedStickers", json);
+        PlayerPrefs.Save();
+        //Debug.Log("[LocationServiceManager] Saved stickers: " + json);
+    }
+
+    private void LoadCollectedStickers()
+    {
+        collectedStickers.Clear();
+
+        if (PlayerPrefs.HasKey("CollectedStickers"))
+        {
+            string json = PlayerPrefs.GetString("CollectedStickers");
+            if (!string.IsNullOrEmpty(json))
+            {
+                StickerSaveData data = JsonUtility.FromJson<StickerSaveData>(json);
+
+                if (data != null)
+                {
+                    foreach (var area in data.areas)
+                    {
+                        collectedStickers[area.areaName] = new List<int>(area.stickerIndices);
+                    }
+                }
+            }
+            //Debug.Log("[LocationServiceManager] Loaded stickers: " + json);
+        }
+    }
+
+    private void OnApplicationPause(bool pause)
+    {
+        if (pause) SaveCollectedStickers();
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveCollectedStickers();
     }
 
     private void OnDisable()

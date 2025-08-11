@@ -224,23 +224,38 @@ public class NativeCameraExample : MonoBehaviour
 
     private IEnumerator CaptureAndSave()
     {
+        // Espera até o fim do frame para garantir que tudo foi renderizado
         yield return new WaitForEndOfFrame();
 
-        Vector2 size = photoAreaToCapture.rect.size;
-        Vector2 screenPos = RectTransformUtility.WorldToScreenPoint(null, photoAreaToCapture.position);
-        Vector2 bottomLeft = screenPos - (size * 0.5f);
+        // Pega os cantos do RectTransform em coordenadas de mundo
+        Vector3[] corners = new Vector3[4];
+        photoAreaToCapture.GetWorldCorners(corners);
 
-        Texture2D screenshot = new Texture2D((int)size.x, (int)size.y, TextureFormat.RGB24, false);
-        screenshot.ReadPixels(new Rect(bottomLeft.x, bottomLeft.y, size.x, size.y), 0, 0);
+        // Converte para coordenadas de tela (pixels)
+        Vector2 bottomLeft = RectTransformUtility.WorldToScreenPoint(null, corners[0]); // canto inferior esquerdo
+        Vector2 topRight = RectTransformUtility.WorldToScreenPoint(null, corners[2]);   // canto superior direito
+
+        // Calcula largura e altura em pixels
+        int width = Mathf.RoundToInt(topRight.x - bottomLeft.x);
+        int height = Mathf.RoundToInt(topRight.y - bottomLeft.y);
+
+        // Cria textura do tamanho exato
+        Texture2D screenshot = new Texture2D(width, height, TextureFormat.RGB24, false);
+
+        // Captura exatamente a área desejada
+        screenshot.ReadPixels(new Rect(bottomLeft.x, bottomLeft.y, width, height), 0, 0);
         screenshot.Apply();
 
+        // Salva na galeria interna
         if (!string.IsNullOrEmpty(currentArea))
         {
             galleryManager.SaveImage(currentArea, screenshot);
         }
 
-        ClosePhotoView(); // limpa tudo
+        // Fecha a visualização da foto
+        ClosePhotoView();
     }
+
 
     public void ResetarProgresso()
     {
