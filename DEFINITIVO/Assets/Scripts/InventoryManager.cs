@@ -18,10 +18,35 @@ public class InventoryManager : MonoBehaviour
 
     private LocationServiceManager locationManager;
 
-    private void Start()
+    private void Awake()
     {
         locationManager = FindObjectOfType<LocationServiceManager>();
+    }
+
+    private void OnEnable()
+    {
+        // (re)obtem e subscreve o evento para atualizações em runtime
+        locationManager = locationManager ?? FindObjectOfType<LocationServiceManager>();
+        if (locationManager != null)
+        {
+            locationManager.OnCollectedStickersChanged += UpdateInventoryUI;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (locationManager != null)
+        {
+            locationManager.OnCollectedStickersChanged -= UpdateInventoryUI;
+        }
+    }
+
+    private void Start()
+    {
         inventoryPanel.SetActive(false);
+
+        // Atualiza UI ao iniciar (Load feito no Awake do LocationServiceManager)
+        UpdateInventoryUI();
     }
 
     public void ToggleInventory()
@@ -35,6 +60,9 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdateInventoryUI()
     {
+        // Garante referência caso não tenha sido setada por Awake
+        locationManager = locationManager ?? FindObjectOfType<LocationServiceManager>();
+
         UpdateAreaProgress("Area1", 0, area1Icons);
         UpdateAreaProgress("CursoDagua", 1, cursoDaguaIcons);
         UpdateAreaProgress("Subosque", 2, subosqueIcons);
@@ -49,12 +77,13 @@ public class InventoryManager : MonoBehaviour
 
         int collectedCount = locationManager.GetCollectedStickerCount(areaName);
 
-        // Atualiza ícones
+        // Atualiza ícones: mapeando índices 3..5 para posições 0..2 no array de icons
         for (int i = 3; i <= 5; i++)
         {
             if (stickerIcons != null && (i - 3) < stickerIcons.Length)
             {
-                stickerIcons[i - 3].gameObject.SetActive(locationManager.IsStickerCollected(areaName, i));
+                bool active = locationManager.IsStickerCollected(areaName, i);
+                stickerIcons[i - 3].gameObject.SetActive(active);
             }
         }
 

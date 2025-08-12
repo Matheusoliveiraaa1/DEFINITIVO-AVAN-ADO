@@ -4420,7 +4420,7 @@ MonoBehaviour:
   cameraButton: {fileID: 1464722304}
   stickerNotificationImage: {fileID: 1323261248}
   areaTeste: 0
-  detectionRadius: 15
+  detectionRadius: 700
   notificationDuration: 3
   areaPoints:
   - latitude: -26.92115
@@ -4447,10 +4447,6 @@ MonoBehaviour:
     longitude: -49.07984
     message: "Voc\xEA est\xE1 na \xE1rea teste"
     areaName: AreaTeste
-  - latitude: -26.90561
-    longitude: -49.07916
-    message: "Voc\xEA chegou \xE0 \xC1rea 1!"
-    areaName: Area1
   stickerPoints:
   - latitude: -26.90557
     longitude: -49.07982
@@ -5551,6 +5547,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1359713790}
   m_CullTransparentMesh: 1
+--- !u!1 &1360917483
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1360917484}
+  m_Layer: 5
+  m_Name: TextosAreas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1360917484
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360917483}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1487988883}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1390981238
 GameObject:
   m_ObjectHideFlags: 0
@@ -6374,7 +6405,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 59.5, y: 361}
+  m_AnchoredPosition: {x: 59.5, y: 327.66}
   m_SizeDelta: {x: 385.3264, y: 281.6794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1479682029
@@ -6494,6 +6525,7 @@ RectTransform:
   - {fileID: 90454787}
   - {fileID: 1841168496}
   - {fileID: 629285382}
+  - {fileID: 1360917484}
   m_Father: {fileID: 822219749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -9014,10 +9046,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minZoom: 0.5
   maxZoom: 2
-  zoomLerpSpeed: 5
-  zoomSensitivity: 0.001
-  recenterSpeed: 5
-  edgePadding: 50
+  zoomSmoothness: 5
+  moveSmoothness: 8
+  rotationSmoothness: 10
+  minMoveThreshold: 5
+  mapRectTransform: {fileID: 1964089031}
+  containerRectTransform: {fileID: 556649114}
 --- !u!1 &1986915528
 GameObject:
   m_ObjectHideFlags: 0
