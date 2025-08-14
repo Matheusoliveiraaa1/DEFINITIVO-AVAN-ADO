@@ -120,7 +120,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 119
+  controlID: 115
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -988,9 +988,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 392.95798, y: 684.29, z: -14.940295}
+    m_Target: {x: 612.47064, y: 816.9712, z: -14.270319}
     speed: 2
-    m_Value: {x: 392.95798, y: 684.29, z: -14.940295}
+    m_Value: {x: 612.47064, y: 816.9712, z: -14.270319}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -1040,9 +1040,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 1597.1063
+    m_Target: 1530.109
     speed: 2
-    m_Value: 1597.1063
+    m_Value: 1530.109
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -1183,7 +1183,7 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_LockTracker:
     m_IsLocked: 0
-  m_LastSelectedObjectID: -36826
+  m_LastSelectedObjectID: 96948
 --- !u!114 &17
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1316,7 +1316,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: cad80000
     m_LastClickedID: 55498
-    m_ExpandedIDs: 000000007eab0000
+    m_ExpandedIDs: 0000000082ab0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1345,7 +1345,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 122}
     m_SelectedIDs: 0a8e0000
     m_LastClickedID: 36362
-    m_ExpandedIDs: 000000007eab0000
+    m_ExpandedIDs: 0000000082ab0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1440,7 +1440,7 @@ MonoBehaviour:
     m_ContainerData: []
     m_OverlaysVisible: 1
   m_SearchFilter:
-    m_NameFilter: perm
+    m_NameFilter: 
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -1450,26 +1450,26 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/TutorialInfo/Scripts
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
-    m_OriginalText: perm
+    m_OriginalText: 
     m_ImportLogFlags: 0
     m_FilterByTypeIntersection: 0
   m_ViewMode: 1
   m_StartGridSize: 67
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/TutorialInfo/Scripts
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\matheusgamba\GITHUB\DEFINITIVO-AVAN-ADO\DEFINITIVO
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 77}
-    m_SelectedIDs: ecab0000
-    m_LastClickedID: 44012
-    m_ExpandedIDs: 000000007eab0000
+    m_SelectedIDs: 2eac0000
+    m_LastClickedID: 44078
+    m_ExpandedIDs: 0000000082ab0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1498,7 +1498,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000007eab0000
+    m_ExpandedIDs: 0000000082ab0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1526,7 +1526,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: f45900001c5e0000385c00008e600000408f000000a80000faa70000a0a5000064ba000000000000beaa00003eac0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

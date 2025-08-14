@@ -12,7 +12,9 @@ public class NativeCameraExample : MonoBehaviour
     public string currentArea;
 
     [Header("Sticker Settings")]
-    public Transform stickerMenu;
+    public Transform stickerMenuContent; // Content do ScrollView
+    public GameObject stickerMenuScrollView; // Objeto Scroll View inteiro
+
     public GameObject[] area1Stickers;
     public GameObject[] cursoDaguaStickers;
     public GameObject[] subosqueStickers;
@@ -23,8 +25,8 @@ public class NativeCameraExample : MonoBehaviour
 
     [Header("Dependencies")]
     public LocationServiceManager locationManager;
-    public GalleryManager galleryManager; // NOVO: referencie no Inspector
-    public RectTransform photoAreaToCapture; // NOVO: container da RawImage + stickers
+    public GalleryManager galleryManager;
+    public RectTransform photoAreaToCapture;
     public GameObject okButton;
 
     [Header("Progresso")]
@@ -35,8 +37,8 @@ public class NativeCameraExample : MonoBehaviour
 
     private void Start()
     {
-        if (stickerMenu != null)
-            stickerMenu.gameObject.SetActive(false);
+        if (stickerMenuScrollView != null)
+            stickerMenuScrollView.SetActive(false);
 
         if (closeButton != null)
             closeButton.SetActive(false);
@@ -95,7 +97,7 @@ public class NativeCameraExample : MonoBehaviour
                     imageDisplay.gameObject.SetActive(true);
                     ShowStickers();
                     closeButton?.SetActive(true);
-                    okButton?.SetActive(true); // Mostra o botão OK
+                    okButton?.SetActive(true);
                 }
             }
         }, maxSize: 1024);
@@ -103,12 +105,13 @@ public class NativeCameraExample : MonoBehaviour
 
     private void ShowStickers()
     {
-        if (stickerMenu == null) return;
+        if (stickerMenuContent == null || stickerMenuScrollView == null) return;
 
-        foreach (Transform child in stickerMenu)
+        foreach (Transform child in stickerMenuContent)
             Destroy(child.gameObject);
 
-        stickerMenu.gameObject.SetActive(true);
+        stickerMenuScrollView.SetActive(true);
+
         GameObject[] stickersToShow = GetStickersForCurrentArea();
 
         if (stickersToShow == null || stickersToShow.Length == 0)
@@ -121,7 +124,7 @@ public class NativeCameraExample : MonoBehaviour
         {
             if (stickerPrefab != null)
             {
-                var sticker = Instantiate(stickerPrefab, stickerMenu);
+                var sticker = Instantiate(stickerPrefab, stickerMenuContent);
                 var controller = sticker.GetComponent<StickerController>() ?? sticker.AddComponent<StickerController>();
                 controller.SetRawImageRect(imageDisplay.rectTransform);
             }
@@ -140,27 +143,13 @@ public class NativeCameraExample : MonoBehaviour
 
         switch (currentArea)
         {
-            case "Area1":
-                AddStickersForArea("Area1", area1Stickers, stickers);
-                break;
-            case "CursoDagua":
-                AddStickersForArea("CursoDagua", cursoDaguaStickers, stickers);
-                break;
-            case "Subosque":
-                AddStickersForArea("Subosque", subosqueStickers, stickers);
-                break;
-            case "Dossel":
-                AddStickersForArea("Dossel", dosselStickers, stickers);
-                break;
-            case "Epifitas":
-                AddStickersForArea("Epifitas", epifitasStickers, stickers);
-                break;
-            case "Serrapilheira":
-                AddStickersForArea("Serrapilheira", serrapilheiraStickers, stickers);
-                break;
-            case "AreaTeste":
-                AddStickersForArea("AreaTeste", areaTesteStickers, stickers);
-                break;
+            case "Area1": AddStickersForArea("Area1", area1Stickers, stickers); break;
+            case "CursoDagua": AddStickersForArea("CursoDagua", cursoDaguaStickers, stickers); break;
+            case "Subosque": AddStickersForArea("Subosque", subosqueStickers, stickers); break;
+            case "Dossel": AddStickersForArea("Dossel", dosselStickers, stickers); break;
+            case "Epifitas": AddStickersForArea("Epifitas", epifitasStickers, stickers); break;
+            case "Serrapilheira": AddStickersForArea("Serrapilheira", serrapilheiraStickers, stickers); break;
+            case "AreaTeste": AddStickersForArea("AreaTeste", areaTesteStickers, stickers); break;
             default:
                 Debug.LogWarning($"Área desconhecida: {currentArea}");
                 break;
@@ -207,16 +196,24 @@ public class NativeCameraExample : MonoBehaviour
         closeButton?.SetActive(false);
         okButton?.SetActive(false);
 
-        if (stickerMenu != null)
+        // Remove todos os stickers ativos na cena, mesmo os que foram arrastados
+        foreach (var sticker in FindObjectsOfType<StickerController>())
         {
-            foreach (Transform child in stickerMenu)
-                Destroy(child.gameObject);
-
-            stickerMenu.gameObject.SetActive(false);
+            Destroy(sticker.gameObject);
         }
+
+        // Limpa o conteúdo do menu (caso ainda tenha filhos)
+        if (stickerMenuContent != null)
+        {
+            foreach (Transform child in stickerMenuContent)
+                Destroy(child.gameObject);
+        }
+
+        if (stickerMenuScrollView != null)
+            stickerMenuScrollView.SetActive(false);
     }
 
-    // NOVO: chamado ao clicar em OK
+
     public void ConfirmarFotoDecorada()
     {
         StartCoroutine(CaptureAndSave());
@@ -224,38 +221,28 @@ public class NativeCameraExample : MonoBehaviour
 
     private IEnumerator CaptureAndSave()
     {
-        // Espera até o fim do frame para garantir que tudo foi renderizado
         yield return new WaitForEndOfFrame();
 
-        // Pega os cantos do RectTransform em coordenadas de mundo
         Vector3[] corners = new Vector3[4];
         photoAreaToCapture.GetWorldCorners(corners);
 
-        // Converte para coordenadas de tela (pixels)
-        Vector2 bottomLeft = RectTransformUtility.WorldToScreenPoint(null, corners[0]); // canto inferior esquerdo
-        Vector2 topRight = RectTransformUtility.WorldToScreenPoint(null, corners[2]);   // canto superior direito
+        Vector2 bottomLeft = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
+        Vector2 topRight = RectTransformUtility.WorldToScreenPoint(null, corners[2]);
 
-        // Calcula largura e altura em pixels
         int width = Mathf.RoundToInt(topRight.x - bottomLeft.x);
         int height = Mathf.RoundToInt(topRight.y - bottomLeft.y);
 
-        // Cria textura do tamanho exato
         Texture2D screenshot = new Texture2D(width, height, TextureFormat.RGB24, false);
-
-        // Captura exatamente a área desejada
         screenshot.ReadPixels(new Rect(bottomLeft.x, bottomLeft.y, width, height), 0, 0);
         screenshot.Apply();
 
-        // Salva na galeria interna
         if (!string.IsNullOrEmpty(currentArea))
         {
             galleryManager.SaveImage(currentArea, screenshot);
         }
 
-        // Fecha a visualização da foto
         ClosePhotoView();
     }
-
 
     public void ResetarProgresso()
     {

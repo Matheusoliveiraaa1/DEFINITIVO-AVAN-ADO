@@ -11,10 +11,14 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private Vector2 initialPosition;
     private bool positionInitialized = false;
 
+    // Controle de hierarquia
+    private Transform originalParent;
+    private Transform dragParent; // Parent temporário para aparecer sobre a RawImage
+
     // Variáveis para pinch-to-zoom
     private float initialDistance;
     private Vector3 initialScale;
-    private static bool isAnyPinching = false; // Agora estático para controlar todos os stickers
+    private static bool isAnyPinching = false;
     private const float MIN_SCALE = 0.5f;
     private const float MAX_SCALE = 3f;
     private bool isBeingDragged = false;
@@ -23,7 +27,7 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
-        initialScale = rectTransform.localScale; // Guarda a escala inicial
+        initialScale = rectTransform.localScale;
         StartCoroutine(SetInitialPositionNextFrame());
     }
 
@@ -37,13 +41,17 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void SetRawImageRect(RectTransform rawImageRectTransform)
     {
         rawImageRect = rawImageRectTransform;
+        dragParent = rawImageRectTransform.parent; // Usamos o mesmo parent da RawImage
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         isBeingDragged = true;
 
-        // Se for multi-toque, começa o pinch-to-zoom
+        // Guarda parent original e move para o parent da RawImage
+        originalParent = transform.parent;
+        transform.SetParent(dragParent, true);
+
         if (Input.touchCount >= 2 && !isAnyPinching)
         {
             StartPinch();
@@ -53,10 +61,8 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
     public void OnDrag(PointerEventData eventData)
     {
-        // Se estiver fazendo pinch, não arrasta
         if (isAnyPinching) return;
 
-        // Arrasta normalmente
         rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
     }
 
@@ -64,7 +70,6 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         isBeingDragged = false;
 
-        // Só libera o pinch se este era o sticker sendo pinched
         if (isAnyPinching && Input.touchCount < 2)
         {
             isAnyPinching = false;
@@ -74,14 +79,19 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
 
         if (!RectTransformUtility.RectangleContainsScreenPoint(rawImageRect, rectTransform.position, null))
         {
+            // Fora da área -> volta para posição original e parent original
+            transform.SetParent(originalParent, true);
             rectTransform.anchoredPosition = initialPosition;
-            rectTransform.localScale = initialScale; // Reseta a escala também
+            rectTransform.localScale = initialScale;
+        }
+        else
+        {
+            // Dentro da área -> mantém no novo parent
         }
     }
 
     void Update()
     {
-        // Só processa pinch se este for o sticker sendo arrastado
         if (isBeingDragged)
         {
             HandlePinchZoom();
@@ -101,26 +111,21 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (Input.touchCount >= 2)
         {
-            // Calcula a nova distância entre os dedos
             float currentDistance = Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position);
 
-            // Se a distância inicial for zero, ajusta
             if (initialDistance == 0)
             {
                 initialDistance = currentDistance;
                 return;
             }
 
-            // Calcula o fator de escala
             float scaleFactor = currentDistance / initialDistance;
             Vector3 newScale = initialScale * scaleFactor;
 
-            // Limita o tamanho mínimo e máximo
             newScale.x = Mathf.Clamp(newScale.x, MIN_SCALE, MAX_SCALE);
             newScale.y = Mathf.Clamp(newScale.y, MIN_SCALE, MAX_SCALE);
-            newScale.z = 1f; // Mantém a profundidade
+            newScale.z = 1f;
 
-            // Aplica a escala apenas a este sticker
             rectTransform.localScale = newScale;
         }
         else if (isAnyPinching)
