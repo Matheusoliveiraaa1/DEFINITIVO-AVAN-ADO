@@ -8,14 +8,15 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     private RectTransform rectTransform;
     private Canvas canvas;
     private RectTransform rawImageRect;
+
     private Vector2 initialPosition;
     private bool positionInitialized = false;
 
-    // Controle de hierarquia
+    // Guardar posição/parent originais (no menu/base)
     private Transform originalParent;
-    private Transform dragParent; // Parent temporário para aparecer sobre a RawImage
+    private Vector3 originalLocalPosition;
 
-    // Variáveis para pinch-to-zoom
+    // Pinch-to-zoom
     private float initialDistance;
     private Vector3 initialScale;
     private static bool isAnyPinching = false;
@@ -28,6 +29,11 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         rectTransform = GetComponent<RectTransform>();
         canvas = GetComponentInParent<Canvas>();
         initialScale = rectTransform.localScale;
+
+        // Salva o pai e posição originais dentro da base/scroll
+        originalParent = rectTransform.parent;
+        originalLocalPosition = rectTransform.localPosition;
+
         StartCoroutine(SetInitialPositionNextFrame());
     }
 
@@ -41,17 +47,17 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void SetRawImageRect(RectTransform rawImageRectTransform)
     {
         rawImageRect = rawImageRectTransform;
-        dragParent = rawImageRectTransform.parent; // Usamos o mesmo parent da RawImage
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
         isBeingDragged = true;
 
-        // Guarda parent original e move para o parent da RawImage
-        originalParent = transform.parent;
-        transform.SetParent(dragParent, true);
+        // Mover para frente da RawImage
+        rectTransform.SetParent(rawImageRect.parent, true);
+        rectTransform.SetAsLastSibling();
 
+        // Pinch-to-zoom
         if (Input.touchCount >= 2 && !isAnyPinching)
         {
             StartPinch();
@@ -63,7 +69,15 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (isAnyPinching) return;
 
-        rectTransform.anchoredPosition += eventData.delta / canvas.scaleFactor;
+        Vector2 localPoint;
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            rawImageRect,
+            eventData.position,
+            canvas.worldCamera,
+            out localPoint))
+        {
+            rectTransform.localPosition = localPoint;
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -71,22 +85,15 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         isBeingDragged = false;
 
         if (isAnyPinching && Input.touchCount < 2)
-        {
             isAnyPinching = false;
-        }
 
         if (!positionInitialized) return;
 
-        if (!RectTransformUtility.RectangleContainsScreenPoint(rawImageRect, rectTransform.position, null))
+        // Se não soltar dentro da RawImage, volta pro menu
+        if (!RectTransformUtility.RectangleContainsScreenPoint(rawImageRect, rectTransform.position, canvas.worldCamera))
         {
-            // Fora da área -> volta para posição original e parent original
-            transform.SetParent(originalParent, true);
-            rectTransform.anchoredPosition = initialPosition;
+            rectTransform.SetParent(originalParent, false); // false mantém o alinhamento do Layout Group
             rectTransform.localScale = initialScale;
-        }
-        else
-        {
-            // Dentro da área -> mantém no novo parent
         }
     }
 
@@ -112,16 +119,10 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (Input.touchCount >= 2)
         {
             float currentDistance = Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position);
-
-            if (initialDistance == 0)
-            {
-                initialDistance = currentDistance;
-                return;
-            }
+            if (initialDistance == 0) { initialDistance = currentDistance; return; }
 
             float scaleFactor = currentDistance / initialDistance;
             Vector3 newScale = initialScale * scaleFactor;
-
             newScale.x = Mathf.Clamp(newScale.x, MIN_SCALE, MAX_SCALE);
             newScale.y = Mathf.Clamp(newScale.y, MIN_SCALE, MAX_SCALE);
             newScale.z = 1f;
