@@ -10,4 +10,10 @@ public class VideoAutoPlayer : MonoBehaviour
         videoPlayer.url = videoPath;
         videoPlayer.Play();
     }
+
+
+    //// não sei to fazendo isso so pra testar 
+
+
+
 }

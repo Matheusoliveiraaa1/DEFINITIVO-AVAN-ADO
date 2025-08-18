@@ -14,7 +14,6 @@ public class NativeCameraExample : MonoBehaviour
     [Header("Sticker Settings")]
     public Transform stickerMenuContent; // Content do ScrollView
     public GameObject stickerMenuScrollView; // Objeto Scroll View inteiro
-
     public GameObject[] area1Stickers;
     public GameObject[] cursoDaguaStickers;
     public GameObject[] subosqueStickers;
@@ -35,25 +34,59 @@ public class NativeCameraExample : MonoBehaviour
     private const int TOTAL_AREAS = 5;
     private List<string> areasContabilizadas = new List<string>();
 
+    [Header("Sticker Limit")]
+    public TextMeshProUGUI errorMessageText;
+    public int maxStickersPerPhoto = 5;
+    private List<StickerController> activeStickers = new List<StickerController>();
+
     private void Start()
     {
-        if (stickerMenuScrollView != null)
-            stickerMenuScrollView.SetActive(false);
+        if (stickerMenuScrollView != null) stickerMenuScrollView.SetActive(false);
+        if (closeButton != null) closeButton.SetActive(false);
+        if (locationManager == null) locationManager = FindAnyObjectByType<LocationServiceManager>();
+        if (progressText != null) progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} áreas visitadas";
 
-        if (closeButton != null)
-            closeButton.SetActive(false);
+        // Garante que a mensagem de erro comece desativada
+        if (errorMessageText != null) errorMessageText.gameObject.SetActive(false);
+    }
 
-        if (locationManager == null)
-            locationManager = FindAnyObjectByType<LocationServiceManager>();
+    public bool CanAddSticker()
+    {
+        return activeStickers.Count < maxStickersPerPhoto;
+    }
 
-        if (progressText != null)
-            progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} áreas visitadas";
+    public void RegisterSticker(StickerController sticker)
+    {
+        if (!activeStickers.Contains(sticker))
+        {
+            activeStickers.Add(sticker);
+        }
+    }
+
+    public void UnregisterSticker(StickerController sticker)
+    {
+        if (activeStickers.Contains(sticker))
+        {
+            activeStickers.Remove(sticker);
+        }
+    }
+
+    public void ShowErrorMessage(string message)
+    {
+        StartCoroutine(ShowErrorMessageCoroutine(message, 3f));
+    }
+
+    private IEnumerator ShowErrorMessageCoroutine(string message, float duration)
+    {
+        errorMessageText.text = message;
+        errorMessageText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(duration);
+        errorMessageText.gameObject.SetActive(false);
     }
 
     public Sprite GetStickerSprite(string areaName, int index)
     {
         GameObject[] stickers = null;
-
         switch (areaName)
         {
             case "Area1": stickers = area1Stickers; break;
@@ -69,11 +102,9 @@ public class NativeCameraExample : MonoBehaviour
         {
             var renderer = stickers[index].GetComponentInChildren<SpriteRenderer>();
             if (renderer != null) return renderer.sprite;
-
             var image = stickers[index].GetComponentInChildren<Image>();
             if (image != null) return image.sprite;
         }
-
         return null;
     }
 
@@ -107,16 +138,14 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (stickerMenuContent == null || stickerMenuScrollView == null) return;
 
-        foreach (Transform child in stickerMenuContent)
-            Destroy(child.gameObject);
-
+        foreach (Transform child in stickerMenuContent) Destroy(child.gameObject);
         stickerMenuScrollView.SetActive(true);
 
-        GameObject[] stickersToShow = GetStickersForCurrentArea();
-
+        // pega TODOS os stickers de todas as áreas
+        GameObject[] stickersToShow = GetAllStickers();
         if (stickersToShow == null || stickersToShow.Length == 0)
         {
-            Debug.LogWarning("Nenhum sticker definido para esta área.");
+            Debug.LogWarning("Nenhum sticker definido.");
             return;
         }
 
@@ -131,7 +160,7 @@ public class NativeCameraExample : MonoBehaviour
         }
     }
 
-    private GameObject[] GetStickersForCurrentArea()
+    private GameObject[] GetAllStickers()
     {
         if (locationManager == null)
         {
@@ -141,37 +170,29 @@ public class NativeCameraExample : MonoBehaviour
 
         List<GameObject> stickers = new List<GameObject>();
 
-        switch (currentArea)
-        {
-            case "Area1": AddStickersForArea("Area1", area1Stickers, stickers); break;
-            case "CursoDagua": AddStickersForArea("CursoDagua", cursoDaguaStickers, stickers); break;
-            case "Subosque": AddStickersForArea("Subosque", subosqueStickers, stickers); break;
-            case "Dossel": AddStickersForArea("Dossel", dosselStickers, stickers); break;
-            case "Epifitas": AddStickersForArea("Epifitas", epifitasStickers, stickers); break;
-            case "Serrapilheira": AddStickersForArea("Serrapilheira", serrapilheiraStickers, stickers); break;
-            case "AreaTeste": AddStickersForArea("AreaTeste", areaTesteStickers, stickers); break;
-            default:
-                Debug.LogWarning($"Área desconhecida: {currentArea}");
-                break;
-        }
+        // Adiciona de todas as áreas
+        AddStickersForArea("Area1", area1Stickers, stickers);
+        AddStickersForArea("CursoDagua", cursoDaguaStickers, stickers);
+        AddStickersForArea("Subosque", subosqueStickers, stickers);
+        AddStickersForArea("Dossel", dosselStickers, stickers);
+        AddStickersForArea("Epifitas", epifitasStickers, stickers);
+        AddStickersForArea("Serrapilheira", serrapilheiraStickers, stickers);
+        AddStickersForArea("AreaTeste", areaTesteStickers, stickers);
 
         return stickers.ToArray();
     }
 
     private void AddStickersForArea(string areaName, GameObject[] stickersArray, List<GameObject> outputList)
     {
-        if (stickersArray == null || stickersArray.Length == 0)
-        {
-            Debug.LogWarning($"Nenhum sticker definido para a área: {areaName}");
-            return;
-        }
+        if (stickersArray == null || stickersArray.Length == 0) return;
 
+        // sempre adiciona os 3 fixos
         for (int i = 0; i < Mathf.Min(3, stickersArray.Length); i++)
         {
-            if (stickersArray[i] != null)
-                outputList.Add(stickersArray[i]);
+            if (stickersArray[i] != null) outputList.Add(stickersArray[i]);
         }
 
+        // só adiciona os colecionáveis se já tiver coletado
         for (int i = 3; i < stickersArray.Length; i++)
         {
             if (stickersArray[i] != null && locationManager.IsStickerCollected(areaName, i))
@@ -196,13 +217,16 @@ public class NativeCameraExample : MonoBehaviour
         closeButton?.SetActive(false);
         okButton?.SetActive(false);
 
-        // Remove todos os stickers ativos na cena, mesmo os que foram arrastados
+        // Limpa a lista de stickers ativos
+        activeStickers.Clear();
+
+        // Remove todos os stickers ativos na cena
         foreach (var sticker in FindObjectsOfType<StickerController>())
         {
             Destroy(sticker.gameObject);
         }
 
-        // Limpa o conteúdo do menu (caso ainda tenha filhos)
+        // Limpa o conteúdo do menu
         if (stickerMenuContent != null)
         {
             foreach (Transform child in stickerMenuContent)
@@ -212,7 +236,6 @@ public class NativeCameraExample : MonoBehaviour
         if (stickerMenuScrollView != null)
             stickerMenuScrollView.SetActive(false);
     }
-
 
     public void ConfirmarFotoDecorada()
     {
@@ -225,7 +248,6 @@ public class NativeCameraExample : MonoBehaviour
 
         Vector3[] corners = new Vector3[4];
         photoAreaToCapture.GetWorldCorners(corners);
-
         Vector2 bottomLeft = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
         Vector2 topRight = RectTransformUtility.WorldToScreenPoint(null, corners[2]);
 
