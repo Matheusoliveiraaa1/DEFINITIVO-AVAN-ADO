@@ -1,22 +1,29 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 
 public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+
+
 {
+
+    [HideInInspector]
+    public string AreaName; // NOVO: guarda a √°rea de origem do sticker
+
+
     private RectTransform rectTransform;
     private Canvas canvas;
     private RectTransform rawImageRect;
     private Vector2 initialPosition;
     private bool positionInitialized = false;
 
-    // Guardar posiÁ„o/parent originais (no menu/base)
+    // Guardar posi√ß√£o/parent originais (no menu/base)
     private Transform originalParent;
     private Vector3 originalLocalPosition;
     private Quaternion originalRotation;
 
-    // Pinch-to-zoom e rotaÁ„o
+    // Pinch-to-zoom e rota√ß√£o
     private float initialDistance;
     private float initialAngle;
     private Vector3 initialScale;
@@ -34,7 +41,7 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         initialScale = rectTransform.localScale;
         originalRotation = rectTransform.localRotation;
 
-        // Salva o pai e posiÁ„o originais dentro da base/scroll
+        // Salva o pai e posi√ß√£o originais dentro da base/scroll
         originalParent = rectTransform.parent;
         originalLocalPosition = rectTransform.localPosition;
 
@@ -74,7 +81,7 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     {
         if (isAnyPinching) return;
 
-        // Atualiza se est· sobre a ·rea da foto
+        // Atualiza se est√° sobre a √°rea da foto
         isOverPhotoArea = RectTransformUtility.RectangleContainsScreenPoint(rawImageRect, eventData.position, canvas.worldCamera);
 
         Vector2 localPoint;
@@ -88,6 +95,7 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     public void OnEndDrag(PointerEventData eventData)
     {
         isBeingDragged = false;
+
         if (isAnyPinching && Input.touchCount < 2)
         {
             isAnyPinching = false;
@@ -97,28 +105,26 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (!positionInitialized)
             return;
 
-        // Verifica se est· dentro da RawImage
-        bool isInsideRawImage = isOverPhotoArea ||
-            RectTransformUtility.RectangleContainsScreenPoint(rawImageRect, rectTransform.position, canvas.worldCamera);
+        // üîπ Checa se o sticker est√° dentro da √°rea da foto pelos cantos
+        bool isInsideRawImage = IsRectTransformInside(rawImageRect, rectTransform);
 
         if (isInsideRawImage)
         {
-            // Pega a referÍncia do NativeCameraExample
             NativeCameraExample cameraExample = FindObjectOfType<NativeCameraExample>();
-            if (cameraExample != null && !cameraExample.CanAddSticker())
-            {
-                // Limite excedido - volta para a base
-                ReturnToBase();
-
-                // Mostra mensagem de erro
-                cameraExample.ShowErrorMessage("Limite de stickers por foto excedido!");
-                return;
-            }
-
-            // Se passou na verificaÁ„o, registra o sticker
             if (cameraExample != null)
             {
-                cameraExample.RegisterSticker(this);
+                // Se j√° est√° registrado, n√£o faz a checagem de limite de novo
+                if (!cameraExample.IsStickerAlreadyRegistered(this))
+                {
+                    if (!cameraExample.CanAddSticker())
+                    {
+                        ReturnToBase();
+                        cameraExample.ShowErrorMessage("Limite de stickers por foto excedido!");
+                        return;
+                    }
+
+                    cameraExample.RegisterSticker(this);
+                }
             }
         }
         else
@@ -127,13 +133,36 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         }
     }
 
+
+    private bool IsRectTransformInside(RectTransform container, RectTransform target)
+    {
+        Vector3[] containerCorners = new Vector3[4];
+        Vector3[] targetCorners = new Vector3[4];
+        container.GetWorldCorners(containerCorners);
+        target.GetWorldCorners(targetCorners);
+
+        Rect containerRect = new Rect(containerCorners[0], containerCorners[2] - containerCorners[0]);
+
+        // Se qualquer canto do target estiver dentro, j√° consideramos v√°lido
+        foreach (var corner in targetCorners)
+        {
+            if (containerRect.Contains(corner))
+                return true;
+        }
+        return false;
+    }
+
+
+
+
+
     private void ReturnToBase()
     {
         rectTransform.SetParent(originalParent, false);
         rectTransform.localScale = initialScale;
         rectTransform.localRotation = originalRotation;
 
-        // Remove da lista de ativos se estiver l·
+        // Remove da lista de ativos se estiver l√°
         NativeCameraExample cameraExample = FindObjectOfType<NativeCameraExample>();
         if (cameraExample != null)
         {
@@ -156,12 +185,12 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             initialDistance = Vector2.Distance(Input.GetTouch(0).position, Input.GetTouch(1).position);
             initialScale = rectTransform.localScale;
 
-            // Calcula o ‚ngulo inicial entre os dois dedos
+            // Calcula o √¢ngulo inicial entre os dois dedos
             Vector2 touch0Pos = Input.GetTouch(0).position;
             Vector2 touch1Pos = Input.GetTouch(1).position;
             initialAngle = Mathf.Atan2(touch1Pos.y - touch0Pos.y, touch1Pos.x - touch0Pos.x) * Mathf.Rad2Deg;
 
-            // Usa a rotaÁ„o atual como base
+            // Usa a rota√ß√£o atual como base
             originalRotation = rectTransform.localRotation;
             rotationInitialized = true;
         }
@@ -192,7 +221,7 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             newScale.z = 1f;
             rectTransform.localScale = newScale;
 
-            // RotaÁ„o (twist) - c·lculo mais est·vel
+            // Rota√ß√£o (twist) - c√°lculo mais est√°vel
             Vector2 currentTouch0Pos = Input.GetTouch(0).position;
             Vector2 currentTouch1Pos = Input.GetTouch(1).position;
             Vector2 previousTouch0Pos = Input.GetTouch(0).position - Input.GetTouch(0).deltaPosition;
@@ -202,10 +231,10 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             Vector2 currentVector = currentTouch1Pos - currentTouch0Pos;
             Vector2 previousVector = previousTouch1Pos - previousTouch0Pos;
 
-            // ¬ngulo entre os vetores
+            // √Çngulo entre os vetores
             float angle = Vector2.SignedAngle(previousVector, currentVector);
 
-            // Aplica a rotaÁ„o incremental
+            // Aplica a rota√ß√£o incremental
             rectTransform.Rotate(0, 0, angle, Space.Self);
         }
         else if (isAnyPinching)

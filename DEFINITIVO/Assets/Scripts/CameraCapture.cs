@@ -1,4 +1,4 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -36,57 +36,101 @@ public class NativeCameraExample : MonoBehaviour
 
     [Header("Sticker Limit")]
     public TextMeshProUGUI errorMessageText;
+    public TextMeshProUGUI warningMessageText;
     public int maxStickersPerPhoto = 5;
     private List<StickerController> activeStickers = new List<StickerController>();
 
+    // Cache para otimiza√ß√£o de performance
+    private Dictionary<GameObject, string> stickerAreaCache = new Dictionary<GameObject, string>();
+
+    // Contador de stickers spawnados por √°rea
+    private Dictionary<string, int> spawnedStickersCount = new Dictionary<string, int>();
+
     private void Start()
     {
-        if (stickerMenuScrollView != null) stickerMenuScrollView.SetActive(false);
-        if (closeButton != null) closeButton.SetActive(false);
-        if (locationManager == null) locationManager = FindAnyObjectByType<LocationServiceManager>();
-        if (progressText != null) progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} ·reas visitadas";
+        if (stickerMenuScrollView != null)
+            stickerMenuScrollView.SetActive(false);
 
-        // Garante que a mensagem de erro comece desativada
-        if (errorMessageText != null) errorMessageText.gameObject.SetActive(false);
+        if (closeButton != null)
+            closeButton.SetActive(false);
+
+        if (locationManager == null)
+            locationManager = FindAnyObjectByType<LocationServiceManager>();
+
+        if (progressText != null)
+            progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} √°reas visitadas";
+
+        if (errorMessageText != null)
+            errorMessageText.gameObject.SetActive(false);
+
+        if (warningMessageText != null)
+            warningMessageText.gameObject.SetActive(false);
+
+        CacheStickerAreas();
+        spawnedStickersCount.Clear();
     }
 
-    public bool CanAddSticker()
+    private void CacheStickerAreas()
     {
-        return activeStickers.Count < maxStickersPerPhoto;
+        stickerAreaCache.Clear();
+        CacheAreaStickers("Area1", area1Stickers);
+        CacheAreaStickers("CursoDagua", cursoDaguaStickers);
+        CacheAreaStickers("Subosque", subosqueStickers);
+        CacheAreaStickers("Dossel", dosselStickers);
+        CacheAreaStickers("Epifitas", epifitasStickers);
+        CacheAreaStickers("Serrapilheira", serrapilheiraStickers);
+        CacheAreaStickers("AreaTeste", areaTesteStickers);
     }
+
+    private void CacheAreaStickers(string areaName, GameObject[] stickers)
+    {
+        if (stickers == null) return;
+
+        foreach (GameObject sticker in stickers)
+        {
+            if (sticker != null && !stickerAreaCache.ContainsKey(sticker))
+            {
+                stickerAreaCache[sticker] = areaName;
+            }
+        }
+    }
+
+    public bool CanAddSticker() => activeStickers.Count < maxStickersPerPhoto;
 
     public void RegisterSticker(StickerController sticker)
     {
         if (!activeStickers.Contains(sticker))
-        {
             activeStickers.Add(sticker);
-        }
     }
 
     public void UnregisterSticker(StickerController sticker)
     {
         if (activeStickers.Contains(sticker))
-        {
             activeStickers.Remove(sticker);
-        }
     }
 
     public void ShowErrorMessage(string message)
     {
-        StartCoroutine(ShowErrorMessageCoroutine(message, 3f));
+        StartCoroutine(ShowMessageCoroutine(errorMessageText, message, 3f));
     }
 
-    private IEnumerator ShowErrorMessageCoroutine(string message, float duration)
+    public void ShowWarningMessage(string message)
     {
-        errorMessageText.text = message;
-        errorMessageText.gameObject.SetActive(true);
+        StartCoroutine(ShowMessageCoroutine(warningMessageText, message, 3f));
+    }
+
+    private IEnumerator ShowMessageCoroutine(TextMeshProUGUI textElement, string message, float duration)
+    {
+        textElement.text = message;
+        textElement.gameObject.SetActive(true);
         yield return new WaitForSeconds(duration);
-        errorMessageText.gameObject.SetActive(false);
+        textElement.gameObject.SetActive(false);
     }
 
     public Sprite GetStickerSprite(string areaName, int index)
     {
         GameObject[] stickers = null;
+
         switch (areaName)
         {
             case "Area1": stickers = area1Stickers; break;
@@ -102,9 +146,11 @@ public class NativeCameraExample : MonoBehaviour
         {
             var renderer = stickers[index].GetComponentInChildren<SpriteRenderer>();
             if (renderer != null) return renderer.sprite;
+
             var image = stickers[index].GetComponentInChildren<Image>();
             if (image != null) return image.sprite;
         }
+
         return null;
     }
 
@@ -112,7 +158,7 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (string.IsNullOrEmpty(currentArea))
         {
-            Debug.LogWarning("Nenhuma ·rea v·lida detectada.");
+            Debug.LogWarning("Nenhuma √°rea v√°lida detectada.");
             return;
         }
 
@@ -123,7 +169,6 @@ public class NativeCameraExample : MonoBehaviour
                 Texture2D texture = NativeCamera.LoadImageAtPath(path, 1024);
                 if (texture != null)
                 {
-                    Debug.Log("Foto tirada em: " + path);
                     imageDisplay.texture = texture;
                     imageDisplay.gameObject.SetActive(true);
                     ShowStickers();
@@ -138,16 +183,14 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (stickerMenuContent == null || stickerMenuScrollView == null) return;
 
-        foreach (Transform child in stickerMenuContent) Destroy(child.gameObject);
-        stickerMenuScrollView.SetActive(true);
+        foreach (Transform child in stickerMenuContent)
+            Destroy(child.gameObject);
 
-        // pega TODOS os stickers de todas as ·reas
+        stickerMenuScrollView.SetActive(true);
+        spawnedStickersCount.Clear();
+
         GameObject[] stickersToShow = GetAllStickers();
-        if (stickersToShow == null || stickersToShow.Length == 0)
-        {
-            Debug.LogWarning("Nenhum sticker definido.");
-            return;
-        }
+        if (stickersToShow == null || stickersToShow.Length == 0) return;
 
         foreach (var stickerPrefab in stickersToShow)
         {
@@ -156,21 +199,26 @@ public class NativeCameraExample : MonoBehaviour
                 var sticker = Instantiate(stickerPrefab, stickerMenuContent);
                 var controller = sticker.GetComponent<StickerController>() ?? sticker.AddComponent<StickerController>();
                 controller.SetRawImageRect(imageDisplay.rectTransform);
+
+                // ‚úÖ NOVO: marca a √°rea de origem do clone
+                if (stickerAreaCache.TryGetValue(stickerPrefab, out string areaName))
+                {
+                    controller.AreaName = areaName;
+
+                    if (spawnedStickersCount.ContainsKey(areaName))
+                        spawnedStickersCount[areaName]++;
+                    else
+                        spawnedStickersCount[areaName] = 1;
+                }
             }
         }
     }
 
     private GameObject[] GetAllStickers()
     {
-        if (locationManager == null)
-        {
-            Debug.LogError("LocationServiceManager n„o encontrado!");
-            return null;
-        }
+        if (locationManager == null) return null;
 
         List<GameObject> stickers = new List<GameObject>();
-
-        // Adiciona de todas as ·reas
         AddStickersForArea("Area1", area1Stickers, stickers);
         AddStickersForArea("CursoDagua", cursoDaguaStickers, stickers);
         AddStickersForArea("Subosque", subosqueStickers, stickers);
@@ -186,18 +234,12 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (stickersArray == null || stickersArray.Length == 0) return;
 
-        // sempre adiciona os 3 fixos
         for (int i = 0; i < Mathf.Min(3, stickersArray.Length); i++)
-        {
             if (stickersArray[i] != null) outputList.Add(stickersArray[i]);
-        }
 
-        // sÛ adiciona os colecion·veis se j· tiver coletado
         for (int i = 3; i < stickersArray.Length; i++)
-        {
             if (stickersArray[i] != null && locationManager.IsStickerCollected(areaName, i))
                 outputList.Add(stickersArray[i]);
-        }
     }
 
     public void ConfirmarVisita()
@@ -206,8 +248,9 @@ public class NativeCameraExample : MonoBehaviour
         {
             areasVisitadas++;
             areasContabilizadas.Add(currentArea);
-            progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} ·reas visitadas";
+            progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} √°reas visitadas";
         }
+
         ClosePhotoView();
     }
 
@@ -217,21 +260,14 @@ public class NativeCameraExample : MonoBehaviour
         closeButton?.SetActive(false);
         okButton?.SetActive(false);
 
-        // Limpa a lista de stickers ativos
         activeStickers.Clear();
 
-        // Remove todos os stickers ativos na cena
         foreach (var sticker in FindObjectsOfType<StickerController>())
-        {
             Destroy(sticker.gameObject);
-        }
 
-        // Limpa o conte˙do do menu
         if (stickerMenuContent != null)
-        {
             foreach (Transform child in stickerMenuContent)
                 Destroy(child.gameObject);
-        }
 
         if (stickerMenuScrollView != null)
             stickerMenuScrollView.SetActive(false);
@@ -239,7 +275,66 @@ public class NativeCameraExample : MonoBehaviour
 
     public void ConfirmarFotoDecorada()
     {
+        if (!AreStickersFromCorrectArea())
+        {
+            ShowErrorMessage("H√° stickers de outra √°rea na foto! Use apenas os stickers da √°rea " + GetAreaDisplayName(currentArea));
+            return;
+        }
+
+        if (AreThereUnusedStickersFromCurrentArea())
+        {
+            ShowWarningMessage("Ainda h√° stickers da √°rea " + GetAreaDisplayName(currentArea) + " que n√£o foram utilizados!");
+            return;
+        }
+
         StartCoroutine(CaptureAndSave());
+    }
+
+    public bool AreStickersFromCorrectArea()
+    {
+        foreach (StickerController sticker in activeStickers)
+            if (!IsStickerFromCurrentArea(sticker)) return false;
+        return true;
+    }
+
+    private bool AreThereUnusedStickersFromCurrentArea()
+    {
+        if (!spawnedStickersCount.ContainsKey(currentArea) || spawnedStickersCount[currentArea] == 0)
+            return false;
+
+        int usedStickersCount = CountStickersFromAreaInPhoto(currentArea);
+        int spawnedCount = spawnedStickersCount.ContainsKey(currentArea) ? spawnedStickersCount[currentArea] : 0;
+
+        return usedStickersCount < spawnedCount;
+    }
+
+    private int CountStickersFromAreaInPhoto(string areaName)
+    {
+        int count = 0;
+        foreach (StickerController sticker in activeStickers)
+            if (sticker.AreaName == areaName) count++; // ‚úÖ usa o campo direto
+
+        return count;
+    }
+
+    private bool IsStickerFromCurrentArea(StickerController sticker)
+    {
+        return sticker.AreaName == currentArea;
+    }
+
+    private string GetAreaDisplayName(string areaCode)
+    {
+        switch (areaCode)
+        {
+            case "Area1": return "√Årea 1";
+            case "CursoDagua": return "Curso D'√°gua";
+            case "Subosque": return "Subosque";
+            case "Dossel": return "Dossel";
+            case "Epifitas": return "Ep√≠fitas";
+            case "Serrapilheira": return "Serrapilheira";
+            case "AreaTeste": return "√Årea Teste";
+            default: return areaCode;
+        }
     }
 
     private IEnumerator CaptureAndSave()
@@ -248,6 +343,7 @@ public class NativeCameraExample : MonoBehaviour
 
         Vector3[] corners = new Vector3[4];
         photoAreaToCapture.GetWorldCorners(corners);
+
         Vector2 bottomLeft = RectTransformUtility.WorldToScreenPoint(null, corners[0]);
         Vector2 topRight = RectTransformUtility.WorldToScreenPoint(null, corners[2]);
 
@@ -259,9 +355,7 @@ public class NativeCameraExample : MonoBehaviour
         screenshot.Apply();
 
         if (!string.IsNullOrEmpty(currentArea))
-        {
             galleryManager.SaveImage(currentArea, screenshot);
-        }
 
         ClosePhotoView();
     }
@@ -270,6 +364,11 @@ public class NativeCameraExample : MonoBehaviour
     {
         areasVisitadas = 0;
         areasContabilizadas.Clear();
-        progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} ·reas visitadas";
+        progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} √°reas visitadas";
+    }
+
+    public bool IsStickerAlreadyRegistered(StickerController sticker)
+    {
+        return activeStickers.Contains(sticker);
     }
 }
