@@ -2679,7 +2679,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: 10
+  m_Spacing: 40
   m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
@@ -4438,8 +4438,8 @@ MonoBehaviour:
   serrapilheiraStickers: []
   areaTesteStickers:
   - {fileID: 1422173344826456025, guid: ff03958cca25bd041bac8e626a988218, type: 3}
-  - {fileID: 1422173344826456025, guid: ff03958cca25bd041bac8e626a988218, type: 3}
-  - {fileID: 1422173344826456025, guid: ff03958cca25bd041bac8e626a988218, type: 3}
+  - {fileID: 631859435886934609, guid: f783eb7a768afeb45b30884883d2dd95, type: 3}
+  - {fileID: 3006071019075136080, guid: b5e491b7f9e1d1247b8bb91b9aa1481f, type: 3}
   locationManager: {fileID: 1103364857}
   galleryManager: {fileID: 1103364859}
   photoAreaToCapture: {fileID: 2037489354}
