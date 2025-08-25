@@ -311,6 +311,8 @@ public class LocationServiceManager : MonoBehaviour
             messageText.text = poi.message;
             Handheld.Vibrate();
             FindAnyObjectByType<NativeCameraExample>().currentArea = poi.areaName;
+
+            PhotoAreaOverlay.Show(); ////
         }
     }
 
