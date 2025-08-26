@@ -6,13 +6,13 @@ public class VideoAutoPlayer : MonoBehaviour
     void Start()
     {
         VideoPlayer videoPlayer = GetComponent<VideoPlayer>();
-        string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, "TESTE.mp4");
+        string videoPath = System.IO.Path.Combine(Application.streamingAssetsPath, "TESTE2.mp4");
         videoPlayer.url = videoPath;
         videoPlayer.Play();
     }
 
 
-    //// não sei to fazendo isso so pra testar 
+    //// 
 
 
 

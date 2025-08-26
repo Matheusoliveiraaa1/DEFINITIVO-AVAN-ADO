@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Video;
+using UnityEngine.UI;
 
 public class NavigationManager : MonoBehaviour
 {
@@ -9,50 +11,135 @@ public class NavigationManager : MonoBehaviour
     public GameObject telaMapa;
     public GameObject telaMochila;
     public GameObject telaGaleria;
-    public GameObject telaExploracao; // Novo campo adicionado
+    public GameObject telaExploracao; // painel que contém RawImage + VideoPlayer
+
+    private VideoPlayer videoPlayerExploracao;
+    private RawImage videoRawImage;
+    private CanvasGroup exploracaoCanvasGroup;
+    private bool videoFinalizado = false;
 
     void Start()
     {
+        // tenta achar o VideoPlayer mesmo que a tela esteja inativa no inspector
+        videoPlayerExploracao = telaExploracao.GetComponentInChildren<VideoPlayer>(true);
+
+        if (videoPlayerExploracao != null)
+        {
+            // desativa play automático
+            videoPlayerExploracao.playOnAwake = false;
+            videoPlayerExploracao.Pause();
+            videoPlayerExploracao.loopPointReached += OnVideoFinished;
+        }
+
+        // encontra a RawImage que exibe o vídeo
+        videoRawImage = videoPlayerExploracao.GetComponent<RawImage>();
+        if (videoRawImage == null)
+            videoRawImage = videoPlayerExploracao.GetComponentInChildren<RawImage>(true);
+
+        // opcional: esconde a RawImage no começo
+        if (videoRawImage != null)
+            videoRawImage.gameObject.SetActive(false);
+
+        // pega (ou adiciona) o CanvasGroup para podermos esconder a UI sem desativar o GameObject
+        exploracaoCanvasGroup = telaExploracao.GetComponent<CanvasGroup>();
+        if (exploracaoCanvasGroup == null)
+            exploracaoCanvasGroup = telaExploracao.AddComponent<CanvasGroup>();
+
+        Debug.Log("[Nav] VideoPlayer encontrado? " + (videoPlayerExploracao != null));
         SetState(AppState.Principal);
     }
 
-    // Método principal (privado)
     private void SetState(AppState newState)
     {
-        // Desativa todas as telas
+        // ativa/desativa todas as telas, EXCETO a telaExploracao (mantemos ela ativa)
         telaPrincipal.SetActive(false);
         telaMapa.SetActive(false);
         telaMochila.SetActive(false);
         telaGaleria.SetActive(false);
-        telaExploracao.SetActive(false); // Nova linha adicionada
 
-        // Ativa apenas a tela desejada
         switch (newState)
         {
             case AppState.Principal:
                 telaPrincipal.SetActive(true);
+                HideExploracao(true);
+                PauseVideoIfPlaying();
                 break;
             case AppState.Mapa:
                 telaMapa.SetActive(true);
+                HideExploracao(true);
+                PauseVideoIfPlaying();
                 break;
             case AppState.Mochila:
                 telaMochila.SetActive(true);
+                HideExploracao(true);
+                PauseVideoIfPlaying();
                 break;
             case AppState.Galeria:
                 telaGaleria.SetActive(true);
+                HideExploracao(true);
+                PauseVideoIfPlaying();
                 break;
-            case AppState.Exploracao: // Novo caso adicionado
-                telaExploracao.SetActive(true);
+            case AppState.Exploracao:
+                HideExploracao(false);
+                ResumeVideoIfNeeded();
                 break;
         }
 
         currentState = newState;
     }
 
-    // Métodos públicos para os botões (sem parâmetros)
+    private void HideExploracao(bool hide)
+    {
+        if (exploracaoCanvasGroup != null)
+        {
+            exploracaoCanvasGroup.alpha = hide ? 0f : 1f;
+            exploracaoCanvasGroup.interactable = !hide;
+            exploracaoCanvasGroup.blocksRaycasts = !hide;
+        }
+        else
+        {
+            foreach (Transform t in telaExploracao.transform)
+            {
+                if (t.GetComponentInChildren<VideoPlayer>(true) != null) continue;
+                t.gameObject.SetActive(!hide);
+            }
+        }
+    }
+
+    private void PauseVideoIfPlaying()
+    {
+        if (videoPlayerExploracao != null && videoPlayerExploracao.isPlaying)
+        {
+            videoPlayerExploracao.Pause();
+            Debug.Log("[Nav] Video pausado em: " + videoPlayerExploracao.time);
+        }
+    }
+
+    private void ResumeVideoIfNeeded()
+    {
+        if (videoPlayerExploracao != null && !videoPlayerExploracao.isPlaying && !videoFinalizado)
+        {
+            if (videoRawImage != null)
+                videoRawImage.gameObject.SetActive(true);
+
+            videoPlayerExploracao.Play();
+            Debug.Log("[Nav] Video iniciado/retomado em: " + videoPlayerExploracao.time);
+        }
+    }
+
+    private void OnVideoFinished(VideoPlayer vp)
+    {
+        Debug.Log("[Nav] Video finalizado");
+        videoFinalizado = true;
+        if (videoRawImage != null)
+            videoRawImage.gameObject.SetActive(false);
+        videoPlayerExploracao.Stop();
+    }
+
+    // Métodos públicos para botões
     public void GoToPrincipal() => SetState(AppState.Principal);
     public void GoToMapa() => SetState(AppState.Mapa);
     public void GoToMochila() => SetState(AppState.Mochila);
     public void GoToGaleria() => SetState(AppState.Galeria);
-    public void GoToExploracao() => SetState(AppState.Exploracao); // Novo método adicionado
+    public void GoToExploracao() => SetState(AppState.Exploracao);
 }
