@@ -5009,7 +5009,7 @@ MonoBehaviour:
   cameraButton: {fileID: 1464722304}
   stickerNotificationImage: {fileID: 1323261248}
   areaTeste: 0
-  detectionRadius: 30
+  detectionRadius: 10
   notificationDuration: 3
   areaPoints:
   - latitude: -26.92115
@@ -5033,7 +5033,7 @@ MonoBehaviour:
     message: "Voc\xEA chegou \xE0 serrapilheira!"
     areaName: Serrapilheira
   - latitude: -26.90557
-    longitude: -49.08005
+    longitude: -49.07985
     message: "Voc\xEA est\xE1 na \xE1rea teste"
     areaName: AreaTeste
   stickerPoints:

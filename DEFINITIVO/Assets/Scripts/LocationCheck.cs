@@ -312,9 +312,14 @@ public class LocationServiceManager : MonoBehaviour
             Handheld.Vibrate();
             FindAnyObjectByType<NativeCameraExample>().currentArea = poi.areaName;
 
-            PhotoAreaOverlay.Show(); ////
+            // Resetar estado de vídeo para nova área
+            VideoPlayState.Reset();
+
+            // Mostrar overlay
+            PhotoAreaOverlay.Show();
         }
     }
+
 
     private void RegisterStickerCollection(PointOfInterest poi)
     {

@@ -34,5 +34,15 @@ public class PhotoAreaOverlay : MonoBehaviour
     public void Hide()
     {
         overlayPanel.SetActive(false);
+
+        // Libera o vídeo
+        VideoPlayState.IsAuthorized = true;
+
+        // Se já estamos na tela exploração, força a checagem
+        var nav = FindObjectOfType<NavigationManager>();
+        if (nav != null && nav.currentState == NavigationManager.AppState.Exploracao)
+        {
+            nav.TryPlayExploracaoVideo();
+        }
     }
 }

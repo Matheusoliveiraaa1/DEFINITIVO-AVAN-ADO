@@ -117,15 +117,21 @@ public class NavigationManager : MonoBehaviour
 
     private void ResumeVideoIfNeeded()
     {
-        if (videoPlayerExploracao != null && !videoPlayerExploracao.isPlaying && !videoFinalizado)
+        // só inicia se já foi autorizado no overlay
+        if (videoPlayerExploracao != null &&
+            !videoPlayerExploracao.isPlaying &&
+            !videoFinalizado &&
+            VideoPlayState.IsAuthorized) // <-- ESSA LINHA BLOQUEIA
         {
             if (videoRawImage != null)
                 videoRawImage.gameObject.SetActive(true);
 
             videoPlayerExploracao.Play();
+            VideoPlayState.AlreadyPlayed = true; // marca que começou
             Debug.Log("[Nav] Video iniciado/retomado em: " + videoPlayerExploracao.time);
         }
     }
+
 
     private void OnVideoFinished(VideoPlayer vp)
     {
@@ -135,6 +141,16 @@ public class NavigationManager : MonoBehaviour
             videoRawImage.gameObject.SetActive(false);
         videoPlayerExploracao.Stop();
     }
+
+
+    public void TryPlayExploracaoVideo()
+    {
+        ResumeVideoIfNeeded();
+    }
+
+
+
+
 
     // Métodos públicos para botões
     public void GoToPrincipal() => SetState(AppState.Principal);
