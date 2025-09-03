@@ -254,19 +254,17 @@ public class LocationServiceManager : MonoBehaviour
         Handheld.Vibrate();
 
         NativeCameraExample cameraExample = FindObjectOfType<NativeCameraExample>();
-        if (cameraExample != null && stickerNotificationImage != null)
+        if (cameraExample != null)
         {
             Sprite stickerSprite = cameraExample.GetStickerSprite(poi.areaName, poi.stickerIndex);
             if (stickerSprite != null)
             {
-                stickerNotificationImage.sprite = stickerSprite;
-                stickerNotificationImage.gameObject.SetActive(true);
-                StartCoroutine(ScaleAnimation(true));
+                // Em vez de mostrar imagem pequena -> chama overlay
+                PhotoAreaOverlay.ShowSticker(stickerSprite);
             }
         }
-
-        StartCoroutine(HideNotificationAfterDelay(notificationDuration));
     }
+
 
     private IEnumerator ScaleAnimation(bool isEntering)
     {
