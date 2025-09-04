@@ -35,7 +35,7 @@ public class PhotoAreaOverlay : MonoBehaviour
     public float stickerPulseSpeed = 2f;
 
     [Header("Fly to Backpack Animation")]
-    public Transform backpackIconTarget; // Arraste o ícone da mochila aqui no Inspector
+    public Transform backpackIconTarget;
     public float shrinkDuration = 0.5f;
     public float flyDuration = 0.8f;
     public float minScale = 0.2f;
@@ -60,13 +60,17 @@ public class PhotoAreaOverlay : MonoBehaviour
     {
         if (showingSticker && !isAnimatingToBackpack)
         {
-            // Inicia animação para a mochila em vez de esconder imediatamente
+            // Desativa painel escuro e extras antes da animação
+            overlayPanel.SetActive(false);
+            if (stickerExtra1 != null) stickerExtra1.gameObject.SetActive(false);
+            if (stickerExtra2 != null) stickerExtra2.gameObject.SetActive(false);
+
+            // Inicia animação do sticker principal
             StartCoroutine(AnimateStickerToBackpack());
         }
         else
         {
-            // Comportamento normal para modo área
-            Hide();
+            Hide(); // Comportamento normal para modo área
         }
     }
 
@@ -76,12 +80,11 @@ public class PhotoAreaOverlay : MonoBehaviour
 
         if (stickerMain == null || backpackIconTarget == null)
         {
-            Hide();
+            Hide(false);
             yield break;
         }
 
         RectTransform stickerRT = stickerMain.rectTransform;
-        Vector3 originalPosition = stickerRT.position;
         Vector3 originalScale = stickerRT.localScale;
 
         // Fase 1: Encolher o sticker
@@ -103,26 +106,21 @@ public class PhotoAreaOverlay : MonoBehaviour
         while (flyTime < flyDuration)
         {
             flyTime += Time.deltaTime;
-            float progress = flyTime / flyDuration;
+            float progress = Mathf.SmoothStep(0f, 1f, flyTime / flyDuration);
 
-            // Curva suave (ease-in-out)
-            float easedProgress = Mathf.SmoothStep(0f, 1f, progress);
-
-            stickerRT.position = Vector3.Lerp(startPosition, targetPosition, easedProgress);
-
-            // Opcional: continuar encolhendo durante o voo
-            float scale = Mathf.Lerp(minScale, 0.1f, easedProgress);
-            stickerRT.localScale = originalScale * scale;
-
+            stickerRT.position = Vector3.Lerp(startPosition, targetPosition, progress);
+            stickerRT.localScale = Vector3.Lerp(originalScale * minScale, Vector3.zero, progress);
             yield return null;
         }
 
-        // Garante que chegou no destino
+        // Garante posição final
         stickerRT.position = targetPosition;
         stickerRT.localScale = Vector3.zero;
 
-        // Agora sim esconde o painel
-        Hide();
+        // Esconde apenas o sticker principal, sem tocar vídeo
+        stickerMain.gameObject.SetActive(false);
+        Hide(false);
+
         isAnimatingToBackpack = false;
     }
 
@@ -169,7 +167,7 @@ public class PhotoAreaOverlay : MonoBehaviour
         Instance.photo2.gameObject.SetActive(false);
         Instance.photo3.gameObject.SetActive(false);
 
-        // Ativa/define sticker principal
+        // Ativa sticker principal
         if (Instance.stickerMain != null)
         {
             Instance.stickerMain.sprite = mainSprite;
@@ -213,13 +211,8 @@ public class PhotoAreaOverlay : MonoBehaviour
             t += Time.deltaTime;
             float progress = t / stickerPopDuration;
 
-            // Ease-out suave
             float scale = 1f - Mathf.Pow(1f - progress, 2f);
-
-            // Pop boost sutil
-            float popBoost = 1f;
-            if (progress < 0.8f)
-                popBoost = Mathf.Lerp(stickerPopScale, 1f, progress / 0.8f);
+            float popBoost = (progress < 0.8f) ? Mathf.Lerp(stickerPopScale, 1f, progress / 0.8f) : 1f;
 
             rt.localScale = stickerOriginalScale * scale * popBoost;
             yield return null;
@@ -227,7 +220,6 @@ public class PhotoAreaOverlay : MonoBehaviour
 
         rt.localScale = stickerOriginalScale;
 
-        // Começa o balanço + pulso
         wobbleCoroutine = StartCoroutine(AnimateStickerWobbleAndPulse(rt));
     }
 
@@ -238,19 +230,17 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             time += Time.deltaTime * stickerWobbleSpeed;
             float angle = Mathf.Sin(time) * stickerWobbleAngle;
-
             float pulse = 1f + Mathf.Sin(Time.time * stickerPulseSpeed) * stickerPulseScale;
 
             rt.localRotation = Quaternion.Euler(0, 0, angle);
             rt.localScale = stickerOriginalScale * pulse;
-
             yield return null;
         }
         rt.localRotation = Quaternion.identity;
         rt.localScale = stickerOriginalScale;
     }
 
-    public void Hide()
+    public void Hide(bool playVideo = true)
     {
         overlayPanel.SetActive(false);
 
@@ -260,7 +250,7 @@ public class PhotoAreaOverlay : MonoBehaviour
             wobbleCoroutine = null;
         }
 
-        if (!showingSticker)
+        if (!showingSticker && playVideo)
         {
             VideoPlayState.IsAuthorized = true;
             var nav = FindObjectOfType<NavigationManager>();

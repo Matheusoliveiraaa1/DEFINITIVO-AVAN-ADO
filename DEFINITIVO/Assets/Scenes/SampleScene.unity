@@ -3031,7 +3031,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e2d1fd18c3970854bbc61866a05f139b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a6a11ade2e349cc4ebd7b4fd73dd6615, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4993,10 +4993,10 @@ MonoBehaviour:
   stickerMenuContent: {fileID: 608273016}
   stickerMenuScrollView: {fileID: 1094861924}
   area1Stickers:
-  - {fileID: 1356931192619510245, guid: 2dc941023d4b6a749ae98e967be4161c, type: 3}
-  - {fileID: 2822079035480731666, guid: 297e010e99202214fbc514c67df49e27, type: 3}
-  - {fileID: 1203235471075835139, guid: 2dc9085e7f951c34c8e3c68d33980291, type: 3}
-  - {fileID: 1203235471075835139, guid: 2dc9085e7f951c34c8e3c68d33980291, type: 3}
+  - {fileID: 3285854925749108767, guid: 6774d6001638a754b876b74041e18fe4, type: 3}
+  - {fileID: 173365786233582652, guid: f46647a3b53444c4eaad2216af78f322, type: 3}
+  - {fileID: 252812386375318403, guid: de524e1456e172f4fb553d8c8c8ad443, type: 3}
+  - {fileID: 6212972348690862617, guid: 532373980eded7644a4ac5ff4ae3ac91, type: 3}
   - {fileID: 1356931192619510245, guid: 2dc941023d4b6a749ae98e967be4161c, type: 3}
   - {fileID: 2822079035480731666, guid: 297e010e99202214fbc514c67df49e27, type: 3}
   cursoDaguaStickers: []
@@ -5005,7 +5005,7 @@ MonoBehaviour:
   epifitasStickers: []
   serrapilheiraStickers: []
   areaTesteStickers:
-  - {fileID: 1422173344826456025, guid: ff03958cca25bd041bac8e626a988218, type: 3}
+  - {fileID: 2178573821587432809, guid: a6bb2040c9ef3dc47a1087f7c265c933, type: 3}
   - {fileID: 631859435886934609, guid: f783eb7a768afeb45b30884883d2dd95, type: 3}
   - {fileID: 3006071019075136080, guid: b5e491b7f9e1d1247b8bb91b9aa1481f, type: 3}
   locationManager: {fileID: 1103364857}
@@ -5099,6 +5099,14 @@ MonoBehaviour:
     longitude: -49.0725
     message: "Voc\xEA chegou \xE0 serrapilheira!"
     areaName: Serrapilheira
+  - latitude: -26.90558
+    longitude: -49.07985
+    message: 
+    areaName: AreaTeste
+  - latitude: -26.90574
+    longitude: -49.07916
+    message: 
+    areaName: Area1
   stickerPoints:
   - latitude: -26.90558
     longitude: -49.07985
@@ -6439,7 +6447,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -20.863}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -488.29, y: -475}
+  m_AnchoredPosition: {x: -432.61, y: -475}
   m_SizeDelta: {x: 508.7837, y: 1170.2515}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1382679680
@@ -6687,10 +6695,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Explore a Trilha
+  m_text: 'Explore a Trilha '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6752,7 +6760,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -524.35693, w: 0}
+  m_margin: {x: 0, y: 0, z: -526.23096, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -6919,7 +6927,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1448855984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7303,7 +7311,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 59.5, y: 327.66}
+  m_AnchoredPosition: {x: 58, y: 319.66}
   m_SizeDelta: {x: 385.3264, y: 281.6794}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1472469441
@@ -10261,7 +10269,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1848800779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10627,7 +10635,7 @@ MonoBehaviour:
   m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: 79459efec17a4d00a321bdcc27bbc385, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
