@@ -106,10 +106,11 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             {
                 if (!cameraExample.IsStickerAlreadyRegistered(this))
                 {
+                    // ✅ Alteração: usa ShowStickerLimitMessage em vez de ShowErrorMessage
                     if (!cameraExample.CanAddSticker())
                     {
                         ReturnToBase();
-                        cameraExample.ShowErrorMessage("Limite de stickers por foto excedido!");
+                        cameraExample.ShowStickerLimitMessage();
                         return;
                     }
 

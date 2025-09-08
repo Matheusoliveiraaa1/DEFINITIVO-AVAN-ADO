@@ -28,6 +28,12 @@ public class NativeCameraExample : MonoBehaviour
     public RectTransform photoAreaToCapture;
     public GameObject okButton;
 
+
+    [Header("Sticker Limit")]
+    public Image stickerLimitImage;
+
+
+
     [Header("Progresso")]
     public TextMeshProUGUI progressText;
     private int areasVisitadas = 0;
@@ -35,8 +41,8 @@ public class NativeCameraExample : MonoBehaviour
     private List<string> areasContabilizadas = new List<string>();
 
     [Header("Sticker Limit")]
-    public TextMeshProUGUI errorMessageText;
-    public TextMeshProUGUI warningMessageText;
+    public Image errorMessageImage; // Substitui o TextMeshProUGUI por Image
+    public Image warningMessageImage; // Substitui o TextMeshProUGUI por Image
     public int maxStickersPerPhoto = 5;
     private List<StickerController> activeStickers = new List<StickerController>();
 
@@ -60,11 +66,12 @@ public class NativeCameraExample : MonoBehaviour
         if (progressText != null)
             progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} áreas visitadas";
 
-        if (errorMessageText != null)
-            errorMessageText.gameObject.SetActive(false);
+        // Desativa as imagens de mensagem no início
+        if (errorMessageImage != null)
+            errorMessageImage.gameObject.SetActive(false);
 
-        if (warningMessageText != null)
-            warningMessageText.gameObject.SetActive(false);
+        if (warningMessageImage != null)
+            warningMessageImage.gameObject.SetActive(false);
 
         CacheStickerAreas();
         spawnedStickersCount.Clear();
@@ -111,20 +118,22 @@ public class NativeCameraExample : MonoBehaviour
 
     public void ShowErrorMessage(string message)
     {
-        StartCoroutine(ShowMessageCoroutine(errorMessageText, message, 3f));
+        StartCoroutine(ShowImageMessageCoroutine(errorMessageImage, 3f));
     }
 
     public void ShowWarningMessage(string message)
     {
-        StartCoroutine(ShowMessageCoroutine(warningMessageText, message, 3f));
+        StartCoroutine(ShowImageMessageCoroutine(warningMessageImage, 3f));
     }
 
-    private IEnumerator ShowMessageCoroutine(TextMeshProUGUI textElement, string message, float duration)
+    private IEnumerator ShowImageMessageCoroutine(Image imageElement, float duration)
     {
-        textElement.text = message;
-        textElement.gameObject.SetActive(true);
-        yield return new WaitForSeconds(duration);
-        textElement.gameObject.SetActive(false);
+        if (imageElement != null)
+        {
+            imageElement.gameObject.SetActive(true);
+            yield return new WaitForSeconds(duration);
+            imageElement.gameObject.SetActive(false);
+        }
     }
 
     public Sprite GetStickerSprite(string areaName, int index)
@@ -371,4 +380,17 @@ public class NativeCameraExample : MonoBehaviour
     {
         return activeStickers.Contains(sticker);
     }
+
+
+
+
+
+
+
+
+    public void ShowStickerLimitMessage()
+    {
+        StartCoroutine(ShowImageMessageCoroutine(stickerLimitImage, 3f));
+    }
+
 }

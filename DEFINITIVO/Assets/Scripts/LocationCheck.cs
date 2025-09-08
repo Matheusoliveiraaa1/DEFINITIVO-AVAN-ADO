@@ -207,10 +207,7 @@ public class LocationServiceManager : MonoBehaviour
             }
             else
             {
-                if (!poi.isStickerPoint)
-                {
-                    poi.alreadyTriggered = false;
-                }
+         
             }
         }
 

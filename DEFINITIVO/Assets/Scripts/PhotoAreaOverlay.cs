@@ -60,17 +60,14 @@ public class PhotoAreaOverlay : MonoBehaviour
     {
         if (showingSticker && !isAnimatingToBackpack)
         {
-            // Desativa painel escuro e extras antes da animação
-            overlayPanel.SetActive(false);
             if (stickerExtra1 != null) stickerExtra1.gameObject.SetActive(false);
             if (stickerExtra2 != null) stickerExtra2.gameObject.SetActive(false);
 
-            // Inicia animação do sticker principal
             StartCoroutine(AnimateStickerToBackpack());
         }
         else
         {
-            Hide(); // Comportamento normal para modo área
+            Hide();
         }
     }
 
@@ -98,7 +95,7 @@ public class PhotoAreaOverlay : MonoBehaviour
             yield return null;
         }
 
-        // Fase 2: Voar até a mochila
+        // Fase 2: Voar até a mochila (mantém tamanho reduzido)
         Vector3 startPosition = stickerRT.position;
         Vector3 targetPosition = backpackIconTarget.position;
 
@@ -109,18 +106,18 @@ public class PhotoAreaOverlay : MonoBehaviour
             float progress = Mathf.SmoothStep(0f, 1f, flyTime / flyDuration);
 
             stickerRT.position = Vector3.Lerp(startPosition, targetPosition, progress);
-            stickerRT.localScale = Vector3.Lerp(originalScale * minScale, Vector3.zero, progress);
+            stickerRT.localScale = originalScale * minScale; // mantém fixo
             yield return null;
         }
 
-        // Garante posição final
+        // Some no final
         stickerRT.position = targetPosition;
         stickerRT.localScale = Vector3.zero;
 
-        // Esconde apenas o sticker principal, sem tocar vídeo
+        overlayPanel.SetActive(false);
         stickerMain.gameObject.SetActive(false);
-        Hide(false);
 
+        Hide(false);
         isAnimatingToBackpack = false;
     }
 
@@ -132,12 +129,10 @@ public class PhotoAreaOverlay : MonoBehaviour
         Instance.showingSticker = false;
         Instance.overlayPanel.SetActive(true);
 
-        // Ativa imagens de área
         Instance.photo1.gameObject.SetActive(true);
         Instance.photo2.gameObject.SetActive(true);
         Instance.photo3.gameObject.SetActive(true);
 
-        // Desativa imagens de sticker
         if (Instance.stickerMain) Instance.stickerMain.gameObject.SetActive(false);
         if (Instance.stickerExtra1) Instance.stickerExtra1.gameObject.SetActive(false);
         if (Instance.stickerExtra2) Instance.stickerExtra2.gameObject.SetActive(false);
@@ -162,12 +157,10 @@ public class PhotoAreaOverlay : MonoBehaviour
         Instance.overlayPanel.SetActive(true);
         Instance.isAnimatingToBackpack = false;
 
-        // Desativa imagens de área
         Instance.photo1.gameObject.SetActive(false);
         Instance.photo2.gameObject.SetActive(false);
         Instance.photo3.gameObject.SetActive(false);
 
-        // Ativa sticker principal
         if (Instance.stickerMain != null)
         {
             Instance.stickerMain.sprite = mainSprite;
@@ -181,7 +174,6 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.StartCoroutine(Instance.AnimateStickerPop());
         }
 
-        // Extra 1
         if (Instance.stickerExtra1 != null)
         {
             if (overrideExtra1 != null) Instance.stickerExtra1.sprite = overrideExtra1;
@@ -189,7 +181,6 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.stickerExtra1.gameObject.SetActive(hasSprite);
         }
 
-        // Extra 2
         if (Instance.stickerExtra2 != null)
         {
             if (overrideExtra2 != null) Instance.stickerExtra2.sprite = overrideExtra2;
