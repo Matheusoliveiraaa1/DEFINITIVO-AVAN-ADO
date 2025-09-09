@@ -28,11 +28,8 @@ public class NativeCameraExample : MonoBehaviour
     public RectTransform photoAreaToCapture;
     public GameObject okButton;
 
-
     [Header("Sticker Limit")]
-    public Image stickerLimitImage;
-
-
+    public int maxStickersPerPhoto = 5;
 
     [Header("Progresso")]
     public TextMeshProUGUI progressText;
@@ -40,10 +37,13 @@ public class NativeCameraExample : MonoBehaviour
     private const int TOTAL_AREAS = 5;
     private List<string> areasContabilizadas = new List<string>();
 
-    [Header("Sticker Limit")]
-    public Image errorMessageImage; // Substitui o TextMeshProUGUI por Image
-    public Image warningMessageImage; // Substitui o TextMeshProUGUI por Image
-    public int maxStickersPerPhoto = 5;
+    [Header("Mensagem")]
+    public Image messageImage; // Única imagem de mensagem
+    public TextMeshProUGUI messageText; // Texto sobre a imagem
+    public string stickerLimitMessage = "Limite de Sticker na foto excedido!";
+    public string errorMessage = "Há stickers de outra área na foto!";
+    public string warningMessage = "Ainda há stickers dessa área que não foram utilizados!";
+
     private List<StickerController> activeStickers = new List<StickerController>();
 
     // Cache para otimização de performance
@@ -66,12 +66,8 @@ public class NativeCameraExample : MonoBehaviour
         if (progressText != null)
             progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} áreas visitadas";
 
-        // Desativa as imagens de mensagem no início
-        if (errorMessageImage != null)
-            errorMessageImage.gameObject.SetActive(false);
-
-        if (warningMessageImage != null)
-            warningMessageImage.gameObject.SetActive(false);
+        if (messageImage != null)
+            messageImage.gameObject.SetActive(false);
 
         CacheStickerAreas();
         spawnedStickersCount.Clear();
@@ -96,9 +92,7 @@ public class NativeCameraExample : MonoBehaviour
         foreach (GameObject sticker in stickers)
         {
             if (sticker != null && !stickerAreaCache.ContainsKey(sticker))
-            {
                 stickerAreaCache[sticker] = areaName;
-            }
         }
     }
 
@@ -116,25 +110,20 @@ public class NativeCameraExample : MonoBehaviour
             activeStickers.Remove(sticker);
     }
 
-    public void ShowErrorMessage(string message)
+    private IEnumerator ShowMessageCoroutine(string message, float duration)
     {
-        StartCoroutine(ShowImageMessageCoroutine(errorMessageImage, 3f));
-    }
-
-    public void ShowWarningMessage(string message)
-    {
-        StartCoroutine(ShowImageMessageCoroutine(warningMessageImage, 3f));
-    }
-
-    private IEnumerator ShowImageMessageCoroutine(Image imageElement, float duration)
-    {
-        if (imageElement != null)
+        if (messageImage != null && messageText != null)
         {
-            imageElement.gameObject.SetActive(true);
+            messageText.text = message;
+            messageImage.gameObject.SetActive(true);
             yield return new WaitForSeconds(duration);
-            imageElement.gameObject.SetActive(false);
+            messageImage.gameObject.SetActive(false);
         }
     }
+
+    public void ShowStickerLimitMessage() => StartCoroutine(ShowMessageCoroutine(stickerLimitMessage, 3f));
+    public void ShowErrorMessage() => StartCoroutine(ShowMessageCoroutine(errorMessage, 3f));
+    public void ShowWarningMessage() => StartCoroutine(ShowMessageCoroutine(warningMessage, 3f));
 
     public Sprite GetStickerSprite(string areaName, int index)
     {
@@ -209,7 +198,6 @@ public class NativeCameraExample : MonoBehaviour
                 var controller = sticker.GetComponent<StickerController>() ?? sticker.AddComponent<StickerController>();
                 controller.SetRawImageRect(imageDisplay.rectTransform);
 
-                // ✅ NOVO: marca a área de origem do clone
                 if (stickerAreaCache.TryGetValue(stickerPrefab, out string areaName))
                 {
                     controller.AreaName = areaName;
@@ -286,13 +274,13 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (!AreStickersFromCorrectArea())
         {
-            ShowErrorMessage("Há stickers de outra área na foto! Use apenas os stickers da área " + GetAreaDisplayName(currentArea));
+            ShowErrorMessage();
             return;
         }
 
         if (AreThereUnusedStickersFromCurrentArea())
         {
-            ShowWarningMessage("Ainda há stickers da área " + GetAreaDisplayName(currentArea) + " que não foram utilizados!");
+            ShowWarningMessage();
             return;
         }
 
@@ -321,7 +309,7 @@ public class NativeCameraExample : MonoBehaviour
     {
         int count = 0;
         foreach (StickerController sticker in activeStickers)
-            if (sticker.AreaName == areaName) count++; // ✅ usa o campo direto
+            if (sticker.AreaName == areaName) count++;
 
         return count;
     }
@@ -333,17 +321,17 @@ public class NativeCameraExample : MonoBehaviour
 
     private string GetAreaDisplayName(string areaCode)
     {
-        switch (areaCode)
+        return areaCode switch
         {
-            case "Area1": return "Área 1";
-            case "CursoDagua": return "Curso D'água";
-            case "Subosque": return "Subosque";
-            case "Dossel": return "Dossel";
-            case "Epifitas": return "Epífitas";
-            case "Serrapilheira": return "Serrapilheira";
-            case "AreaTeste": return "Área Teste";
-            default: return areaCode;
-        }
+            "Area1" => "Área 1",
+            "CursoDagua" => "Curso D'água",
+            "Subosque" => "Subosque",
+            "Dossel" => "Dossel",
+            "Epifitas" => "Epífitas",
+            "Serrapilheira" => "Serrapilheira",
+            "AreaTeste" => "Área Teste",
+            _ => areaCode,
+        };
     }
 
     private IEnumerator CaptureAndSave()
@@ -380,17 +368,4 @@ public class NativeCameraExample : MonoBehaviour
     {
         return activeStickers.Contains(sticker);
     }
-
-
-
-
-
-
-
-
-    public void ShowStickerLimitMessage()
-    {
-        StartCoroutine(ShowImageMessageCoroutine(stickerLimitImage, 3f));
-    }
-
 }

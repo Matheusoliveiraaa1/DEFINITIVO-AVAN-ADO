@@ -45,6 +45,10 @@ public class PhotoAreaOverlay : MonoBehaviour
     private Coroutine wobbleCoroutine;
     private bool isAnimatingToBackpack = false;
 
+    // --- NOVO: Controle da animação da photo1 ---
+    private Coroutine photo1AnimationCoroutine;
+    private Vector3 photo1OriginalScale;
+
     private void Awake()
     {
         Instance = this;
@@ -143,6 +147,16 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.wobbleCoroutine = null;
         }
 
+        // --- ANIMAÇÃO DA PROFESSORINHA ---
+        if (Instance.photo1AnimationCoroutine != null)
+        {
+            Instance.StopCoroutine(Instance.photo1AnimationCoroutine);
+        }
+
+        Instance.photo1OriginalScale = Instance.photo1.rectTransform.localScale;
+        Instance.photo1.rectTransform.localScale = Vector3.zero;
+        Instance.photo1AnimationCoroutine = Instance.StartCoroutine(Instance.AnimatePhoto1());
+
         if (img1 != null) Instance.photo1.sprite = img1;
         if (img2 != null) Instance.photo2.sprite = img2;
         if (img3 != null) Instance.photo3.sprite = img3;
@@ -231,6 +245,40 @@ public class PhotoAreaOverlay : MonoBehaviour
         rt.localScale = stickerOriginalScale;
     }
 
+    // --- NOVO: Animação da professorinha (photo1) ---
+    private IEnumerator AnimatePhoto1()
+    {
+        RectTransform rt = photo1.rectTransform;
+
+        // Entrada com bounce
+        float t = 0;
+        float duration = 0.5f;
+        while (t < duration)
+        {
+            t += Time.deltaTime;
+            float progress = t / duration;
+            float scale = Mathf.Sin(progress * Mathf.PI * 0.5f); // curva suave
+            rt.localScale = photo1OriginalScale * scale;
+            yield return null;
+        }
+        rt.localScale = photo1OriginalScale;
+
+        // Loop contínuo de balanço + pulso
+        float time = 0;
+        while (overlayPanel.activeSelf && !showingSticker)
+        {
+            time += Time.deltaTime;
+            float angle = Mathf.Sin(time * 2f) * 5f; // balanço leve
+            float pulse = 1f + Mathf.Sin(time * 3f) * 0.03f; // pulso sutil
+            rt.localRotation = Quaternion.Euler(0, 0, angle);
+            rt.localScale = photo1OriginalScale * pulse;
+            yield return null;
+        }
+
+        rt.localRotation = Quaternion.identity;
+        rt.localScale = photo1OriginalScale;
+    }
+
     public void Hide(bool playVideo = true)
     {
         overlayPanel.SetActive(false);
@@ -239,6 +287,14 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             StopCoroutine(wobbleCoroutine);
             wobbleCoroutine = null;
+        }
+
+        if (photo1AnimationCoroutine != null)
+        {
+            StopCoroutine(photo1AnimationCoroutine);
+            photo1AnimationCoroutine = null;
+            photo1.rectTransform.localRotation = Quaternion.identity;
+            photo1.rectTransform.localScale = photo1OriginalScale;
         }
 
         if (!showingSticker && playVideo)
