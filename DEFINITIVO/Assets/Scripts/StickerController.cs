@@ -8,6 +8,10 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
     [HideInInspector]
     public string AreaName;
 
+    // Novo: índice do sticker (0..5)
+    [HideInInspector]
+    public int StickerIndex = -1;
+
     private RectTransform rectTransform;
     private Canvas canvas;
     private RectTransform rawImageRect;
@@ -106,7 +110,6 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
             {
                 if (!cameraExample.IsStickerAlreadyRegistered(this))
                 {
-                    // ✅ Alteração: usa ShowStickerLimitMessage em vez de ShowErrorMessage
                     if (!cameraExample.CanAddSticker())
                     {
                         ReturnToBase();

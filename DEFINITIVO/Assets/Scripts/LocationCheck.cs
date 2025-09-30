@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,8 +29,9 @@ public class LocationServiceManager : MonoBehaviour
     [Header("Inventory")]
     public InventoryManager inventoryManager;
 
-    // Evento p�blico que notifica quando o conjunto de stickers mudou
+    // Evento público que notifica quando o conjunto de stickers mudou
     public event Action OnCollectedStickersChanged;
+    public event Action OnUsedStickersChanged; // notifica quando stickers "usados" mudam
 
     [System.Serializable]
     public class AreaPoint
@@ -52,6 +53,7 @@ public class LocationServiceManager : MonoBehaviour
     }
 
     private Dictionary<string, List<int>> collectedStickers = new Dictionary<string, List<int>>();
+    private Dictionary<string, List<int>> usedStickers = new Dictionary<string, List<int>>(); // NOVO: stickers usados nas fotos confirmadas
     private List<PointOfInterest> allPoints = new List<PointOfInterest>();
 
     private class PointOfInterest
@@ -89,10 +91,17 @@ public class LocationServiceManager : MonoBehaviour
         public List<int> stickerIndices = new List<int>();
     }
 
-    // CARREGA o estado antes de qualquer Start() - evita problema de ordem de execu��o.
+    [Serializable]
+    public class UsedStickerSaveData
+    {
+        public List<AreaStickerData> areas = new List<AreaStickerData>();
+    }
+
+    // CARREGA o estado antes de qualquer Start() - evita problema de ordem de execução.
     private void Awake()
     {
         LoadCollectedStickers();
+        LoadUsedStickers(); // NOVO: carrega stickers usados
     }
 
     private void Start()
@@ -102,7 +111,7 @@ public class LocationServiceManager : MonoBehaviour
         if (stickerNotificationImage != null)
             stickerNotificationImage.gameObject.SetActive(false);
 
-        // Se o InventoryManager estiver referenciado via inspector, for�a uma atualiza��o da UI (Start rodar� depois do Awake).
+        // Se o InventoryManager estiver referenciado via inspector, força uma atualização da UI (Start rodará depois do Awake).
         inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
         inventoryManager?.UpdateInventoryUI();
 
@@ -128,7 +137,7 @@ public class LocationServiceManager : MonoBehaviour
 
     private IEnumerator StartLocationService()
     {
-        // Adicione esta verifica��o inicial
+        // Adicione esta verificação inicial
         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation) ||
                !Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
         {
@@ -137,7 +146,7 @@ public class LocationServiceManager : MonoBehaviour
 
         if (!Input.location.isEnabledByUser)
         {
-            messageText.text = "Localiza��o desativada.";
+            messageText.text = "Localização desativada.";
             yield break;
         }
 
@@ -153,7 +162,7 @@ public class LocationServiceManager : MonoBehaviour
         if (maxWait <= 0 || Input.location.status == LocationServiceStatus.Failed)
         {
             messageText.text = maxWait <= 0 ?
-                "Tempo limite ao iniciar servi�o." : "Falha ao obter localiza��o.";
+                "Tempo limite ao iniciar serviço." : "Falha ao obter localização.";
             yield break;
         }
 
@@ -164,7 +173,7 @@ public class LocationServiceManager : MonoBehaviour
     {
         if (Input.location.status != LocationServiceStatus.Running)
         {
-            messageText.text = "Servi�o parado.";
+            messageText.text = "Serviço parado.";
             return;
         }
 
@@ -189,7 +198,7 @@ public class LocationServiceManager : MonoBehaviour
     {
         latitudeText.text = $"Latitude: {data.latitude:F6}";
         longitudeText.text = $"Longitude: {data.longitude:F6}";
-        accuracyText.text = $"Precis�o: {data.horizontalAccuracy:F1} m";
+        accuracyText.text = $"Precisão: {data.horizontalAccuracy:F1} m";
     }
 
     private void CheckNearbyPoints(LocationInfo data)
@@ -207,11 +216,12 @@ public class LocationServiceManager : MonoBehaviour
             }
             else
             {
-         
+
             }
         }
 
-        cameraButton.SetActive(isInsideAnyArea);
+        // NOTE: não ligamos o cameraButton aqui genericamente porque a ativação
+        // depende se a área está completa. A ativação é tratada em HandleAreaPoint e HandleTestArea.
         if (!isInsideAnyArea && !string.IsNullOrEmpty(messageText.text))
         {
             StartCoroutine(HideNotificationAfterDelay(2f));
@@ -307,14 +317,108 @@ public class LocationServiceManager : MonoBehaviour
             Handheld.Vibrate();
             FindAnyObjectByType<NativeCameraExample>().currentArea = poi.areaName;
 
-            // Resetar estado de v�deo para nova �rea
+            // Resetar estado de vídeo para nova área
             VideoPlayState.Reset();
 
             // Mostrar overlay
             PhotoAreaOverlay.Show();
         }
+
+        // Só habilita o botão da câmera se a área NÃO estiver completa
+        bool allowCamera = !IsAreaCompleted(poi.areaName);
+        if (cameraButton != null)
+            cameraButton.SetActive(allowCamera);
     }
 
+    // --------------------------
+    // Persistência e lógica para stickers usados (NOVO)
+    // --------------------------
+    private void RegisterUsedSticker(string areaName, int index)
+    {
+        if (index < 0) return;
+
+        if (!usedStickers.ContainsKey(areaName))
+            usedStickers[areaName] = new List<int>();
+
+        if (!usedStickers[areaName].Contains(index))
+        {
+            usedStickers[areaName].Add(index);
+            SaveUsedStickers();
+            OnUsedStickersChanged?.Invoke();
+        }
+    }
+
+    public void MarkStickerAsUsed(string areaName, int index)
+    {
+        RegisterUsedSticker(areaName, index);
+
+        // se atingiu 6 então marca área como completa implicitamente (persistência é através de usedStickers)
+        if (GetUsedStickerCount(areaName) >= 6)
+        {
+            // nothing else required — IsAreaCompleted consultará usedStickers
+            // mas podemos acionar evento pra atualizar UI
+            OnUsedStickersChanged?.Invoke();
+        }
+    }
+
+    public bool IsStickerUsed(string areaName, int index)
+    {
+        return usedStickers.ContainsKey(areaName) && usedStickers[areaName].Contains(index);
+    }
+
+    public int GetUsedStickerCount(string areaName)
+    {
+        if (usedStickers.ContainsKey(areaName))
+            return usedStickers[areaName].Count;
+        return 0;
+    }
+
+    public bool IsAreaCompleted(string areaName)
+    {
+        return GetUsedStickerCount(areaName) >= 6;
+    }
+
+    private void SaveUsedStickers()
+    {
+        UsedStickerSaveData data = new UsedStickerSaveData();
+        foreach (var kvp in usedStickers)
+        {
+            data.areas.Add(new AreaStickerData
+            {
+                areaName = kvp.Key,
+                stickerIndices = kvp.Value
+            });
+        }
+
+        string json = JsonUtility.ToJson(data);
+        PlayerPrefs.SetString("UsedStickers", json);
+        PlayerPrefs.Save();
+    }
+
+    private void LoadUsedStickers()
+    {
+        usedStickers.Clear();
+
+        if (PlayerPrefs.HasKey("UsedStickers"))
+        {
+            string json = PlayerPrefs.GetString("UsedStickers");
+            if (!string.IsNullOrEmpty(json))
+            {
+                UsedStickerSaveData data = JsonUtility.FromJson<UsedStickerSaveData>(json);
+                if (data != null)
+                {
+                    foreach (var area in data.areas)
+                    {
+                        usedStickers[area.areaName] = new List<int>(area.stickerIndices);
+                    }
+                }
+            }
+        }
+    }
+
+    // --------------------------
+    // Fim persistência usados
+    // --------------------------
 
     private void RegisterStickerCollection(PointOfInterest poi)
     {
@@ -330,7 +434,7 @@ public class LocationServiceManager : MonoBehaviour
             SaveCollectedStickers(); // salva imediatamente
             OnCollectedStickersChanged?.Invoke(); // notifica listeners (InventoryManager, por exemplo)
 
-            // atualiza UI se refer�ncia estiver setada
+            // atualiza UI se referência estiver setada
             if (inventoryManager != null)
             {
                 inventoryManager.UpdateInventoryUI();
@@ -421,12 +525,17 @@ public class LocationServiceManager : MonoBehaviour
 
     private void OnApplicationPause(bool pause)
     {
-        if (pause) SaveCollectedStickers();
+        if (pause)
+        {
+            SaveCollectedStickers();
+            SaveUsedStickers();
+        }
     }
 
     private void OnApplicationQuit()
     {
         SaveCollectedStickers();
+        SaveUsedStickers();
     }
 
     private void OnDisable()
