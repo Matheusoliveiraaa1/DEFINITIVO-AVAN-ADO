@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 
@@ -10,7 +10,7 @@ public class PhotoAreaOverlay : MonoBehaviour
     public GameObject overlayPanel;
     public Button okButton;
 
-    [Header("UI Elements - ¡rea")]
+    [Header("UI Elements - √Årea")]
     public Image photo1;
     public Image photo2;
     public Image photo3;
@@ -22,21 +22,21 @@ public class PhotoAreaOverlay : MonoBehaviour
 
     [Header("UI Elements - Sticker Glow (novo)")]
     public Image stickerGlow;
-    [Tooltip("Multiplicador do tamanho do glow em relaÁ„o ao sticker")]
+    [Tooltip("Multiplicador do tamanho do glow em rela√ß√£o ao sticker")]
     public float stickerGlowScaleMultiplier = 1.35f;
     [Tooltip("Alpha base do glow (0..1)")]
     public float stickerGlowAlpha = 0.5f;
 
     [Header("Animation")]
-    [Tooltip("Tempo da animaÁ„o de crescimento em segundos")]
+    [Tooltip("Tempo da anima√ß√£o de crescimento em segundos")]
     public float stickerPopDuration = 2.0f;
-    [Tooltip("Escala extra no meio da animaÁ„o para dar 'pop'")]
+    [Tooltip("Escala extra no meio da anima√ß√£o para dar 'pop'")]
     public float stickerPopScale = 1.15f;
-    [Tooltip("¬ngulo m·ximo de rotaÁ„o para o efeito de balanÁo")]
+    [Tooltip("√Çngulo m√°ximo de rota√ß√£o para o efeito de balan√ßo")]
     public float stickerWobbleAngle = 5f;
-    [Tooltip("Velocidade do balanÁo")]
+    [Tooltip("Velocidade do balan√ßo")]
     public float stickerWobbleSpeed = 2f;
-    [Tooltip("Amplitude do leve pulso apÛs crescimento")]
+    [Tooltip("Amplitude do leve pulso ap√≥s crescimento")]
     public float stickerPulseScale = 0.05f;
     [Tooltip("Velocidade do pulso")]
     public float stickerPulseSpeed = 2f;
@@ -53,14 +53,13 @@ public class PhotoAreaOverlay : MonoBehaviour
     private Coroutine wobbleCoroutine;
     private bool isAnimatingToBackpack = false;
 
-    // --- NOVO: Controle da animaÁ„o da photo1 ---
+    // --- NOVO: Controle da anima√ß√£o da photo1 ---
     private Coroutine photo1AnimationCoroutine;
     private Vector3 photo1OriginalScale;
 
     private void Awake()
     {
         Instance = this;
-
         overlayPanel.SetActive(false);
         okButton.onClick.AddListener(OnOkButtonClick);
 
@@ -79,9 +78,10 @@ public class PhotoAreaOverlay : MonoBehaviour
     {
         if (showingSticker && !isAnimatingToBackpack)
         {
-            if (stickerExtra1 != null) stickerExtra1.gameObject.SetActive(false);
-            if (stickerExtra2 != null) stickerExtra2.gameObject.SetActive(false);
-
+            if (stickerExtra1 != null)
+                stickerExtra1.gameObject.SetActive(false);
+            if (stickerExtra2 != null)
+                stickerExtra2.gameObject.SetActive(false);
             StartCoroutine(AnimateStickerToBackpack());
         }
         else
@@ -117,22 +117,20 @@ public class PhotoAreaOverlay : MonoBehaviour
                 stickerGlow.rectTransform.localScale = originalScale * scale * stickerGlowScaleMultiplier;
                 stickerGlow.rectTransform.position = stickerRT.position;
             }
-
             yield return null;
         }
 
-        // Fase 2: Voar atÈ a mochila (mantÈm tamanho reduzido)
+        // Fase 2: Voar at√© a mochila (mant√©m tamanho reduzido)
         Vector3 startPosition = stickerRT.position;
         Vector3 targetPosition = backpackIconTarget.position;
-
         float flyTime = 0f;
+
         while (flyTime < flyDuration)
         {
             flyTime += Time.deltaTime;
             float progress = Mathf.SmoothStep(0f, 1f, flyTime / flyDuration);
-
             stickerRT.position = Vector3.Lerp(startPosition, targetPosition, progress);
-            stickerRT.localScale = originalScale * minScale; // mantÈm fixo
+            stickerRT.localScale = originalScale * minScale; // mant√©m fixo
 
             if (stickerGlow != null)
             {
@@ -142,14 +140,12 @@ public class PhotoAreaOverlay : MonoBehaviour
                 c.a = Mathf.Lerp(stickerGlowAlpha, 0f, progress); // fade out
                 stickerGlow.color = c;
             }
-
             yield return null;
         }
 
         // Some no final
         stickerRT.position = targetPosition;
         stickerRT.localScale = Vector3.zero;
-
         if (stickerGlow != null)
         {
             stickerGlow.gameObject.SetActive(false);
@@ -157,15 +153,15 @@ public class PhotoAreaOverlay : MonoBehaviour
 
         overlayPanel.SetActive(false);
         stickerMain.gameObject.SetActive(false);
-
         Hide(false);
         isAnimatingToBackpack = false;
     }
 
-    // --- MODO ¡REA ---
+    // --- MODO √ÅREA ---
     public static void Show(Sprite img1 = null, Sprite img2 = null, Sprite img3 = null)
     {
-        if (Instance == null) return;
+        if (Instance == null)
+            return;
 
         Instance.showingSticker = false;
         Instance.overlayPanel.SetActive(true);
@@ -174,10 +170,14 @@ public class PhotoAreaOverlay : MonoBehaviour
         Instance.photo2.gameObject.SetActive(true);
         Instance.photo3.gameObject.SetActive(true);
 
-        if (Instance.stickerMain) Instance.stickerMain.gameObject.SetActive(false);
-        if (Instance.stickerExtra1) Instance.stickerExtra1.gameObject.SetActive(false);
-        if (Instance.stickerExtra2) Instance.stickerExtra2.gameObject.SetActive(false);
-        if (Instance.stickerGlow) Instance.stickerGlow.gameObject.SetActive(false);
+        if (Instance.stickerMain)
+            Instance.stickerMain.gameObject.SetActive(false);
+        if (Instance.stickerExtra1)
+            Instance.stickerExtra1.gameObject.SetActive(false);
+        if (Instance.stickerExtra2)
+            Instance.stickerExtra2.gameObject.SetActive(false);
+        if (Instance.stickerGlow)
+            Instance.stickerGlow.gameObject.SetActive(false);
 
         if (Instance.wobbleCoroutine != null)
         {
@@ -185,7 +185,7 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.wobbleCoroutine = null;
         }
 
-        // --- ANIMA«√O DA PROFESSORINHA ---
+        // --- ANIMA√á√ÉO DA PROFESSORINHA ---
         if (Instance.photo1AnimationCoroutine != null)
         {
             Instance.StopCoroutine(Instance.photo1AnimationCoroutine);
@@ -195,20 +195,25 @@ public class PhotoAreaOverlay : MonoBehaviour
         Instance.photo1.rectTransform.localScale = Vector3.zero;
         Instance.photo1AnimationCoroutine = Instance.StartCoroutine(Instance.AnimatePhoto1());
 
-        if (img1 != null) Instance.photo1.sprite = img1;
-        if (img2 != null) Instance.photo2.sprite = img2;
-        if (img3 != null) Instance.photo3.sprite = img3;
+        if (img1 != null)
+            Instance.photo1.sprite = img1;
+        if (img2 != null)
+            Instance.photo2.sprite = img2;
+        if (img3 != null)
+            Instance.photo3.sprite = img3;
     }
 
     // --- MODO STICKER ---
     public static void ShowSticker(Sprite mainSprite, Sprite overrideExtra1 = null, Sprite overrideExtra2 = null)
     {
-        if (Instance == null) return;
+        if (Instance == null)
+            return;
 
         Instance.showingSticker = true;
         Instance.overlayPanel.SetActive(true);
         Instance.isAnimatingToBackpack = false;
 
+        // Esconde as fotos da √°rea
         Instance.photo1.gameObject.SetActive(false);
         Instance.photo2.gameObject.SetActive(false);
         Instance.photo3.gameObject.SetActive(false);
@@ -219,6 +224,8 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.stickerMain.gameObject.SetActive(true);
             Instance.stickerMain.rectTransform.localScale = Instance.stickerOriginalScale;
             Instance.stickerMain.rectTransform.localRotation = Quaternion.identity;
+            // <-- CORRE√á√ÉO: reset da posi√ß√£o para o centro do overlay
+            Instance.stickerMain.rectTransform.anchoredPosition = Vector2.zero;
 
             if (Instance.wobbleCoroutine != null)
                 Instance.StopCoroutine(Instance.wobbleCoroutine);
@@ -228,16 +235,15 @@ public class PhotoAreaOverlay : MonoBehaviour
             {
                 if (Instance.stickerGlow.sprite == null)
                 {
-                    // fallback: usa o prÛprio sprite do sticker se n„o houver um glow separado
+                    // fallback: usa o pr√≥prio sprite do sticker se n√£o houver um glow separado
                     Instance.stickerGlow.sprite = mainSprite;
                 }
-
                 Instance.stickerGlow.gameObject.SetActive(true);
-                Instance.stickerGlow.color = new Color(1f, 0.95f, 0.6f, Instance.stickerGlowAlpha); // ajuste de cor/alpha
+                Instance.stickerGlow.color = new Color(1f, 0.95f, 0.6f, Instance.stickerGlowAlpha);
                 Instance.stickerGlow.rectTransform.position = Instance.stickerMain.rectTransform.position;
                 Instance.stickerGlow.rectTransform.localScale = Instance.stickerOriginalScale * Instance.stickerGlowScaleMultiplier;
 
-                // Garantir que o glow esteja por tr·s (Ìndice de sibling menor)
+                // Garantir que o glow esteja por tr√°s
                 int stickerIndex = Instance.stickerMain.transform.GetSiblingIndex();
                 int glowIndex = Mathf.Max(0, stickerIndex - 1);
                 Instance.stickerGlow.transform.SetSiblingIndex(glowIndex);
@@ -248,14 +254,16 @@ public class PhotoAreaOverlay : MonoBehaviour
 
         if (Instance.stickerExtra1 != null)
         {
-            if (overrideExtra1 != null) Instance.stickerExtra1.sprite = overrideExtra1;
+            if (overrideExtra1 != null)
+                Instance.stickerExtra1.sprite = overrideExtra1;
             bool hasSprite = Instance.stickerExtra1.sprite != null;
             Instance.stickerExtra1.gameObject.SetActive(hasSprite);
         }
 
         if (Instance.stickerExtra2 != null)
         {
-            if (overrideExtra2 != null) Instance.stickerExtra2.sprite = overrideExtra2;
+            if (overrideExtra2 != null)
+                Instance.stickerExtra2.sprite = overrideExtra2;
             bool hasSprite = Instance.stickerExtra2.sprite != null;
             Instance.stickerExtra2.gameObject.SetActive(hasSprite);
         }
@@ -264,7 +272,6 @@ public class PhotoAreaOverlay : MonoBehaviour
     private IEnumerator AnimateStickerPop()
     {
         RectTransform rt = stickerMain.rectTransform;
-
         rt.localScale = Vector3.zero;
         rt.localRotation = Quaternion.identity;
 
@@ -276,7 +283,6 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             t += Time.deltaTime;
             float progress = t / stickerPopDuration;
-
             float scale = 1f - Mathf.Pow(1f - progress, 2f);
             float popBoost = (progress < 0.8f) ? Mathf.Lerp(stickerPopScale, 1f, progress / 0.8f) : 1f;
 
@@ -290,7 +296,6 @@ public class PhotoAreaOverlay : MonoBehaviour
                 stickerGlow.color = c;
                 stickerGlow.rectTransform.position = rt.position;
             }
-
             yield return null;
         }
 
@@ -298,7 +303,9 @@ public class PhotoAreaOverlay : MonoBehaviour
         if (stickerGlow != null)
         {
             stickerGlow.rectTransform.localScale = stickerOriginalScale * stickerGlowScaleMultiplier;
-            Color c = stickerGlow.color; c.a = stickerGlowAlpha; stickerGlow.color = c;
+            Color c = stickerGlow.color;
+            c.a = stickerGlowAlpha;
+            stickerGlow.color = c;
         }
 
         wobbleCoroutine = StartCoroutine(AnimateStickerWobbleAndPulse(rt));
@@ -325,9 +332,9 @@ public class PhotoAreaOverlay : MonoBehaviour
                 c.a = stickerGlowAlpha * (0.8f + 0.2f * (Mathf.Sin(Time.time * stickerPulseSpeed * 1.2f) * 0.5f + 0.5f));
                 stickerGlow.color = c;
             }
-
             yield return null;
         }
+
         rt.localRotation = Quaternion.identity;
         rt.localScale = stickerOriginalScale;
         if (stickerGlow != null)
@@ -336,33 +343,77 @@ public class PhotoAreaOverlay : MonoBehaviour
         }
     }
 
-    // --- NOVO: AnimaÁ„o da professorinha (photo1) ---
+    // --- NOVO: Anima√ß√£o da professorinha (photo1) ---
     private IEnumerator AnimatePhoto1()
     {
         RectTransform rt = photo1.rectTransform;
 
-        // Entrada com bounce
-        float t = 0;
-        float duration = 0.5f;
+        // Guarda posi√ß√£o e escala originais
+        Vector3 targetPos = rt.anchoredPosition;
+        Vector3 offScreenStart = targetPos + new Vector3(-Screen.width * 0.6f, 0f, 0f); // come√ßa fora da tela √† esquerda
+        rt.anchoredPosition = offScreenStart;
+
+        // Come√ßa um pouco inclinada e menor
+        rt.localScale = photo1OriginalScale * 0.95f;
+        rt.localRotation = Quaternion.Euler(0, 0, 10f); // inclinada pra direita
+
+        // --- Entrada suave com curva e leve "bounce" natural ---
+        float duration = 1.2f;
+        float t = 0f;
+
         while (t < duration)
         {
             t += Time.deltaTime;
-            float progress = t / duration;
-            float scale = Mathf.Sin(progress * Mathf.PI * 0.5f); // curva suave
+            float progress = Mathf.Clamp01(t / duration);
+            // Suaviza√ß√£o (easeOutCubic)
+            float eased = 1f - Mathf.Pow(1f - progress, 3f);
+
+            // Movimento lateral fluido
+            rt.anchoredPosition = Vector3.Lerp(offScreenStart, targetPos, eased);
+
+            // Escala com leve overshoot, mas suavizando no final
+            float scale = Mathf.Lerp(0.95f, 1.0f + Mathf.Sin(progress * Mathf.PI) * 0.02f, eased);
             rt.localScale = photo1OriginalScale * scale;
+
+            // Rota√ß√£o vai suavizando at√© ficar reta
+            float rotation = Mathf.Lerp(10f, 0f, eased);
+            rt.localRotation = Quaternion.Euler(0, 0, rotation);
+
             yield return null;
         }
-        rt.localScale = photo1OriginalScale;
 
-        // Loop contÌnuo de balanÁo + pulso
-        float time = 0;
+        // Garante estado final exato
+        rt.anchoredPosition = targetPos;
+        rt.localScale = photo1OriginalScale;
+        rt.localRotation = Quaternion.identity;
+
+        // --- Transi√ß√£o suave para o loop cont√≠nuo ---
+        float transitionTime = 0.2f;
+        float startScale = rt.localScale.x;
+        float endScale = 1f;
+        float elapsed = 0f;
+
+        while (elapsed < transitionTime)
+        {
+            elapsed += Time.deltaTime;
+            float p = Mathf.Clamp01(elapsed / transitionTime);
+            rt.localScale = Vector3.Lerp(photo1OriginalScale * startScale, photo1OriginalScale * endScale, p);
+            yield return null;
+        }
+
+        // --- Loop cont√≠nuo de balan√ßo e pulso suaves ---
+        float time = 0f;
         while (overlayPanel.activeSelf && !showingSticker)
         {
             time += Time.deltaTime;
-            float angle = Mathf.Sin(time * 2f) * 5f; // balanÁo leve
-            float pulse = 1f + Mathf.Sin(time * 3f) * 0.03f; // pulso sutil
+
+            // Balan√ßo natural
+            float angle = Mathf.Sin(time * 1.5f) * 3f;
+            float pulse = 1f + Mathf.Sin(time * 2f) * 0.015f; // pulso mais sutil (antes era 0.02f)
+
             rt.localRotation = Quaternion.Euler(0, 0, angle);
             rt.localScale = photo1OriginalScale * pulse;
+
             yield return null;
         }
 

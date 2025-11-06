@@ -15,4 +15,6 @@ public class LocationPermissionManager : MonoBehaviour
             Permission.RequestUserPermission(Permission.CoarseLocation);
         }
     }
+
+
 }

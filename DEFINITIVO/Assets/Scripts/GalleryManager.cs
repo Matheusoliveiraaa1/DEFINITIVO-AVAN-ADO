@@ -8,9 +8,8 @@ public class GalleryManager : MonoBehaviour
     [System.Serializable]
     public class AreaSlot
     {
-        public string areaName;           // Nome da área (ex: "Area1")
-        public RawImage slotImage;        // Miniatura no painel da galeria
-        public Texture defaultTexture;    // Textura padrão caso não tenha foto
+        public string areaName;      // Nome da área (ex: "Area1")
+        public RawImage slotImage;   // Miniatura no painel da galeria
     }
 
     [Header("Slots da Galeria")]
@@ -52,7 +51,7 @@ public class GalleryManager : MonoBehaviour
             }
         }
 
-        // SALVAR IMAGEM EM DISCO (APENAS NO CACHE INTERNO)
+        // SALVAR IMAGEM EM DISCO (CACHE INTERNO)
         string path = GetImageFilePath(areaName);
         byte[] bytes = image.EncodeToPNG();
         File.WriteAllBytes(path, bytes);
@@ -100,10 +99,11 @@ public class GalleryManager : MonoBehaviour
             }
             else
             {
-                slot.slotImage.texture = slot.defaultTexture;
+                // não define textura — mantém cor padrão configurada no Editor
+                slot.slotImage.texture = null;
             }
 
-            // Garante que botão funcione
+            // Garante que o botão funcione
             Button slotButton = slot.slotImage.GetComponent<Button>();
             if (slotButton != null)
             {

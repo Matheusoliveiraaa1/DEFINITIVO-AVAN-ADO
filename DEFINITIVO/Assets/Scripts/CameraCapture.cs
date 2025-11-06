@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System; // Necessário para System.GC
 
 public class NativeCameraExample : MonoBehaviour
 {
@@ -14,7 +15,9 @@ public class NativeCameraExample : MonoBehaviour
     [Header("Sticker Settings")]
     public Transform stickerMenuContent;
     public GameObject stickerMenuScrollView;
+
     public GameObject[] area1Stickers;
+    public GameObject[] area2Stickers; // NOVA ÁREA
     public GameObject[] cursoDaguaStickers;
     public GameObject[] subosqueStickers;
     public GameObject[] dosselStickers;
@@ -34,7 +37,7 @@ public class NativeCameraExample : MonoBehaviour
     [Header("Progresso")]
     public TextMeshProUGUI progressText;
     private int areasVisitadas = 0;
-    private const int TOTAL_AREAS = 5;
+    private const int TOTAL_AREAS = 6; // Atualizado para incluir Área2
     private List<string> areasContabilizadas = new List<string>();
 
     [Header("Mensagem")]
@@ -46,6 +49,7 @@ public class NativeCameraExample : MonoBehaviour
 
     [Header("Sticker Count UI")]
     public TextMeshProUGUI area1CountText;
+    public TextMeshProUGUI area2CountText; // NOVO contador
     public TextMeshProUGUI cursoDaguaCountText;
     public TextMeshProUGUI subosqueCountText;
     public TextMeshProUGUI dosselCountText;
@@ -55,7 +59,7 @@ public class NativeCameraExample : MonoBehaviour
 
     private List<StickerController> activeStickers = new List<StickerController>();
     private Dictionary<GameObject, string> stickerAreaCache = new Dictionary<GameObject, string>();
-    private Dictionary<GameObject, int> stickerIndexCache = new Dictionary<GameObject, int>(); // NOVO: mapa prefab -> índice
+    private Dictionary<GameObject, int> stickerIndexCache = new Dictionary<GameObject, int>();
     private Dictionary<string, int> spawnedStickersCount = new Dictionary<string, int>();
 
     private void Start()
@@ -73,7 +77,6 @@ public class NativeCameraExample : MonoBehaviour
         InicializarContadores();
         UpdateAllCountersFromLocationManager();
 
-        // Se os used stickers mudarem em runtime (LocationServiceManager notifica), atualiza UI
         if (locationManager != null)
             locationManager.OnUsedStickersChanged += UpdateAllCountersFromLocationManager;
     }
@@ -90,6 +93,7 @@ public class NativeCameraExample : MonoBehaviour
         stickerIndexCache.Clear();
 
         CacheAreaStickers("Area1", area1Stickers);
+        CacheAreaStickers("Area2", area2Stickers); // NOVA ÁREA
         CacheAreaStickers("CursoDagua", cursoDaguaStickers);
         CacheAreaStickers("Subosque", subosqueStickers);
         CacheAreaStickers("Dossel", dosselStickers);
@@ -149,6 +153,7 @@ public class NativeCameraExample : MonoBehaviour
         GameObject[] stickers = areaName switch
         {
             "Area1" => area1Stickers,
+            "Area2" => area2Stickers,
             "CursoDagua" => cursoDaguaStickers,
             "Subosque" => subosqueStickers,
             "Dossel" => dosselStickers,
@@ -178,12 +183,30 @@ public class NativeCameraExample : MonoBehaviour
             return;
         }
 
+        StartCoroutine(OptimizeMemoryAndCapture());
+    }
+
+    private IEnumerator OptimizeMemoryAndCapture()
+    {
+        Debug.Log("Iniciando otimização de memória: Resources.UnloadUnusedAssets...");
+        AsyncOperation unloadOperation = Resources.UnloadUnusedAssets();
+
+        while (!unloadOperation.isDone)
+            yield return null;
+
+        Debug.Log("Coletando lixo (GC.Collect)...");
+        GC.Collect();
+        yield return null;
+
+        Debug.Log("Otimização concluída. Abrindo a Câmera Nativa.");
+
         NativeCamera.TakePicture((path) =>
         {
             if (path != null)
             {
                 Texture2D texture = NativeCamera.LoadImageAtPath(path, 1024);
-                if (texture != null)
+
+                if (texture != null && imageDisplay != null)
                 {
                     imageDisplay.texture = texture;
                     imageDisplay.gameObject.SetActive(true);
@@ -191,11 +214,15 @@ public class NativeCameraExample : MonoBehaviour
                     closeButton?.SetActive(true);
                     okButton?.SetActive(true);
                 }
+                else
+                {
+                    Debug.LogError("Erro: Texture nula ou imageDisplay nulo após retorno da câmera.");
+                }
             }
         }, maxSize: 1024);
     }
 
-    private void ShowStickers()
+    public void ShowStickers()
     {
         if (stickerMenuContent == null || stickerMenuScrollView == null || locationManager == null) return;
 
@@ -205,7 +232,6 @@ public class NativeCameraExample : MonoBehaviour
         stickerMenuScrollView.SetActive(true);
         spawnedStickersCount.Clear();
 
-        // Recebe lista já filtrada
         GameObject[] stickersToShow = GetAllStickers();
         if (stickersToShow == null || stickersToShow.Length == 0) return;
 
@@ -217,12 +243,10 @@ public class NativeCameraExample : MonoBehaviour
                 var controller = sticker.GetComponent<StickerController>() ?? sticker.AddComponent<StickerController>();
                 controller.SetRawImageRect(imageDisplay.rectTransform);
 
-                // Preenche AreaName e StickerIndex para que possamos marcar como "used" mais tarde
                 string areaName = null;
                 if (stickerAreaCache.TryGetValue(stickerPrefab, out areaName))
-                {
                     controller.AreaName = areaName;
-                }
+
                 int idx = GetIndexForPrefab(stickerPrefab);
                 controller.StickerIndex = idx;
 
@@ -236,7 +260,6 @@ public class NativeCameraExample : MonoBehaviour
             }
         }
 
-        // Atualiza os contadores ao mostrar o menu (pois spawnedStickersCount foi recalculado)
         UpdateAllCountersFromLocationManager();
     }
 
@@ -247,9 +270,9 @@ public class NativeCameraExample : MonoBehaviour
         if (stickerIndexCache.TryGetValue(prefab, out int idx))
             return idx;
 
-        // fallback: procurar nos arrays (mais lento)
         int found = -1;
         found = IndexOfInArray(area1Stickers, prefab); if (found != -1) return found;
+        found = IndexOfInArray(area2Stickers, prefab); if (found != -1) return found;
         found = IndexOfInArray(cursoDaguaStickers, prefab); if (found != -1) return found;
         found = IndexOfInArray(subosqueStickers, prefab); if (found != -1) return found;
         found = IndexOfInArray(dosselStickers, prefab); if (found != -1) return found;
@@ -274,6 +297,7 @@ public class NativeCameraExample : MonoBehaviour
 
         List<GameObject> stickers = new List<GameObject>();
         AddStickersForArea("Area1", area1Stickers, stickers, showAllForArea: currentArea == "Area1");
+        AddStickersForArea("Area2", area2Stickers, stickers, showAllForArea: currentArea == "Area2"); // NOVA ÁREA
         AddStickersForArea("CursoDagua", cursoDaguaStickers, stickers, showAllForArea: currentArea == "CursoDagua");
         AddStickersForArea("Subosque", subosqueStickers, stickers, showAllForArea: currentArea == "Subosque");
         AddStickersForArea("Dossel", dosselStickers, stickers, showAllForArea: currentArea == "Dossel");
@@ -284,22 +308,24 @@ public class NativeCameraExample : MonoBehaviour
         return stickers.ToArray();
     }
 
-    // showAllForArea = true => estamos abrindo o menu NA MESMA área -> então mostramos TUDO (fixos + coletados)
-    // showAllForArea = false => estamos em outra área -> escondemos stickers que já foram usados nessa área
     private void AddStickersForArea(string areaName, GameObject[] stickersArray, List<GameObject> outputList, bool showAllForArea)
     {
-        if (stickersArray == null || stickersArray.Length == 0 || locationManager == null) return;
+        if (stickersArray == null || stickersArray.Length == 0 || locationManager == null)
+            return;
+
+        int usedCount = locationManager.GetUsedStickerCount(areaName);
+        if (usedCount >= 6) return;
 
         for (int i = 0; i < stickersArray.Length; i++)
         {
             GameObject prefab = stickersArray[i];
             if (prefab == null) continue;
 
-            bool isCollectedExtra = (i < 3) ? true : locationManager.IsStickerCollected(areaName, i);
+            bool isFixedSticker = (i < 3);
+            bool isCollectedExtra = (i >= 3) ? locationManager.IsStickerCollected(areaName, i) : true;
 
-            if (!isCollectedExtra) continue; // não foi coletado (se for >=3)
+            if (!isCollectedExtra) continue;
 
-            // Se não estamos na área atual, e o sticker já foi marcado como "used" nessa área, então não mostrar
             if (!showAllForArea && locationManager.IsStickerUsed(areaName, i))
                 continue;
 
@@ -351,15 +377,12 @@ public class NativeCameraExample : MonoBehaviour
             return;
         }
 
-        // Marca os stickers usados (persistente via LocationServiceManager)
         if (locationManager != null)
         {
             foreach (var st in activeStickers)
             {
                 if (!string.IsNullOrEmpty(st.AreaName) && st.StickerIndex >= 0)
-                {
                     locationManager.MarkStickerAsUsed(st.AreaName, st.StickerIndex);
-                }
             }
         }
 
@@ -376,6 +399,7 @@ public class NativeCameraExample : MonoBehaviour
         switch (areaName)
         {
             case "Area1": area1CountText.text = text; break;
+            case "Area2": area2CountText.text = text; break; // NOVA ÁREA
             case "CursoDagua": cursoDaguaCountText.text = text; break;
             case "Subosque": subosqueCountText.text = text; break;
             case "Dossel": dosselCountText.text = text; break;
@@ -383,8 +407,6 @@ public class NativeCameraExample : MonoBehaviour
             case "Serrapilheira": serrapilheiraCountText.text = text; break;
             case "AreaTeste": areaTesteCountText.text = text; break;
         }
-
-        // Não salvamos aqui em PlayerPrefs: a fonte da verdade agora é LocationServiceManager (usedStickers).
     }
 
     public bool AreStickersFromCorrectArea()
@@ -424,6 +446,7 @@ public class NativeCameraExample : MonoBehaviour
         return areaCode switch
         {
             "Area1" => "Área 1",
+            "Area2" => "Área 2",
             "CursoDagua" => "Curso D'água",
             "Subosque" => "Subosque",
             "Dossel" => "Dossel",
@@ -455,14 +478,13 @@ public class NativeCameraExample : MonoBehaviour
             galleryManager.SaveImage(currentArea, screenshot);
 
         ClosePhotoView();
-
-        // Atualiza contadores após salvar/fechar
         UpdateAllCountersFromLocationManager();
     }
 
     private void InicializarContadores()
     {
         area1CountText.text = "0/6";
+        area2CountText.text = "0/6"; // NOVO
         cursoDaguaCountText.text = "0/6";
         subosqueCountText.text = "0/6";
         dosselCountText.text = "0/6";
@@ -476,6 +498,7 @@ public class NativeCameraExample : MonoBehaviour
         if (locationManager == null) return;
 
         area1CountText.text = $"Área 1: {locationManager.GetUsedStickerCount("Area1")}/6";
+        area2CountText.text = $"Área 2: {locationManager.GetUsedStickerCount("Area2")}/6"; // NOVO
         cursoDaguaCountText.text = $"Curso D'água: {locationManager.GetUsedStickerCount("CursoDagua")}/6";
         subosqueCountText.text = $"Subosque: {locationManager.GetUsedStickerCount("Subosque")}/6";
         dosselCountText.text = $"Dossel: {locationManager.GetUsedStickerCount("Dossel")}/6";
@@ -490,19 +513,13 @@ public class NativeCameraExample : MonoBehaviour
         areasContabilizadas.Clear();
         progressText.text = $"{areasVisitadas} de {TOTAL_AREAS} áreas visitadas";
 
-        // Reseta todos (cuidado: limpa tudo, inclusive dados persistidos em LocationServiceManager quando você implementar reset lá)
         InicializarContadores();
 
-        // também pedir pra LocationServiceManager resetar (se quiser manter um único ponto de verdade)
         if (locationManager != null)
         {
             PlayerPrefs.DeleteKey("UsedStickers");
             PlayerPrefs.DeleteKey("CollectedStickers");
-            // re-carrega internal states
-            // uma forma limpa: reiniciar a cena, ou chamar métodos de reset no locationManager se implementar
             locationManager = FindAnyObjectByType<LocationServiceManager>();
-            // força reload interno (se você quiser implementar um método ResetAll dentro do LSM, melhor)
-            // aqui simplificamos: recarrega os dados da memória (eles já foram deletados)
             locationManager?.SendMessage("LoadCollectedStickers", SendMessageOptions.DontRequireReceiver);
         }
     }
@@ -510,5 +527,18 @@ public class NativeCameraExample : MonoBehaviour
     public bool IsStickerAlreadyRegistered(StickerController sticker)
     {
         return activeStickers.Contains(sticker);
+    }
+
+    public void FecharFotoDeTeste()
+    {
+        if (imageDisplay != null && imageDisplay.gameObject.activeSelf)
+        {
+            imageDisplay.gameObject.SetActive(false);
+            Debug.Log("✅ Foto fechada (teste)");
+        }
+        else
+        {
+            Debug.LogWarning("⚠️ Nenhuma foto aberta para fechar.");
+        }
     }
 }

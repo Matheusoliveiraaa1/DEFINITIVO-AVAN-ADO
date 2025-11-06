@@ -204,29 +204,55 @@ public class LocationServiceManager : MonoBehaviour
     private void CheckNearbyPoints(LocationInfo data)
     {
         bool isInsideAnyArea = false;
+        PointOfInterest activeArea = null;
 
+        // Verifica cada ponto de interesse
         foreach (var poi in allPoints)
         {
             double distance = CalculateDistance(data.latitude, data.longitude, poi.latitude, poi.longitude);
 
+            // Dentro do raio de detecção
             if (distance <= detectionRadius)
             {
+                isInsideAnyArea = true;
+                activeArea = poi;
                 HandlePointTrigger(poi, ref isInsideAnyArea);
                 break;
             }
-            else
-            {
+        }
 
+        // Se está dentro de uma área
+        if (isInsideAnyArea)
+        {
+            if (activeArea != null && !activeArea.isStickerPoint)
+            {
+                bool allowCamera = !IsAreaCompleted(activeArea.areaName);
+                cameraButton.SetActive(allowCamera);
             }
         }
-
-        // NOTE: não ligamos o cameraButton aqui genericamente porque a ativação
-        // depende se a área está completa. A ativação é tratada em HandleAreaPoint e HandleTestArea.
-        if (!isInsideAnyArea && !string.IsNullOrEmpty(messageText.text))
+        else
         {
-            StartCoroutine(HideNotificationAfterDelay(2f));
+            // Fora de qualquer área → desativa câmera e limpa mensagens
+            if (cameraButton.activeSelf)
+                cameraButton.SetActive(false);
+
+            if (!string.IsNullOrEmpty(messageText.text))
+                StartCoroutine(HideNotificationAfterDelay(1.5f));
+        }
+
+        // -------------------------
+        // 🔁 Reentrada de áreas
+        // -------------------------
+        // Se o jogador se afastar mais do que detectionRadius + 3m,
+        // reseta o estado "alreadyTriggered" para permitir que a área seja ativada de novo
+        foreach (var poi in allPoints)
+        {
+            double distance = CalculateDistance(data.latitude, data.longitude, poi.latitude, poi.longitude);
+            if (distance > detectionRadius + 3f)
+                poi.alreadyTriggered = false;
         }
     }
+
 
     private void HandlePointTrigger(PointOfInterest poi, ref bool isInsideAnyArea)
     {
@@ -431,8 +457,11 @@ public class LocationServiceManager : MonoBehaviour
         {
             collectedStickers[poi.areaName].Add(poi.stickerIndex);
 
-            SaveCollectedStickers(); // salva imediatamente
-            OnCollectedStickersChanged?.Invoke(); // notifica listeners (InventoryManager, por exemplo)
+            SaveCollectedStickers();
+            OnCollectedStickersChanged?.Invoke();
+
+            // NOVO: Notificar o StickerCatalogUI para adicionar o sprite
+            NotifyStickerCatalog(poi.areaName, poi.stickerIndex);
 
             // atualiza UI se referência estiver setada
             if (inventoryManager != null)
@@ -444,6 +473,16 @@ public class LocationServiceManager : MonoBehaviour
                 inventoryManager = FindObjectOfType<InventoryManager>();
                 inventoryManager?.UpdateInventoryUI();
             }
+        }
+    }
+
+    // NOVO: Notifica o StickerCatalogUI sobre o novo sticker
+    private void NotifyStickerCatalog(string areaName, int stickerIndex)
+    {
+        StickerCatalogUI catalog = FindObjectOfType<StickerCatalogUI>();
+        if (catalog != null)
+        {
+            catalog.AddUnlockedSticker(areaName, stickerIndex);
         }
     }
 
