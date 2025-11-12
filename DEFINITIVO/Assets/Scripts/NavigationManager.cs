@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class NavigationManager : MonoBehaviour
 {
-    public enum AppState { Principal, Mapa, Mochila, Galeria, Exploracao }
+    public enum AppState { Principal, Mapa, Mochila, Galeria, Exploracao, Regras }
     public AppState currentState;
 
     public GameObject telaPrincipal;
@@ -12,6 +12,7 @@ public class NavigationManager : MonoBehaviour
     public GameObject telaMochila;
     public GameObject telaGaleria;
     public GameObject telaExploracao; // painel que contém RawImage + VideoPlayer
+    public GameObject telaRegras;     // NOVA TELA
 
     private VideoPlayer videoPlayerExploracao;
     private RawImage videoRawImage;
@@ -51,11 +52,12 @@ public class NavigationManager : MonoBehaviour
 
     private void SetState(AppState newState)
     {
-        // ativa/desativa todas as telas, EXCETO a telaExploracao (mantemos ela ativa)
+        // desativa todas as telas exceto a exploracao (que é tratada à parte)
         telaPrincipal.SetActive(false);
         telaMapa.SetActive(false);
         telaMochila.SetActive(false);
         telaGaleria.SetActive(false);
+        telaRegras.SetActive(false); // <--- nova linha
 
         switch (newState)
         {
@@ -64,21 +66,31 @@ public class NavigationManager : MonoBehaviour
                 HideExploracao(true);
                 PauseVideoIfPlaying();
                 break;
+
             case AppState.Mapa:
                 telaMapa.SetActive(true);
                 HideExploracao(true);
                 PauseVideoIfPlaying();
                 break;
+
             case AppState.Mochila:
                 telaMochila.SetActive(true);
                 HideExploracao(true);
                 PauseVideoIfPlaying();
                 break;
+
             case AppState.Galeria:
                 telaGaleria.SetActive(true);
                 HideExploracao(true);
                 PauseVideoIfPlaying();
                 break;
+
+            case AppState.Regras:
+                telaRegras.SetActive(true);
+                HideExploracao(true);
+                PauseVideoIfPlaying();
+                break;
+
             case AppState.Exploracao:
                 HideExploracao(false);
                 ResumeVideoIfNeeded();
@@ -117,21 +129,19 @@ public class NavigationManager : MonoBehaviour
 
     private void ResumeVideoIfNeeded()
     {
-        // só inicia se já foi autorizado no overlay
         if (videoPlayerExploracao != null &&
             !videoPlayerExploracao.isPlaying &&
             !videoFinalizado &&
-            VideoPlayState.IsAuthorized) // <-- ESSA LINHA BLOQUEIA
+            VideoPlayState.IsAuthorized)
         {
             if (videoRawImage != null)
                 videoRawImage.gameObject.SetActive(true);
 
             videoPlayerExploracao.Play();
-            VideoPlayState.AlreadyPlayed = true; // marca que começou
+            VideoPlayState.AlreadyPlayed = true;
             Debug.Log("[Nav] Video iniciado/retomado em: " + videoPlayerExploracao.time);
         }
     }
-
 
     private void OnVideoFinished(VideoPlayer vp)
     {
@@ -142,15 +152,10 @@ public class NavigationManager : MonoBehaviour
         videoPlayerExploracao.Stop();
     }
 
-
     public void TryPlayExploracaoVideo()
     {
         ResumeVideoIfNeeded();
     }
-
-
-
-
 
     // Métodos públicos para botões
     public void GoToPrincipal() => SetState(AppState.Principal);
@@ -158,4 +163,5 @@ public class NavigationManager : MonoBehaviour
     public void GoToMochila() => SetState(AppState.Mochila);
     public void GoToGaleria() => SetState(AppState.Galeria);
     public void GoToExploracao() => SetState(AppState.Exploracao);
+    public void GoToRegras() => SetState(AppState.Regras); // <--- novo botão
 }
