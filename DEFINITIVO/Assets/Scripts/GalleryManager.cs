@@ -82,7 +82,7 @@ public class GalleryManager : MonoBehaviour
         galeriaPainel.SetActive(false);
     }
 
-    private void AtualizarMiniaturas()
+    public void AtualizarMiniaturas()
     {
         foreach (var slot in slots)
         {

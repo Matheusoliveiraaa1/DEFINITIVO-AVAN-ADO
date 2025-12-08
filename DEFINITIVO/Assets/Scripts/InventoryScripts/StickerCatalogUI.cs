@@ -1,34 +1,47 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Linq;
 
 public class StickerCatalogUI : MonoBehaviour
 {
     public RectTransform content;
     public GameObject stickerSlotPrefab;
 
-    // Lista de sprites dos stickers desbloqueados (incluindo os manuais do Inspector)
+    // NOVO: Lista com TODOS os sprites dos stickers possíveis
+    public List<Sprite> allStickers = new List<Sprite>();
+
+    // Lista de sprites dos stickers desbloqueados (iniciais + coletados)
     public List<Sprite> unlockedStickers = new List<Sprite>();
 
-    // NOVO: Referência para o LocationServiceManager
+    // Referências
     public LocationServiceManager locationManager;
+    public MapPinsController mapPinsController;
+    public Sprite checkmarkSprite; // Sprite do check verde
 
-    // NOVO: Sprite do check verde
-    public Sprite checkmarkSprite;
+    // Configuração do checkmark
+    [Header("Checkmark Settings")]
+    public Vector2 checkmarkSize = new Vector2(30f, 30f); // Tamanho do checkmark
+    public Vector2 checkmarkPosition = new Vector2(35f, -35f); // Posição no canto superior direito
 
     private List<GameObject> slots = new List<GameObject>();
-    private List<Image> checkmarkImages = new List<Image>(); // NOVO: Referências aos checks
+    private List<Image> checkmarkImages = new List<Image>();
+    private List<GameObject> darkOverlays = new List<GameObject>(); // NOVO: Lista separada para overlays
+
+    // NOVO: Mapa para comparação confiável de sprites
+    private Dictionary<string, Sprite> stickerSpriteMap = new Dictionary<string, Sprite>();
 
     void Start()
     {
+        InitializeStickerMap(); // Inicializa o mapa de sprites
         GenerateSlots();
         LoadInitialStickersFromLocationManager();
-        UpdateSlots();
+        UpdateSlots(); // Agora mostra todos os stickers
 
         if (locationManager != null)
         {
             locationManager.OnCollectedStickersChanged += RefreshStickersFromLocationManager;
-            locationManager.OnUsedStickersChanged += RefreshCheckmarks; // NOVO: Atualizar checks quando stickers são usados
+            locationManager.OnUsedStickersChanged += RefreshCheckmarks;
         }
     }
 
@@ -37,24 +50,36 @@ public class StickerCatalogUI : MonoBehaviour
         if (locationManager != null)
         {
             locationManager.OnCollectedStickersChanged -= RefreshStickersFromLocationManager;
-            locationManager.OnUsedStickersChanged -= RefreshCheckmarks; // NOVO
+            locationManager.OnUsedStickersChanged -= RefreshCheckmarks;
         }
     }
 
-    // NOVO: Método para atualizar os checkmarks
+    // NOVO: Inicializar mapa de sprites para comparação confiável
+    void InitializeStickerMap()
+    {
+        foreach (Sprite sprite in allStickers)
+        {
+            if (sprite != null && !stickerSpriteMap.ContainsKey(sprite.name))
+            {
+                stickerSpriteMap[sprite.name] = sprite;
+                Debug.Log($"MAPA: Sprite {sprite.name} adicionado ao mapa");
+            }
+        }
+    }
+
+    // Atualiza os checkmarks
     void RefreshCheckmarks()
     {
         UpdateCheckmarks();
     }
 
-    // NOVO: Verifica se um sticker foi usado
+    // Verifica se um sticker foi usado
     bool IsStickerUsed(Sprite sticker)
     {
-        if (locationManager == null) return false;
+        if (locationManager == null || sticker == null) return false;
 
         // Verifica em todas as áreas se este sprite corresponde a um sticker usado
         string[] areas = { "Area1", "Area2", "CursoDagua", "Subosque", "Dossel", "Epifitas", "Serrapilheira", "AreaTeste" };
-
         foreach (string area in areas)
         {
             for (int i = 0; i < 6; i++)
@@ -62,43 +87,72 @@ public class StickerCatalogUI : MonoBehaviour
                 if (locationManager.IsStickerUsed(area, i))
                 {
                     Sprite usedStickerSprite = GetStickerSprite(area, i);
-                    if (usedStickerSprite == sticker)
+                    // MODIFICADO: Comparação por nome para maior confiabilidade
+                    if (usedStickerSprite != null && sticker != null && usedStickerSprite.name == sticker.name)
                     {
                         return true;
                     }
                 }
             }
         }
-
         return false;
     }
 
-    // NOVO: Atualiza a visibilidade dos checkmarks
+    // Atualiza a visibilidade dos checkmarks
     void UpdateCheckmarks()
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            if (i < unlockedStickers.Count && i < checkmarkImages.Count)
+            if (i < allStickers.Count && i < checkmarkImages.Count)
             {
-                bool isUsed = IsStickerUsed(unlockedStickers[i]);
-                var checkImage = checkmarkImages[i];
-                var overlayLink = checkImage.GetComponent<LinkedOverlay>();
+                // Verifica se este sticker foi usado
+                Sprite currentSticker = allStickers[i];
+                bool isUsed = IsStickerUsed(currentSticker);
 
-                checkImage.gameObject.SetActive(isUsed);
-                if (overlayLink != null && overlayLink.overlay != null)
-                    overlayLink.overlay.SetActive(isUsed);
+                // Ativa/desativa checkmark
+                checkmarkImages[i].gameObject.SetActive(isUsed);
+
+                // DEBUG
+                if (isUsed)
+                {
+                    Debug.Log($"CHECKMARK: Slot {i} ({currentSticker.name}) marcado como usado");
+                }
             }
         }
     }
 
+    // Atualiza os overlays escuros (baseado no que está desbloqueado)
+    void UpdateDarkOverlays()
+    {
+        Debug.Log($"OVERLAYS: Atualizando {slots.Count} slots, {unlockedStickers.Count} desbloqueados");
+
+        for (int i = 0; i < slots.Count; i++)
+        {
+            if (i < allStickers.Count && i < darkOverlays.Count)
+            {
+                // Verifica se este sticker está desbloqueado
+                Sprite currentSticker = allStickers[i];
+                bool isUnlocked = unlockedStickers.Contains(currentSticker);
+
+                // Se NÃO estiver desbloqueado, mostra overlay escuro
+                darkOverlays[i].SetActive(!isUnlocked);
+
+                // DEBUG
+                Debug.Log($"Slot {i}: {currentSticker.name} - {(isUnlocked ? "DESBLOQUEADO" : "BLOQUEADO")}");
+            }
+        }
+    }
 
     void LoadInitialStickersFromLocationManager()
     {
         if (locationManager == null) return;
 
+        Debug.Log("CATALOG: Carregando stickers do Location Manager");
+
         // Para cada área, adiciona os stickers coletados
         string[] areas = { "Area1", "Area2", "CursoDagua", "Subosque", "Dossel", "Epifitas", "Serrapilheira", "AreaTeste" };
 
+        int totalCarregados = 0;
         foreach (string area in areas)
         {
             for (int i = 0; i < 6; i++)
@@ -106,20 +160,49 @@ public class StickerCatalogUI : MonoBehaviour
                 if (locationManager.IsStickerCollected(area, i))
                 {
                     Sprite stickerSprite = GetStickerSprite(area, i);
-                    if (stickerSprite != null && !unlockedStickers.Contains(stickerSprite))
+                    if (stickerSprite != null)
                     {
-                        unlockedStickers.Add(stickerSprite);
+                        // MODIFICADO: Usa o nome do sprite para adicionar via mapa
+                        AddUnlockedStickerBySpriteName(stickerSprite.name);
+                        totalCarregados++;
                     }
                 }
             }
+        }
+
+        Debug.Log($"CATALOG: {totalCarregados} stickers carregados do Location Manager");
+    }
+
+    // NOVO: Método para adicionar sticker por nome (usando o mapa)
+    void AddUnlockedStickerBySpriteName(string spriteName)
+    {
+        if (stickerSpriteMap.TryGetValue(spriteName, out Sprite sprite))
+        {
+            if (!unlockedStickers.Contains(sprite))
+            {
+                unlockedStickers.Add(sprite);
+                Debug.Log($"DESBLOQUEIO: {spriteName} adicionado ao catálogo");
+            }
+        }
+        else
+        {
+            Debug.LogWarning($"AVISO: Sprite {spriteName} não encontrado no mapa de sprites!");
         }
     }
 
     void RefreshStickersFromLocationManager()
     {
+        Debug.Log("CATALOG: Refresh chamado - atualizando stickers do Location Manager");
+
+        // Recarrega todos os stickers
         LoadInitialStickersFromLocationManager();
-        UpdateSlots();
-        UpdateCheckmarks(); // NOVO: Atualizar checks também
+
+        // Atualiza overlays quando novos stickers são coletados
+        UpdateDarkOverlays();
+        UpdateCheckmarks();
+
+        // DEBUG: Mostra todos os stickers desbloqueados
+        DebugUnlockedStickers();
     }
 
     Sprite GetStickerSprite(string areaName, int index)
@@ -134,27 +217,69 @@ public class StickerCatalogUI : MonoBehaviour
 
     void GenerateSlots()
     {
-        for (int i = 0; i < 24; i++)
+        // Determina quantos slots criar (baseado em allStickers ou 24)
+        int slotCount = Mathf.Max(allStickers.Count, 24);
+
+        for (int i = 0; i < slotCount; i++)
         {
             GameObject slot = Instantiate(stickerSlotPrefab, content);
             slots.Add(slot);
 
-            // NOVO: Criar checkmark para este slot
+            // Adicionar handler de clique
+            AddStickerClickHandler(slot, i);
+
+            // Criar overlay escuro e checkmark
+            CreateDarkOverlayForSlot(slot, i);
             CreateCheckmarkForSlot(slot, i);
         }
     }
 
-    // NOVO: Cria o checkmark para um slot - MODIFICADO PARA COBRIR TODO O SLOT
-    // NOVO: Cria o checkmark para um slot
-    // NOVO: Cria o overlay escuro e o checkmark por cima
-    void CreateCheckmarkForSlot(GameObject slot, int index)
+    void AddStickerClickHandler(GameObject slot, int index)
     {
-        // === DARK OVERLAY ===
+        Image stickerImage = slot.transform.GetChild(0).GetComponent<Image>();
+        if (stickerImage != null)
+        {
+            Button button = stickerImage.GetComponent<Button>();
+            if (button == null)
+            {
+                button = stickerImage.gameObject.AddComponent<Button>();
+            }
+
+            int currentIndex = index;
+            button.onClick.RemoveAllListeners();
+            button.onClick.AddListener(() => OnStickerClicked(currentIndex));
+        }
+    }
+
+    void OnStickerClicked(int slotIndex)
+    {
+        if (slotIndex < allStickers.Count)
+        {
+            Sprite clickedSticker = allStickers[slotIndex];
+
+            // Só permite clique se o sticker estiver desbloqueado
+            if (unlockedStickers.Contains(clickedSticker))
+            {
+                if (mapPinsController != null)
+                {
+                    mapPinsController.OpenSpeciesInfo(clickedSticker);
+                }
+            }
+            else
+            {
+                Debug.Log("Sticker ainda não desbloqueado!");
+            }
+        }
+    }
+
+    // NOVO: Cria apenas o overlay escuro (sem checkmark)
+    void CreateDarkOverlayForSlot(GameObject slot, int index)
+    {
         GameObject darkOverlayObj = new GameObject("DarkOverlay");
         darkOverlayObj.transform.SetParent(slot.transform, false);
 
         Image darkOverlayImage = darkOverlayObj.AddComponent<Image>();
-        darkOverlayImage.color = new Color(0f, 0f, 0f, 0.5f); // preto semi-transparente
+        darkOverlayImage.color = new Color(0f, 0f, 0f, 0.85f); // preto semi-transparente
 
         RectTransform darkRect = darkOverlayObj.GetComponent<RectTransform>();
         darkRect.anchorMin = Vector2.zero;
@@ -163,33 +288,49 @@ public class StickerCatalogUI : MonoBehaviour
         darkRect.offsetMax = Vector2.zero;
         darkRect.localScale = Vector3.one;
 
-        // === CHECKMARK ===
+        // Posiciona atrás do sticker
+        darkOverlayObj.transform.SetSiblingIndex(1); // Após a imagem do sticker
+
+        // Começa ativado (todos começam escuros)
+        darkOverlayObj.SetActive(true);
+
+        // Guarda referência
+        if (index >= darkOverlays.Count)
+        {
+            darkOverlays.Add(darkOverlayObj);
+        }
+        else
+        {
+            darkOverlays[index] = darkOverlayObj;
+        }
+    }
+
+    // MODIFICADO: Checkmark pequeno no canto
+    void CreateCheckmarkForSlot(GameObject slot, int index)
+    {
         GameObject checkmarkObj = new GameObject("Checkmark");
         checkmarkObj.transform.SetParent(slot.transform, false);
 
         Image checkmarkImage = checkmarkObj.AddComponent<Image>();
         checkmarkImage.sprite = checkmarkSprite;
-        checkmarkImage.color = new Color(0f, 1f, 0f, 0.4f); // verde semi-transparente
+        checkmarkImage.color = Color.green; // Verde sólido
 
         RectTransform rectTransform = checkmarkObj.GetComponent<RectTransform>();
-        rectTransform.anchorMin = Vector2.zero;
-        rectTransform.anchorMax = Vector2.one;
-        rectTransform.offsetMin = Vector2.zero;
-        rectTransform.offsetMax = Vector2.zero;
-        rectTransform.localScale = Vector3.one;
 
-        // Ordem de renderização:
-        // Sticker (base)
-        // DarkOverlay (escurece)
-        // Checkmark (por cima de tudo)
-        darkOverlayObj.transform.SetSiblingIndex(slot.transform.childCount - 1);
+        // Configura como pequeno no canto superior direito
+        rectTransform.sizeDelta = new Vector2(55f, 55f);      // MAIOR E VISÍVEL
+        rectTransform.anchorMin = new Vector2(1f, 1f);
+        rectTransform.anchorMax = new Vector2(1f, 1f);
+        rectTransform.pivot = new Vector2(1f, 1f);
+        rectTransform.anchoredPosition = new Vector2(-10f, -10f);  // POSIÇÃO CORRETA NO CANTO
+
+        // Coloca por cima de tudo
         checkmarkObj.transform.SetAsLastSibling();
 
-        // Ambos começam desativados
-        darkOverlayObj.SetActive(false);
+        // Começa desativado
         checkmarkObj.SetActive(false);
 
-        // Guardar referência para o check
+        // Guarda referência
         if (index >= checkmarkImages.Count)
         {
             checkmarkImages.Add(checkmarkImage);
@@ -198,38 +339,42 @@ public class StickerCatalogUI : MonoBehaviour
         {
             checkmarkImages[index] = checkmarkImage;
         }
-
-        // 💡 Vincular overlay ao check via tag interna (assim ativamos ambos juntos)
-        checkmarkImage.gameObject.AddComponent<LinkedOverlay>().overlay = darkOverlayObj;
     }
-
 
     public void UpdateSlots()
     {
+        Debug.Log($"CATALOG: UpdateSlots chamado. Total de allStickers = {allStickers.Count}, unlocked = {unlockedStickers.Count}");
+
         for (int i = 0; i < slots.Count; i++)
         {
             Image stickerImg = slots[i].transform.GetChild(0).GetComponent<Image>();
 
-            if (i < unlockedStickers.Count)
+            if (i < allStickers.Count)
             {
-                stickerImg.sprite = unlockedStickers[i];
+                // Sempre mostra o sprite (mesmo que escuro)
+                stickerImg.sprite = allStickers[i];
+                Debug.Log($"CATALOG: Slot {i} atualizado com sprite: {allStickers[i].name}");
                 stickerImg.gameObject.SetActive(true);
             }
             else
             {
+                // Slot vazio se não houver sprite
                 stickerImg.gameObject.SetActive(false);
             }
         }
 
-        UpdateCheckmarks(); // NOVO: Atualizar checks quando slots são atualizados
+        // Atualiza overlays e checkmarks
+        UpdateDarkOverlays();
+        UpdateCheckmarks();
     }
 
     public void AddUnlockedSticker(Sprite newSticker)
     {
-        if (!unlockedStickers.Contains(newSticker))
+        if (newSticker != null && !unlockedStickers.Contains(newSticker))
         {
             unlockedStickers.Add(newSticker);
-            UpdateSlots();
+            Debug.Log($"MANUAL: Sticker {newSticker.name} adicionado ao catálogo");
+            UpdateDarkOverlays(); // Atualiza apenas os overlays
         }
     }
 
@@ -238,18 +383,35 @@ public class StickerCatalogUI : MonoBehaviour
         Sprite stickerSprite = GetStickerSprite(areaName, stickerIndex);
         if (stickerSprite != null)
         {
-            AddUnlockedSticker(stickerSprite);
+            // MODIFICADO: Usa o nome do sprite para adicionar via mapa
+            AddUnlockedStickerBySpriteName(stickerSprite.name);
         }
     }
 
-    // Classe auxiliar para ligar o checkmark ao overlay escuro
-    public class LinkedOverlay : MonoBehaviour
+    // NOVO: Método para obter se um sticker está desbloqueado
+    public bool IsStickerUnlocked(Sprite sticker)
     {
-        public GameObject overlay;
+        return unlockedStickers.Contains(sticker);
     }
 
+    // NOVO: Método para obter se um sticker foi usado
+    public bool IsStickerMarkedAsUsed(Sprite sticker)
+    {
+        return IsStickerUsed(sticker);
+    }
 
-
-
-
+    // NOVO: Método para debug - mostrar todos os stickers desbloqueados
+    public void DebugUnlockedStickers()
+    {
+        Debug.Log("=== DEBUG: STICKERS DESBLOQUEADOS ===");
+        foreach (Sprite sprite in unlockedStickers)
+        {
+            if (sprite != null)
+            {
+                Debug.Log($"- {sprite.name}");
+            }
+        }
+        Debug.Log($"Total: {unlockedStickers.Count} stickers");
+        Debug.Log("====================================");
+    }
 }

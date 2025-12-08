@@ -1,10 +1,18 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
+using System.IO;
+using System.Text.RegularExpressions;
 
 public class PhotoAreaOverlay : MonoBehaviour
 {
     public static PhotoAreaOverlay Instance;
+
+
+    public TMP_Text stickerMessageText;
+
+
 
     [Header("Shared")]
     public GameObject overlayPanel;
@@ -46,6 +54,14 @@ public class PhotoAreaOverlay : MonoBehaviour
     public float shrinkDuration = 0.5f;
     public float flyDuration = 0.8f;
     public float minScale = 0.2f;
+
+    [Header("Sticker Position")]
+    [Tooltip("Posição vertical do sticker (valores positivos sobem)")]
+    public float stickerVerticalOffset = 150f;
+
+
+
+
 
     private bool showingSticker = false;
     private Vector3 stickerOriginalScale;
@@ -203,6 +219,30 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.photo3.sprite = img3;
     }
 
+
+    private static string FormatStickerName(string rawName)
+    {
+        // Remove extensão, exemplo: AraraAzul -> araraazul
+        rawName = Path.GetFileNameWithoutExtension(rawName);
+
+        // Insere espaços antes de letras maiúsculas
+        var result = Regex.Replace(rawName, "([A-Z])", " $1").Trim();
+
+        // Primeira letra maiúscula
+        return char.ToUpper(result[0]) + result.Substring(1);
+    }
+
+
+
+
+
+
+
+
+
+
+
+    // --- MODO STICKER ---
     // --- MODO STICKER ---
     public static void ShowSticker(Sprite mainSprite, Sprite overrideExtra1 = null, Sprite overrideExtra2 = null)
     {
@@ -221,11 +261,23 @@ public class PhotoAreaOverlay : MonoBehaviour
         if (Instance.stickerMain != null)
         {
             Instance.stickerMain.sprite = mainSprite;
+
+            // === GERAR TEXTO AUTOMÁTICO DO BALÃO ===
+            string prettyName = FormatStickerName(mainSprite.name);
+            Instance.stickerMessageText.text =
+                $"Parece que você encontrou a espécie <b>{prettyName}</b>!";
+
+
+
             Instance.stickerMain.gameObject.SetActive(true);
             Instance.stickerMain.rectTransform.localScale = Instance.stickerOriginalScale;
             Instance.stickerMain.rectTransform.localRotation = Quaternion.identity;
-            // <-- CORREÇÃO: reset da posição para o centro do overlay
-            Instance.stickerMain.rectTransform.anchoredPosition = Vector2.zero;
+
+            // ========== MUDANÇA AQUI ==========
+            // Antes: Instance.stickerMain.rectTransform.anchoredPosition = Vector2.zero;
+            // Agora: Usa o offset vertical configurável
+            Instance.stickerMain.rectTransform.anchoredPosition = new Vector2(0, Instance.stickerVerticalOffset);
+            // ==================================
 
             if (Instance.wobbleCoroutine != null)
                 Instance.StopCoroutine(Instance.wobbleCoroutine);
@@ -240,7 +292,9 @@ public class PhotoAreaOverlay : MonoBehaviour
                 }
                 Instance.stickerGlow.gameObject.SetActive(true);
                 Instance.stickerGlow.color = new Color(1f, 0.95f, 0.6f, Instance.stickerGlowAlpha);
-                Instance.stickerGlow.rectTransform.position = Instance.stickerMain.rectTransform.position;
+
+                // O glow também recebe o mesmo offset vertical
+                Instance.stickerGlow.rectTransform.anchoredPosition = new Vector2(0, Instance.stickerVerticalOffset);
                 Instance.stickerGlow.rectTransform.localScale = Instance.stickerOriginalScale * Instance.stickerGlowScaleMultiplier;
 
                 // Garantir que o glow esteja por trás

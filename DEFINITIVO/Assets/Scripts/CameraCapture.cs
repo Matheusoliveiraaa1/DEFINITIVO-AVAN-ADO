@@ -25,11 +25,19 @@ public class NativeCameraExample : MonoBehaviour
     public GameObject[] serrapilheiraStickers;
     public GameObject[] areaTesteStickers;
 
+
+
+    [Header("Map Controller")]
+    public MapPinsController mapPinsController; // arrastar no inspector, opcional se usar Instance
+
+
     [Header("Dependencies")]
     public LocationServiceManager locationManager;
     public GalleryManager galleryManager;
     public RectTransform photoAreaToCapture;
     public GameObject okButton;
+    public GameObject backButton; // 🆕 Botão "Voltar"
+
 
     [Header("Sticker Limit")]
     public int maxStickersPerPhoto = 6;
@@ -213,6 +221,8 @@ public class NativeCameraExample : MonoBehaviour
                     ShowStickers();
                     closeButton?.SetActive(true);
                     okButton?.SetActive(true);
+                    backButton?.SetActive(true); // 🆕 Ativa o botão Voltar
+
                 }
                 else
                 {
@@ -293,20 +303,95 @@ public class NativeCameraExample : MonoBehaviour
 
     private GameObject[] GetAllStickers()
     {
-        if (locationManager == null) return null;
+        List<GameObject> finalList = new List<GameObject>();
 
-        List<GameObject> stickers = new List<GameObject>();
-        AddStickersForArea("Area1", area1Stickers, stickers, showAllForArea: currentArea == "Area1");
-        AddStickersForArea("Area2", area2Stickers, stickers, showAllForArea: currentArea == "Area2"); // NOVA ÁREA
-        AddStickersForArea("CursoDagua", cursoDaguaStickers, stickers, showAllForArea: currentArea == "CursoDagua");
-        AddStickersForArea("Subosque", subosqueStickers, stickers, showAllForArea: currentArea == "Subosque");
-        AddStickersForArea("Dossel", dosselStickers, stickers, showAllForArea: currentArea == "Dossel");
-        AddStickersForArea("Epifitas", epifitasStickers, stickers, showAllForArea: currentArea == "Epifitas");
-        AddStickersForArea("Serrapilheira", serrapilheiraStickers, stickers, showAllForArea: currentArea == "Serrapilheira");
-        AddStickersForArea("AreaTeste", areaTesteStickers, stickers, showAllForArea: currentArea == "AreaTeste");
+        // 1) Stickers da área atual
+        finalList.AddRange(GetStickersFromCurrentArea());
 
-        return stickers.ToArray();
+        // 2) Todos stickers elegíveis das outras áreas
+        List<GameObject> others = GetEligibleStickersFromOtherAreas();
+
+        // 3) Sorteia 3 sem repetição
+        int count = Mathf.Min(3, others.Count);
+        for (int i = 0; i < count; i++)
+        {
+            int rnd = UnityEngine.Random.Range(0, others.Count);
+            finalList.Add(others[rnd]);
+            others.RemoveAt(rnd); // evita repetir
+        }
+
+        return finalList.ToArray();
     }
+
+    private List<GameObject> GetStickersFromCurrentArea()
+    {
+        List<GameObject> list = new List<GameObject>();
+
+        GameObject[] arr = GetStickersArrayByArea(currentArea);
+        if (arr == null) return list;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            bool isFixed = i < 3;
+            bool isCollectedExtra = i >= 3 ? locationManager.IsStickerCollected(currentArea, i) : true;
+
+            if (isFixed || isCollectedExtra)
+                list.Add(arr[i]);
+        }
+
+        return list;
+    }
+
+
+    private List<GameObject> GetEligibleStickersFromOtherAreas()
+    {
+        List<GameObject> list = new List<GameObject>();
+
+        foreach (string areaName in new string[] {
+        "Area1", "Area2", "CursoDagua", "Subosque",
+        "Dossel", "Epifitas", "Serrapilheira", "AreaTeste"
+    })
+        {
+            if (areaName == currentArea) continue; // pular a área atual
+
+            GameObject[] arr = GetStickersArrayByArea(areaName);
+            if (arr == null) continue;
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                bool isFixed = i < 3;
+                bool isCollectedExtra = true;
+
+                if (i >= 3)
+                    isCollectedExtra = locationManager.IsStickerCollected(areaName, i);
+
+                if (isFixed || isCollectedExtra)
+                    list.Add(arr[i]);
+            }
+        }
+
+        return list;
+    }
+
+    private GameObject[] GetStickersArrayByArea(string area)
+    {
+        return area switch
+        {
+            "Area1" => area1Stickers,
+            "Area2" => area2Stickers,
+            "CursoDagua" => cursoDaguaStickers,
+            "Subosque" => subosqueStickers,
+            "Dossel" => dosselStickers,
+            "Epifitas" => epifitasStickers,
+            "Serrapilheira" => serrapilheiraStickers,
+            "AreaTeste" => areaTesteStickers,
+            _ => null
+        };
+    }
+
+
+
+
 
     private void AddStickersForArea(string areaName, GameObject[] stickersArray, List<GameObject> outputList, bool showAllForArea)
     {
@@ -350,6 +435,8 @@ public class NativeCameraExample : MonoBehaviour
         imageDisplay.gameObject.SetActive(false);
         closeButton?.SetActive(false);
         okButton?.SetActive(false);
+        backButton?.SetActive(false); // 🆕 Desativa o botão Voltar
+
 
         foreach (var sticker in FindObjectsOfType<StickerController>())
             Destroy(sticker.gameObject);
@@ -475,7 +562,17 @@ public class NativeCameraExample : MonoBehaviour
         screenshot.Apply();
 
         if (!string.IsNullOrEmpty(currentArea))
+        {
             galleryManager.SaveImage(currentArea, screenshot);
+            galleryManager.AtualizarMiniaturas();   // <-- ADICIONE AQUI
+
+            if (mapPinsController != null)
+            {
+                mapPinsController.MarkPinVisited(currentArea);
+            }
+
+        }
+
 
         ClosePhotoView();
         UpdateAllCountersFromLocationManager();
@@ -541,4 +638,19 @@ public class NativeCameraExample : MonoBehaviour
             Debug.LogWarning("⚠️ Nenhuma foto aberta para fechar.");
         }
     }
+
+    public void VoltarFotoDecorada()
+    {
+        ClosePhotoView(); // Apenas fecha, sem verificar nem salvar
+    }
+
+
+
+
+
+
+
+
+
+
 }

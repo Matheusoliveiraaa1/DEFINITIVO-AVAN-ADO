@@ -153,7 +153,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -187, y: -234}
+  m_AnchoredPosition: {x: -187, y: -311}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &22663836
@@ -1344,7 +1344,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -380, y: 25}
+  m_AnchoredPosition: {x: -386, y: 25}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &180213821
@@ -1825,6 +1825,85 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding: {x: 0, y: 0, z: 0, w: 0}
   m_Softness: {x: 0, y: 0}
+--- !u!1 &216827986
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 216827987}
+  - component: {fileID: 216827989}
+  - component: {fileID: 216827988}
+  m_Layer: 5
+  m_Name: NomesContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &216827987
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216827986}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1416014227}
+  - {fileID: 459568487}
+  m_Father: {fileID: 314935338}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -98.91998, y: 421.16852}
+  m_SizeDelta: {x: 807.20996, y: 137.93}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &216827988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216827986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 2
+--- !u!114 &216827989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 216827986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Padding:
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
+    m_Bottom: 0
+  m_ChildAlignment: 1
+  m_Spacing: 5
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
+  m_ReverseArrangement: 0
 --- !u!1 &220652098
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,8 +1939,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 479.93, y: -866.6735}
-  m_SizeDelta: {x: 959.86, y: 236.3562}
+  m_AnchoredPosition: {x: 479.93, y: -1039.1288}
+  m_SizeDelta: {x: 959.86, y: 256.0813}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &220652100
 MonoBehaviour:
@@ -2071,6 +2150,83 @@ RectTransform:
   m_AnchoredPosition: {x: -192, y: -316}
   m_SizeDelta: {x: 536.57, y: 1249.2603}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &255964038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 255964039}
+  - component: {fileID: 255964041}
+  - component: {fileID: 255964040}
+  m_Layer: 5
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &255964039
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255964038}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1626442318}
+  - {fileID: 2009529762}
+  m_Father: {fileID: 2037489354}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0.0019379, y: 1270.8303}
+  m_SizeDelta: {x: 900, y: 146.2628}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &255964040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255964038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0.3188386, b: 0.023584902, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a9455706bf46c6f4d9e4d5d07170b584, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &255964041
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 255964038}
+  m_CullTransparentMesh: 1
 --- !u!1 &266479425
 GameObject:
   m_ObjectHideFlags: 0
@@ -2308,18 +2464,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 314935337}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 716310365}
-  - {fileID: 1416014227}
-  - {fileID: 459568487}
+  - {fileID: 216827987}
   - {fileID: 646763107}
   - {fileID: 1337860479}
   - {fileID: 22663835}
-  m_Father: {fileID: 556649114}
+  m_Father: {fileID: 822219749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -3540,12 +3695,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 314935338}
+  m_Father: {fileID: 216827987}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -99.3945, y: 419.21704}
-  m_SizeDelta: {x: 807.20996, y: 129.72168}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 403.60498, y: -137.93}
+  m_SizeDelta: {x: 807.20996, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &459568488
 MonoBehaviour:
@@ -3680,7 +3835,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.42729044, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -293, y: 57}
+  m_AnchoredPosition: {x: -280, y: 59}
   m_SizeDelta: {x: 139, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &473145219
@@ -3705,8 +3860,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "N\xE3o retirar/danificar plantas ou animais do parque"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
-  m_sharedMaterial: {fileID: 4874870646470409256, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
+  m_sharedMaterial: {fileID: -4251051390080476164, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4031,7 +4186,6 @@ RectTransform:
   - {fileID: 1964089031}
   - {fileID: 1952518335}
   - {fileID: 1821968685}
-  - {fileID: 314935338}
   m_Father: {fileID: 822219749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -4733,7 +4887,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.42729044, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -267, y: 59}
+  m_AnchoredPosition: {x: -281, y: 59}
   m_SizeDelta: {x: 139, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &637091257
@@ -4758,8 +4912,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "N\xE3o entrar com animais dom\xE9sticos"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
-  m_sharedMaterial: {fileID: 4874870646470409256, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
+  m_sharedMaterial: {fileID: -4251051390080476164, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4869,7 +5023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.56648964}
-  m_AnchoredPosition: {x: -241.89185, y: 28.3694}
+  m_AnchoredPosition: {x: -256, y: -73}
   m_SizeDelta: {x: 375.0079, y: 287.5302}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &646763108
@@ -5547,6 +5701,7 @@ RectTransform:
   - {fileID: 556649114}
   - {fileID: 986441944}
   - {fileID: 431415748}
+  - {fileID: 314935338}
   - {fileID: 1884149036}
   - {fileID: 1707938780}
   - {fileID: 1103364858}
@@ -5883,8 +6038,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "N\xE3o entrar com mochilas/bags"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
-  m_sharedMaterial: {fileID: 4874870646470409256, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
+  m_sharedMaterial: {fileID: -4251051390080476164, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -6529,8 +6684,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 479.93, y: -617.17505}
-  m_SizeDelta: {x: 959.86, y: 236.3562}
+  m_AnchoredPosition: {x: 479.93, y: -737.9907}
+  m_SizeDelta: {x: 959.86, y: 316.1948}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &916223622
 MonoBehaviour:
@@ -6809,6 +6964,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 1967924731}
   - {fileID: 612590128}
   - {fileID: 1448855986}
   - {fileID: 1848800781}
@@ -6832,7 +6988,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.499756, y: 27.833008}
+  m_AnchoredPosition: {x: -59.500244, y: 27.833008}
   m_SizeDelta: {x: 506.60632, y: -207.66565}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &998412537
@@ -6852,7 +7008,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &998412538
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7291,8 +7447,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 59.5, y: -635.7846}
-  m_SizeDelta: {x: 900, y: 244.5792}
+  m_AnchoredPosition: {x: 59.5, y: -684.83}
+  m_SizeDelta: {x: 900, y: 342.67}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1094861926
 MonoBehaviour:
@@ -7511,46 +7667,47 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 4444340831296335131, guid: 22981bb4b7aff904984a9ca850e921d2, type: 3}
   area2Stickers: []
   cursoDaguaStickers:
   - {fileID: 4259669242176332773, guid: b092d9dc103f3ab4795194d0c85430f8, type: 3}
   - {fileID: 4501177554998319538, guid: 238dc578cc1d8c04780f8dc0d06be220, type: 3}
   - {fileID: 5729031850406356967, guid: 5cf32b1ffd0b0ed4e916b3b7c3a75e21, type: 3}
-  - {fileID: 4517430092214123514, guid: 403243c7e1ca87b4395b278c9658dafd, type: 3}
-  - {fileID: 2649602765084454205, guid: 4f2a3478b313a224492a6832d7fe5b11, type: 3}
-  - {fileID: 2915470633809138005, guid: 0eb6f615666710045ab373307c0ad739, type: 3}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   subosqueStickers:
   - {fileID: 8759529696081694331, guid: febde4e28406915479fac8c053abc772, type: 3}
   - {fileID: 7745521535422220794, guid: 9fb35010193812146872e91ad800cd5b, type: 3}
-  - {fileID: 0}
-  - {fileID: 4444340831296335131, guid: 22981bb4b7aff904984a9ca850e921d2, type: 3}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 3448470844577006941, guid: 45a6c78cdb9952f4d855e3c5ca20e15a, type: 3}
+  - {fileID: 2778672974996036193, guid: 57f21dea3290d7c45a4441d7a6c74ba7, type: 3}
+  - {fileID: 5918237336424375887, guid: be3cf8bfea00b134289558a4740dc7e1, type: 3}
   dosselStickers:
-  - {fileID: 8205815776363827919, guid: dfb260132ca48564590cdc4c385ab9a9, type: 3}
-  - {fileID: 7934090030627619050, guid: 2614210dec8c36c429599f67aacc76a3, type: 3}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 716919775942253321, guid: edecedfce84818f40a9c99919dec6282, type: 3}
-  - {fileID: 1652102910857222158, guid: f05898dbdd445524c8b800b01888d487, type: 3}
-  - {fileID: 997361853740005891, guid: 0c84dbee6b2e31d4da946182241c27fe, type: 3}
+  - {fileID: 8205815776363827919, guid: dfb260132ca48564590cdc4c385ab9a9, type: 3}
+  - {fileID: 7934090030627619050, guid: 2614210dec8c36c429599f67aacc76a3, type: 3}
   epifitasStickers:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 3845800101381962468, guid: 287f547944a69104bb02a6d8d49be6d9, type: 3}
   - {fileID: 456146798935420840, guid: 47aefebfbdfac824d923dc1774fcc49c, type: 3}
-  - {fileID: 0}
-  - {fileID: 6602011286608055205, guid: ea512cf595b65e740a48ffb21b3b119d, type: 3}
-  - {fileID: 0}
+  - {fileID: 4831280195759621166, guid: 3dbb4200975a73e48ba6fd64526fa293, type: 3}
   serrapilheiraStickers:
-  - {fileID: 2018666548081544111, guid: 9d3d00ffcda3cb246a901a6ab7c77d22, type: 3}
-  - {fileID: 2718473183687257842, guid: 7d9f363f701a6b946bd5ca46614aad93, type: 3}
-  - {fileID: 8892709416439699440, guid: 7a9db2bb5f47525468fb6b295346a9ca, type: 3}
-  - {fileID: 3146776779553589372, guid: 7f070ae7bf5ff3540bd81fdebd11a43c, type: 3}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 925777454971331882, guid: 2579b884377c54342a4fb634f37517a4, type: 3}
+  - {fileID: 2718473183687257842, guid: 7d9f363f701a6b946bd5ca46614aad93, type: 3}
+  - {fileID: 2018666548081544111, guid: 9d3d00ffcda3cb246a901a6ab7c77d22, type: 3}
   areaTesteStickers: []
+  mapPinsController: {fileID: 1964089035}
   locationManager: {fileID: 1103364857}
   galleryManager: {fileID: 1103364859}
   photoAreaToCapture: {fileID: 2037489354}
   okButton: {fileID: 1626442314}
+  backButton: {fileID: 2009529761}
   maxStickersPerPhoto: 6
   progressText: {fileID: 1986915529}
   messageImage: {fileID: 53880233}
@@ -7597,79 +7754,14 @@ MonoBehaviour:
   cameraButton: {fileID: 1464722304}
   stickerNotificationImage: {fileID: 1323261248}
   areaTeste: 0
-  detectionRadius: 10
+  detectionRadius: 100
   notificationDuration: 3
   areaPoints:
-  - latitude: -26.921153
-    longitude: -49.072008
-    message: "Voc\xEA chegou ao curso da \xE1gua!"
-    areaName: CursoDagua
-  - latitude: -26.921064
-    longitude: -49.07395
-    message: "Voc\xEA chegou ao subosque!"
-    areaName: Subosque
-  - latitude: -26.92137
-    longitude: -49.07517
-    message: "Voc\xEA chegou ao Dossel!"
-    areaName: 'Dossel '
-  - latitude: -26.92139
-    longitude: -49.0725
-    message: "Voc\xEA chegou \xE0 serrapilheira!"
-    areaName: Serrapilheira
-  - latitude: -26.921361
-    longitude: -49.073411
-    message: "Voc\xEA chegou \xE0s epifitas"
-    areaName: Epifitas
-  - latitude: -26.90588
-    longitude: -49.07933
-    message: "Voc\xEA chegou \xE0 \xE1rea 1"
-    areaName: Area1
-  stickerPoints:
-  - latitude: -26.921272
-    longitude: -49.071814
+  - latitude: -26.90551
+    longitude: -49.07988
     message: 
     areaName: CursoDagua
-    stickerIndex: 3
-  - latitude: -26.921447
-    longitude: -49.072914
-    message: 
-    areaName: CursoDagua
-    stickerIndex: 4
-  - latitude: -26.921339
-    longitude: -49.073961
-    message: 
-    areaName: CursoDagua
-    stickerIndex: 5
-  - latitude: -26.921347
-    longitude: -49.074342
-    message: 
-    areaName: 'Dossel '
-    stickerIndex: 3
-  - latitude: -26.920503
-    longitude: -49.075869
-    message: 
-    areaName: 'Dossel '
-    stickerIndex: 4
-  - latitude: -26.920925
-    longitude: -49.074908
-    message: 
-    areaName: 'Dossel '
-    stickerIndex: 5
-  - latitude: -26.921083
-    longitude: -49.073208
-    message: 
-    areaName: Serrapilheira
-    stickerIndex: 3
-  - latitude: -26.921039
-    longitude: -49.072347
-    message: 
-    areaName: Epifitas
-    stickerIndex: 3
-  - latitude: -26.90563
-    longitude: -49.0792
-    message: 
-    areaName: Area1
-    stickerIndex: 3
+  stickerPoints: []
   inventoryManager: {fileID: 0}
 --- !u!224 &1103364858
 RectTransform:
@@ -7707,7 +7799,7 @@ MonoBehaviour:
     slotImage: {fileID: 570093688}
   - areaName: Subosque
     slotImage: {fileID: 1726187844}
-  - areaName: 'Dossel '
+  - areaName: Dossel
     slotImage: {fileID: 1172862730}
   - areaName: Epifitas
     slotImage: {fileID: 1217307033}
@@ -7728,6 +7820,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79131087cf58ff7428d1ff309f3325ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stickerMessageText: {fileID: 1472469443}
   overlayPanel: {fileID: 895717595}
   okButton: {fileID: 863431977}
   photo1: {fileID: 241780610}
@@ -7749,6 +7842,7 @@ MonoBehaviour:
   shrinkDuration: 0.5
   flyDuration: 0.8
   minScale: 0.2
+  stickerVerticalOffset: 150
 --- !u!1 &1117080312
 GameObject:
   m_ObjectHideFlags: 0
@@ -8010,7 +8104,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 540, y: -143.2815}
+  m_AnchoredPosition: {x: 540, y: -143.28125}
   m_SizeDelta: {x: 1080, y: 219.03998}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1171909189
@@ -9013,7 +9107,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.56648964}
-  m_AnchoredPosition: {x: 241, y: 28.369}
+  m_AnchoredPosition: {x: 248, y: -73}
   m_SizeDelta: {x: 375.0079, y: 287.53}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1337860480
@@ -9357,7 +9451,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.0000095367, y: 250.58}
+  m_AnchoredPosition: {x: -0.0000095367, y: 345.9001}
   m_SizeDelta: {x: 547.1181, y: 501.16}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1366306393
@@ -9624,12 +9718,12 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 314935338}
+  m_Father: {fileID: 216827987}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -105.51999, y: 519.83997}
-  m_SizeDelta: {x: 563.9199, y: 192.71582}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 403.60498, y: -66.465}
+  m_SizeDelta: {x: 563.9199, y: 132.93}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1416014228
 MonoBehaviour:
@@ -9651,7 +9745,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "Camale\xE3ozinho"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9678,8 +9772,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 120
-  m_fontSizeBase: 120
+  m_fontSize: 110
+  m_fontSizeBase: 110
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -10019,7 +10113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1448855984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10463,8 +10557,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Parece que voc\xEA encontrou um Sticker! pressione no ok para guarda-lo
-    na sua mochila."
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -10926,7 +11019,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.42729044, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -287, y: 53}
+  m_AnchoredPosition: {x: -280, y: 65}
   m_SizeDelta: {x: 139, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1524953447
@@ -10951,8 +11044,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "N\xE3o entrar com comida, apenas \xE1gua."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
-  m_sharedMaterial: {fileID: 4874870646470409256, guid: 158e298a22fe9b24cbd296abc20e5fe1, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
+  m_sharedMaterial: {fileID: -4251051390080476164, guid: 7421ab29004d73e438859518570fd5e8, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11489,8 +11582,8 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: -150
+  m_ChildAlignment: 3
+  m_Spacing: 15
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
@@ -11746,8 +11839,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 479.93, y: -367.67657}
-  m_SizeDelta: {x: 959.86, y: 236.3562}
+  m_AnchoredPosition: {x: 479.93, y: -408.12476}
+  m_SizeDelta: {x: 959.86, y: 313.5371}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1617570955
 MonoBehaviour:
@@ -11912,11 +12005,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2037489354}
+  m_Father: {fileID: 255964039}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 1}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: 96}
+  m_AnchorMin: {x: 1, y: 0.5}
+  m_AnchorMax: {x: 1, y: 0.5}
+  m_AnchoredPosition: {x: -92, y: 0}
   m_SizeDelta: {x: 161.39227, y: 119.9234}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1631988498
@@ -12710,21 +12803,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   content: {fileID: 1064278402}
   stickerSlotPrefab: {fileID: 6871702897271296346, guid: 1148d173830da7345942c36936a22ab1, type: 3}
-  unlockedStickers:
-  - {fileID: 21300000, guid: f56604285fea2fe41adbf200201411a3, type: 3}
-  - {fileID: 21300000, guid: 6941b947e542baf42878a1b8f3845801, type: 3}
-  - {fileID: 21300000, guid: 43b4c6613c6ffa04ab180cb103d26be8, type: 3}
-  - {fileID: 21300000, guid: 64598ca5198a9654db40a235aa8463fd, type: 3}
-  - {fileID: 21300000, guid: d29e93a62cfd25f4fbad31b49928c16a, type: 3}
+  allStickers:
+  - {fileID: 21300000, guid: 479251d875cb810499dbae90aa0117ba, type: 3}
+  - {fileID: 21300000, guid: c0443e633b7dcd94b8da429fb72dfd98, type: 3}
   - {fileID: 21300000, guid: 77f71217215cd444cb6881fb1fb22cd4, type: 3}
   - {fileID: 21300000, guid: 59b613efd76a09e4f95856ec19028ef0, type: 3}
   - {fileID: 21300000, guid: 3dd363d8a9bd1a549abe2c04866e8f2b, type: 3}
-  - {fileID: 21300000, guid: 89976aa87f3b52d448eceb47b80078c0, type: 3}
-  - {fileID: 21300000, guid: 479251d875cb810499dbae90aa0117ba, type: 3}
-  - {fileID: 21300000, guid: c0443e633b7dcd94b8da429fb72dfd98, type: 3}
+  - {fileID: 21300000, guid: f4a3d0a307092be47b4b1d5e41ef7348, type: 3}
   - {fileID: 21300000, guid: dfb00d40a3d5d8c499531beb4f686dfd, type: 3}
+  - {fileID: 21300000, guid: dc2d547321776fe47b1644c856f18b5d, type: 3}
+  - {fileID: 21300000, guid: 64598ca5198a9654db40a235aa8463fd, type: 3}
+  - {fileID: 21300000, guid: d29e93a62cfd25f4fbad31b49928c16a, type: 3}
+  - {fileID: 21300000, guid: 89976aa87f3b52d448eceb47b80078c0, type: 3}
+  - {fileID: 21300000, guid: 6386ee774ef0df448a1582b60fa8f376, type: 3}
+  - {fileID: 21300000, guid: f56604285fea2fe41adbf200201411a3, type: 3}
+  - {fileID: 21300000, guid: 424505632b434a546ac1c3a57ebc48bd, type: 3}
+  - {fileID: 21300000, guid: 6941b947e542baf42878a1b8f3845801, type: 3}
+  - {fileID: 21300000, guid: 43b4c6613c6ffa04ab180cb103d26be8, type: 3}
+  - {fileID: 21300000, guid: 66a482c5b6736f148b5fe358f992ea49, type: 3}
+  - {fileID: 21300000, guid: 78cf4e97d981b8b4fbf4c31ebcabaf21, type: 3}
+  - {fileID: 21300000, guid: 491e2a91f42ce954aa8761481f36bc12, type: 3}
+  - {fileID: 21300000, guid: 617df9e87c8b8104990bf8099ee6b0e8, type: 3}
+  - {fileID: 21300000, guid: 486843aa15fb86a43b0f239d301fb0a7, type: 3}
+  - {fileID: 21300000, guid: bb7949bb672acef42bb5b2e3be4634dc, type: 3}
+  - {fileID: 21300000, guid: a7653c8a717f30642baaca1a706f9e7c, type: 3}
+  - {fileID: 21300000, guid: c20cb76043c26574496cc25263e1a199, type: 3}
+  - {fileID: 21300000, guid: af1bc6132f096394fb4c66f2a7dfb40b, type: 3}
+  - {fileID: 21300000, guid: 8a852213b93a5634f9252eddc4ad2374, type: 3}
+  unlockedStickers: []
   locationManager: {fileID: 1103364857}
+  mapPinsController: {fileID: 1964089035}
   checkmarkSprite: {fileID: 21300000, guid: f7fca6dcfe43fd2458c982d0fcf095e8, type: 3}
+  checkmarkSize: {x: 30, y: 30}
+  checkmarkPosition: {x: 35, y: 10}
 --- !u!1 &1720227053
 GameObject:
   m_ObjectHideFlags: 0
@@ -13272,7 +13383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1848800779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13794,6 +13905,9 @@ MonoBehaviour:
   areaTitleText: {fileID: 1575146464}
   areaDescriptionText: {fileID: 2031510971}
   viewStickersButton: {fileID: 1401370556}
+  visitedPinSprite: {fileID: 0}
+  useSpriteSwap: 0
+  visitedTint: {r: 0, g: 1, b: 0, a: 1}
   stickersPanel: {fileID: 1821968684}
   stickersContentParent: {fileID: 690399560}
   stickerImagePrefab: {fileID: 1858631504469661234, guid: 2214ae3939f037e48a4ae847256a058e, type: 3}
@@ -13805,30 +13919,51 @@ MonoBehaviour:
       e animais que dependem da umidade e da sombra para sobreviver. "
   - pinName: Subosque
     position: {x: -143, y: 11}
-    description: 
-  - pinName: Subosque
-    position: {x: -143, y: 11}
-    description: 
+    description: Camada logo abaixo das copas, com pouca luz, onde vivem arbustos,
+      mudas e animais que preferem sombra.
   - pinName: Dossel
     position: {x: 45, y: 498}
-    description: 
+    description: "A camada superior da floresta formada pelas copas das \xE1rvores,
+      rica em luz e muito biodiversa."
   - pinName: Epifitas
     position: {x: 275, y: 430}
-    description: 
+    description: "Plantas que vivem sobre outras plantas (geralmente troncos e galhos),
+      mas sem tirar nutrientes delas \u2014 como brom\xE9lias e orqu\xEDdeas."
   - pinName: Serrapilheira
     position: {x: 66, y: 159}
-    description: 
+    description: "Camada de folhas, galhos e mat\xE9ria org\xE2nica no ch\xE3o da
+      floresta, essencial para nutrir o solo."
   cursoDaguaStickers:
   - {fileID: 21300000, guid: af1bc6132f096394fb4c66f2a7dfb40b, type: 3}
   - {fileID: 21300000, guid: 66a482c5b6736f148b5fe358f992ea49, type: 3}
   - {fileID: 21300000, guid: 491e2a91f42ce954aa8761481f36bc12, type: 3}
   - {fileID: 21300000, guid: 43b4c6613c6ffa04ab180cb103d26be8, type: 3}
-  - {fileID: 21300000, guid: 66a482c5b6736f148b5fe358f992ea49, type: 3}
+  - {fileID: 21300000, guid: f56604285fea2fe41adbf200201411a3, type: 3}
   - {fileID: 21300000, guid: 6941b947e542baf42878a1b8f3845801, type: 3}
-  subosqueStickers: []
-  dosselStickers: []
-  epifitasStickers: []
-  serrapilheiraStickers: []
+  subosqueStickers:
+  - {fileID: 21300000, guid: 64598ca5198a9654db40a235aa8463fd, type: 3}
+  - {fileID: 21300000, guid: d29e93a62cfd25f4fbad31b49928c16a, type: 3}
+  - {fileID: 21300000, guid: 6386ee774ef0df448a1582b60fa8f376, type: 3}
+  - {fileID: 21300000, guid: 424505632b434a546ac1c3a57ebc48bd, type: 3}
+  - {fileID: 21300000, guid: bb7949bb672acef42bb5b2e3be4634dc, type: 3}
+  dosselStickers:
+  - {fileID: 21300000, guid: 77f71217215cd444cb6881fb1fb22cd4, type: 3}
+  - {fileID: 21300000, guid: 59b613efd76a09e4f95856ec19028ef0, type: 3}
+  - {fileID: 21300000, guid: f4a3d0a307092be47b4b1d5e41ef7348, type: 3}
+  - {fileID: 21300000, guid: 617df9e87c8b8104990bf8099ee6b0e8, type: 3}
+  - {fileID: 21300000, guid: c20cb76043c26574496cc25263e1a199, type: 3}
+  epifitasStickers:
+  - {fileID: 21300000, guid: 3dd363d8a9bd1a549abe2c04866e8f2b, type: 3}
+  - {fileID: 21300000, guid: 89976aa87f3b52d448eceb47b80078c0, type: 3}
+  - {fileID: 21300000, guid: 78cf4e97d981b8b4fbf4c31ebcabaf21, type: 3}
+  - {fileID: 21300000, guid: 486843aa15fb86a43b0f239d301fb0a7, type: 3}
+  - {fileID: 21300000, guid: 8a852213b93a5634f9252eddc4ad2374, type: 3}
+  serrapilheiraStickers:
+  - {fileID: 21300000, guid: 479251d875cb810499dbae90aa0117ba, type: 3}
+  - {fileID: 21300000, guid: c0443e633b7dcd94b8da429fb72dfd98, type: 3}
+  - {fileID: 21300000, guid: dfb00d40a3d5d8c499531beb4f686dfd, type: 3}
+  - {fileID: 21300000, guid: dc2d547321776fe47b1644c856f18b5d, type: 3}
+  - {fileID: 21300000, guid: a7653c8a717f30642baaca1a706f9e7c, type: 3}
   speciesInfoPanel: {fileID: 314935337}
   commonNameText: {fileID: 1416014228}
   scientificNameText: {fileID: 459568488}
@@ -13838,26 +13973,280 @@ MonoBehaviour:
   backButton: {fileID: 716310366}
   speciesList:
   - commonName: "Camar\xE3o"
-    scientificName: "El camar\xF3n Camaronzito"
-    realPhoto: {fileID: 21300000, guid: ee31864a6b332dd419062e953c99e1b1, type: 3}
+    scientificName: Macrobrachium potiuna
+    realPhoto: {fileID: 21300000, guid: 89089987f6880e74e84f236c23b060c3, type: 3}
     stickerSprite: {fileID: 21300000, guid: 66a482c5b6736f148b5fe358f992ea49, type: 3}
-    description: "O camar\xE3o \xE9 um camar\xE3o e ele gosta de sempre viver fazendo
-      coisas que camaroes costumam fazer "
-  - commonName: 
+    description: "Vive em riachos limpos e bem oxigenados. Esse pequeno camar\xE3o
+      de \xE1gua\r\ndoce ajuda a manter o equil\xEDbrio do ecossistema e indica boa
+      qualidade da \xE1gua.\r"
+  - commonName: Girino
     scientificName: 
-    realPhoto: {fileID: 0}
-    stickerSprite: {fileID: 0}
-    description: 
-  - commonName: 
+    realPhoto: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    stickerSprite: {fileID: 21300000, guid: f56604285fea2fe41adbf200201411a3, type: 3}
+    description: "Fase jovem dos anf\xEDbios, vive na \xE1gua e respira por br\xE2nquias.
+      Alimenta-se de algas e restos org\xE2nicos, ajudando a manter o ambiente limpo.\r        
+      \r"
+  - commonName: Anfibio
+    scientificName: Leptodactylus latrans
+    realPhoto: {fileID: 21300000, guid: 5cef873b1b6c7674d9b173ae851991ef, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 43b4c6613c6ffa04ab180cb103d26be8, type: 3}
+    description: "R\xE3 de coaxar forte que vive perto da \xE1gua. Alimenta-se de
+      insetos e \xE9 sens\xEDvel \xE0 polui\xE7\xE3o -- um importante indicador da
+      sa\xFAde ambiental como todo anf\xEDbio."
+  - commonName: "Caet\xE9"
+    scientificName: Heliconia farinosa
+    realPhoto: {fileID: 21300000, guid: f50ca8544ab03f5448083fe682bc2815, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 6941b947e542baf42878a1b8f3845801, type: 3}
+    description: "Planta tropical de cores vibrantes que atrai beija-flores. Suas
+      flores ajudam na poliniza\xE7\xE3o e embelezam o interior da floresta.\r"
+  - commonName: Caranguejo
+    scientificName: Trichodactylus fluviatilis
+    realPhoto: {fileID: 21300000, guid: cd8dcf7da8a35374aa7ba93c04b9c958, type: 3}
+    stickerSprite: {fileID: 21300000, guid: af1bc6132f096394fb4c66f2a7dfb40b, type: 3}
+    description: "Mora nas margens de rios e c\xF3rregos. Alimenta-se de restos de
+      plantas e animais, auxiliando na decomposi\xE7\xE3o e ciclagem de nutrientes
+      do ambiente.\r\n\r"
+  - commonName: Peixe
+    scientificName: Phalloceros sp.
+    realPhoto: {fileID: 21300000, guid: 22d2331933e82754695ab9ac575e9411, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 491e2a91f42ce954aa8761481f36bc12, type: 3}
+    description: "Pequeno e resistente, vive em riachos calmos. Alimenta-se de algas
+      e insetos, mantendo o equil\xEDbrio da vida aqu\xE1tica.\r"
+  - commonName: Cogumelo
+    scientificName: Agaricus sp.
+    realPhoto: {fileID: 21300000, guid: 444e377210359484baf670ddfe4bfcd5, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 479251d875cb810499dbae90aa0117ba, type: 3}
+    description: "Surge em locais \xFAmidos e ricos em mat\xE9ria org\xE2nica. Recicla
+      nutrientes, transformando o que morreu em nova vida no solo."
+  - commonName: Aranha-lobo
+    scientificName: Ctenus ornatus
+    realPhoto: {fileID: 21300000, guid: 93685cc29d5787640ae3a2a024716ceb, type: 3}
+    stickerSprite: {fileID: 21300000, guid: dc2d547321776fe47b1644c856f18b5d, type: 3}
+    description: "Ca\xE7adora \xE1gil que vive no ch\xE3o da floresta. Controla popula\xE7\xF5es
+      de insetos, sendo uma das principais predadoras da serrapilheira."
+  - commonName: Semente germinando
+    scientificName: Euterpe edulis
+    realPhoto: {fileID: 21300000, guid: e21fed4b69fcaee4ab5c30784db10f42, type: 3}
+    stickerSprite: {fileID: 21300000, guid: a7653c8a717f30642baaca1a706f9e7c, type: 3}
+    description: "O nascimento de um novo palmito-ju\xE7ara, \xE1rvore essencial
+      da Mata Atl\xE2ntica, alimento para aves e s\xEDmbolo de regenera\xE7\xE3o.\r"
+  - commonName: Inhambu
+    scientificName: Crypturellus tataupa
+    realPhoto: {fileID: 21300000, guid: 15df305961e6f5242b26e57f93ca2680, type: 3}
+    stickerSprite: {fileID: 21300000, guid: dfb00d40a3d5d8c499531beb4f686dfd, type: 3}
+    description: "Ave terr\xEDcola e discreta. Come sementes e insetos, ajudando
+      na manuten\xE7\xE3o e regenera\xE7\xE3o da floresta.\r"
+  - commonName: Rato-do-mato
+    scientificName: Akodon azarae
+    realPhoto: {fileID: 21300000, guid: b17dde6b4d3a8434b8161e0d5df92721, type: 3}
+    stickerSprite: {fileID: 21300000, guid: c0443e633b7dcd94b8da429fb72dfd98, type: 3}
+    description: "Pequeno roedor da floresta. Espalha sementes e serve de alimento
+      para v\xE1rios predadores, mantendo o ciclo natural."
+  - commonName: 'Muda de palmito '
+    scientificName: Euterpe edulis
+    realPhoto: {fileID: 21300000, guid: c8cfd13485cd6524288134d0c4405231, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 6386ee774ef0df448a1582b60fa8f376, type: 3}
+    description: "Jovem palmito-ju\xE7ara crescendo sob a sombra da floresta. Sua
+      presen\xE7a garante alimento e abrigo para muitas esp\xE9cies.\r"
+  - commonName: Samambaia
+    scientificName: Danaea geniculata
+    realPhoto: {fileID: 21300000, guid: 3b051c94d0c1545469b7dc94d224680d, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 64598ca5198a9654db40a235aa8463fd, type: 3}
+    description: "Gosta de lugares \xFAmidos e sombreados. Suas folhas ajudam a manter
+      a umidade e proteger o solo da eros\xE3o.\r"
+  - commonName: 'Planta '
+    scientificName: Goeppertia monophylla
+    realPhoto: {fileID: 21300000, guid: 1ee8d6a05030f2e4f8549aaf60829258, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 424505632b434a546ac1c3a57ebc48bd, type: 3}
+    description: "Esp\xE9cie de folhas largas do sub-bosque. Ajuda a manter o microclima
+      \xFAmido e abriga pequenos animais da floresta."
+  - commonName: "Camale\xE3ozinho"
+    scientificName: Enyalius iheringii
+    realPhoto: {fileID: 21300000, guid: 95307ff9ef65f964f97ed8c5cae90f0e, type: 3}
+    stickerSprite: {fileID: 21300000, guid: d29e93a62cfd25f4fbad31b49928c16a, type: 3}
+    description: "Lagarto que vive entre as \xE1rvores e muda de cor para se camuflar.
+      Ca\xE7a insetos e ajuda a manter o equil\xEDbrio ecol\xF3gico.\r"
+  - commonName: "Ti\xE9-sangue"
+    scientificName: Ramphocelus bresilius
+    realPhoto: {fileID: 21300000, guid: 080c143f16dc7d546997a28dc213b6c9, type: 3}
+    stickerSprite: {fileID: 21300000, guid: bb7949bb672acef42bb5b2e3be4634dc, type: 3}
+    description: "Ave de plumagem vermelha intensa. Alimenta-se de frutos e espalha
+      sementes, colorindo e renovando a floresta.\r"
+  - commonName: "Brom\xE9lia"
+    scientificName: Vriesea incurvata
+    realPhoto: {fileID: 21300000, guid: db33459cfee14e542871f43e2b4002d7, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 8a852213b93a5634f9252eddc4ad2374, type: 3}
+    description: "Acumula \xE1gua entre as folhas, criando abrigos para insetos e
+      pererecas. Um pequeno universo dentro da floresta."
+  - commonName: Beija-Flor
+    scientificName: Eupetomena macroura
+    realPhoto: {fileID: 21300000, guid: d00d43f5abdca9d4d9ea19b4e92978f9, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 89976aa87f3b52d448eceb47b80078c0, type: 3}
+    description: "Com voo r\xE1pido e preciso, visita flores em busca de n\xE9ctar.
+      Poliniza plantas de diversas esp\xE9cies, especialmente com flores tubulares. "
+  - commonName: Perereca
+    scientificName: Phyllodytes luteolus
+    realPhoto: {fileID: 21300000, guid: f86999f0c594e374bbd7c577cdec5e5f, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 486843aa15fb86a43b0f239d301fb0a7, type: 3}
+    description: "Vive em brom\xE9lias e nelas cria seus filhotes. \xC9 sens\xEDvel
+      \xE0s mudan\xE7as do ambiente e indica equil\xEDbrio ecol\xF3gico."
+  - commonName: Musgo
     scientificName: 
-    realPhoto: {fileID: 0}
-    stickerSprite: {fileID: 0}
-    description: 
-  - commonName: 
-    scientificName: 
-    realPhoto: {fileID: 0}
-    stickerSprite: {fileID: 0}
-    description: 
+    realPhoto: {fileID: 21300000, guid: 68cb51f1529b32c46b7ada2e599b7b7f, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 78cf4e97d981b8b4fbf4c31ebcabaf21, type: 3}
+    description: "Pequeno e delicado, cresce onde h\xE1 umidade. Ret\xE9m \xE1gua
+      e prepara o solo para novas plantas. "
+  - commonName: "Orqu\xEDdea"
+    scientificName: Cattleya purpurata
+    realPhoto: {fileID: 21300000, guid: b1ca91e7902d56143ace7e13be2b9029, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 3dd363d8a9bd1a549abe2c04866e8f2b, type: 3}
+    description: "Flor s\xEDmbolo de Santa Catarina, vive sobre \xE1rvores sem prejudic\xE1-las.
+      Atrai polinizadores e representa a beleza da Mata Atl\xE2ntica."
+  - commonName: Bugio
+    scientificName: Alouatta guariba
+    realPhoto: {fileID: 21300000, guid: 88fdf662b18ca7a47b18bf544d988a57, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 77f71217215cd444cb6881fb1fb22cd4, type: 3}
+    description: "Macaco de grande porte e vocaliza\xE7\xE3o poderosa. Vive em grupos
+      e ajuda a espalhar sementes por toda a floresta. "
+  - commonName: Morcego
+    scientificName: Artibeus sp.
+    realPhoto: {fileID: 21300000, guid: ebcc18b6b83770346a81df5886b912da, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 59b613efd76a09e4f95856ec19028ef0, type: 3}
+    description: "Alimenta-se de frutos e espalha sementes ao voar longas dist\xE2ncias.
+      Um jardineiro noturno essencial para a regenera\xE7\xE3o das matas."
+  - commonName: "Cobra-cip\xF3"
+    scientificName: Philodryas olfersii
+    realPhoto: {fileID: 21300000, guid: 65b7bfea9c3abc84d85e01fb45a130b4, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 617df9e87c8b8104990bf8099ee6b0e8, type: 3}
+    description: "Serpente esguia e verde, camuflada entre os galhos. Ca\xE7a anf\xEDbios
+      e pequenos animais, controlando suas popula\xE7\xF5es na copa das \xE1rvores. "
+  - commonName: Fruto do cedro
+    scientificName: Cedrela fissilis
+    realPhoto: {fileID: 21300000, guid: e2d2412dbe7af904d9beb793b697e584, type: 3}
+    stickerSprite: {fileID: 21300000, guid: f4a3d0a307092be47b4b1d5e41ef7348, type: 3}
+    description: "Libera sementes aladas que voam com o vento. D\xE1 origem a \xE1rvores
+      de grande porte (emergentes), importantes para o equil\xEDbrio e a manuten\xE7\xE3o
+      da floresta."
+  - commonName: "Gavi\xE3o"
+    scientificName: Spizaetus tyrannus
+    realPhoto: {fileID: 21300000, guid: e0084057524a8564d86f406c723cf792, type: 3}
+    stickerSprite: {fileID: 21300000, guid: c20cb76043c26574496cc25263e1a199, type: 3}
+    description: "Predador de topo, conhecido como gavi\xE3o-pega-macaco. Mant\xE9m
+      o equil\xEDbrio natural controlando popula\xE7\xF5es de outras esp\xE9cies."
+--- !u!1 &1967924730
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1967924731}
+  - component: {fileID: 1967924733}
+  - component: {fileID: 1967924732}
+  m_Layer: 5
+  m_Name: SassafrasWalking
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1967924731
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967924730}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 50, y: 50, z: 50}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 986441944}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 1375, y: -139}
+  m_SizeDelta: {x: 1, y: 1}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &1967924732
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967924730}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 877d8b33f6d57544f87e6f476df8f42f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!212 &1967924733
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967924730}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 1248166797, guid: b76055d617526db4dae457e4f5cb0682, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
 --- !u!1 &1986915528
 GameObject:
   m_ObjectHideFlags: 0
@@ -13994,6 +14383,138 @@ RectTransform:
   m_AnchoredPosition: {x: -140.5, y: 545.83984}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &2009529761
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2009529762}
+  - component: {fileID: 2009529765}
+  - component: {fileID: 2009529764}
+  - component: {fileID: 2009529763}
+  m_Layer: 5
+  m_Name: BackButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2009529762
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009529761}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 255964039}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 68.987, y: 0.000043869}
+  m_SizeDelta: {x: 137.9738, y: 70.586}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2009529763
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009529761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 2009529764}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1103364854}
+        m_TargetAssemblyTypeName: NativeCameraExample, Assembly-CSharp
+        m_MethodName: VoltarFotoDecorada
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2009529764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009529761}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 0f1ab097113c46046b67a3d9e8b76c58, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2009529765
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2009529761}
+  m_CullTransparentMesh: 1
 --- !u!1 &2031510969
 GameObject:
   m_ObjectHideFlags: 0
@@ -14028,7 +14549,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.4753418, y: 119}
+  m_AnchoredPosition: {x: -0.47558594, y: 119}
   m_SizeDelta: {x: -806, y: -1366}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2031510971
@@ -14237,7 +14758,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1626442318}
+  - {fileID: 255964039}
   m_Father: {fileID: 986441944}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -14317,6 +14838,8 @@ MonoBehaviour:
   navBar: {fileID: 876384701}
   imagemExtra1: {fileID: 1656883262}
   imagemExtra2: {fileID: 1098334542}
+  botao1: {fileID: 146778205}
+  botao2: {fileID: 933812397}
 --- !u!1 &2093003148
 GameObject:
   m_ObjectHideFlags: 0

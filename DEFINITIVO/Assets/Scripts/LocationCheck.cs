@@ -483,6 +483,8 @@ public class LocationServiceManager : MonoBehaviour
         if (catalog != null)
         {
             catalog.AddUnlockedSticker(areaName, stickerIndex);
+
+
         }
     }
 
