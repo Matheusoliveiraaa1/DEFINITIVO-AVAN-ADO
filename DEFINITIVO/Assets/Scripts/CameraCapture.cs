@@ -25,12 +25,6 @@ public class NativeCameraExample : MonoBehaviour
     public GameObject[] serrapilheiraStickers;
     public GameObject[] areaTesteStickers;
 
-
-
-    [Header("Map Controller")]
-    public MapPinsController mapPinsController; // arrastar no inspector, opcional se usar Instance
-
-
     [Header("Dependencies")]
     public LocationServiceManager locationManager;
     public GalleryManager galleryManager;
@@ -565,12 +559,6 @@ public class NativeCameraExample : MonoBehaviour
         {
             galleryManager.SaveImage(currentArea, screenshot);
             galleryManager.AtualizarMiniaturas();   // <-- ADICIONE AQUI
-
-            if (mapPinsController != null)
-            {
-                mapPinsController.MarkPinVisited(currentArea);
-            }
-
         }
 
 
@@ -654,3 +642,4 @@ public class NativeCameraExample : MonoBehaviour
 
 
 }
+
