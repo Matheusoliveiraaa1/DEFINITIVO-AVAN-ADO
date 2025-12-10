@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+ï»¿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
@@ -8,8 +8,8 @@ public class GalleryManager : MonoBehaviour
     [System.Serializable]
     public class AreaSlot
     {
-        public string areaName;      // Nome da área (ex: "Area1")
-        public RawImage slotImage;   // Miniatura no painel da galeria
+        public string areaName;
+        public RawImage slotImage;
     }
 
     [Header("Slots da Galeria")]
@@ -22,53 +22,63 @@ public class GalleryManager : MonoBehaviour
     [Header("Painel da Galeria")]
     public GameObject galeriaPainel;
 
-    // Armazena as imagens salvas em tempo de execução
-    private Dictionary<string, Texture2D> savedImages = new Dictionary<string, Texture2D>();
+    // âœ… NÃƒO armazenamos mais Textures na RAM
+    private Dictionary<string, string> savedImagePaths = new Dictionary<string, string>();
+
+    private Texture2D currentFullTexture; // âœ… controle de memÃ³ria
 
     private void Start()
     {
-        AtualizarMiniaturas(); // Carrega imagens do disco e atualiza slots
+        AtualizarMiniaturas();
     }
 
     public void SaveImage(string areaName, Texture2D image)
     {
-        savedImages[areaName] = image;
-
-        // Atualiza miniatura
-        foreach (var slot in slots)
-        {
-            if (slot.areaName == areaName)
-            {
-                slot.slotImage.texture = image;
-
-                Button slotButton = slot.slotImage.GetComponent<Button>();
-                if (slotButton != null)
-                {
-                    slotButton.onClick.RemoveAllListeners();
-                    slotButton.onClick.AddListener(() => OpenFullScreen(areaName));
-                }
-                break;
-            }
-        }
-
-        // SALVAR IMAGEM EM DISCO (CACHE INTERNO)
         string path = GetImageFilePath(areaName);
-        byte[] bytes = image.EncodeToPNG();
+
+        byte[] bytes = image.EncodeToJPG(80); // âœ… muito mais leve que PNG
         File.WriteAllBytes(path, bytes);
+
+        savedImagePaths[areaName] = path;
+
+        AtualizarMiniaturas();
     }
 
     public void OpenFullScreen(string areaName)
     {
-        if (savedImages.ContainsKey(areaName))
+        string path = GetImageFilePath(areaName);
+        if (!File.Exists(path)) return;
+
+        // âœ… DESTROI textura anterior antes de abrir nova
+        if (currentFullTexture != null)
         {
-            fullImageDisplay.texture = savedImages[areaName];
-            fullImagePanel.SetActive(true);
+            Destroy(currentFullTexture);
+            currentFullTexture = null;
+            Resources.UnloadUnusedAssets();
+            System.GC.Collect();
         }
+
+        byte[] bytes = File.ReadAllBytes(path);
+        currentFullTexture = new Texture2D(2, 2);
+        currentFullTexture.LoadImage(bytes);
+
+        fullImageDisplay.texture = currentFullTexture;
+        fullImagePanel.SetActive(true);
     }
 
     public void CloseFullScreen()
     {
         fullImagePanel.SetActive(false);
+
+        // âœ… LIBERA a textura da tela cheia
+        if (currentFullTexture != null)
+        {
+            Destroy(currentFullTexture);
+            currentFullTexture = null;
+            fullImageDisplay.texture = null;
+            Resources.UnloadUnusedAssets();
+            System.GC.Collect();
+        }
     }
 
     public void AbrirGaleria()
@@ -88,6 +98,13 @@ public class GalleryManager : MonoBehaviour
         {
             string path = GetImageFilePath(slot.areaName);
 
+            // âœ… DESTROI miniatura antiga antes de criar nova
+            if (slot.slotImage.texture != null)
+            {
+                Destroy(slot.slotImage.texture);
+                slot.slotImage.texture = null;
+            }
+
             if (File.Exists(path))
             {
                 byte[] bytes = File.ReadAllBytes(path);
@@ -95,15 +112,8 @@ public class GalleryManager : MonoBehaviour
                 tex.LoadImage(bytes);
 
                 slot.slotImage.texture = tex;
-                savedImages[slot.areaName] = tex;
-            }
-            else
-            {
-                // não define textura — mantém cor padrão configurada no Editor
-                slot.slotImage.texture = null;
             }
 
-            // Garante que o botão funcione
             Button slotButton = slot.slotImage.GetComponent<Button>();
             if (slotButton != null)
             {
@@ -112,11 +122,13 @@ public class GalleryManager : MonoBehaviour
                 slotButton.onClick.AddListener(() => OpenFullScreen(areaName));
             }
         }
+
+        Resources.UnloadUnusedAssets();
+        System.GC.Collect();
     }
 
-    // Agora salva no CACHE INTERNO (limpado ao desinstalar)
     private string GetImageFilePath(string areaName)
     {
-        return Path.Combine(Application.temporaryCachePath, $"{areaName}_photo.png");
+        return Path.Combine(Application.temporaryCachePath, $"{areaName}_photo.jpg");
     }
 }

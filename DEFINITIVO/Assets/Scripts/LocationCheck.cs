@@ -344,7 +344,12 @@ public class LocationServiceManager : MonoBehaviour
             FindAnyObjectByType<NativeCameraExample>().currentArea = poi.areaName;
 
             // Resetar estado de vídeo para nova área
+            // ✅ Resetar estado de vídeo para nova área
             VideoPlayState.Reset();
+
+            // ✅ Define qual vídeo deve tocar nesta área
+            VideoPlayState.CurrentVideoFile = GetVideoFileForArea(poi.areaName);
+
 
             // Mostrar overlay
             PhotoAreaOverlay.Show();
@@ -355,6 +360,38 @@ public class LocationServiceManager : MonoBehaviour
         if (cameraButton != null)
             cameraButton.SetActive(allowCamera);
     }
+
+
+
+    private string GetVideoFileForArea(string areaName)
+    {
+        switch (areaName)
+        {
+            case "CursoDagua":
+                return "TESTE.mp4";
+
+            case "Serrapilheira":
+                return "TESTE.mp4";
+
+            case "Epifitas":
+                return "epifitas.mp4";
+
+            case "Subosque":
+                return "subosque.mp4";
+
+            case "Dossel":
+                return "dossel.mp4";
+
+            default:
+                Debug.LogError("❌ Área desconhecida recebida: [" + areaName + "]");
+                return "TESTE.mp4"; // fallback de segurança
+        }
+    }
+
+
+
+
+
 
     // --------------------------
     // Persistência e lógica para stickers usados (NOVO)

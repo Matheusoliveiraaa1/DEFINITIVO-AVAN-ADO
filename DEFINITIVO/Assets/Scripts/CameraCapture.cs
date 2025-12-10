@@ -206,7 +206,17 @@ public class NativeCameraExample : MonoBehaviour
         {
             if (path != null)
             {
+                // ✅ DESTRÓI A FOTO ANTERIOR ANTES DE CARREGAR A NOVA
+                if (imageDisplay.texture != null)
+                {
+                    Destroy(imageDisplay.texture);
+                    imageDisplay.texture = null;
+                    Resources.UnloadUnusedAssets();
+                    GC.Collect();
+                }
+
                 Texture2D texture = NativeCamera.LoadImageAtPath(path, 1024);
+
 
                 if (texture != null && imageDisplay != null)
                 {
@@ -299,23 +309,33 @@ public class NativeCameraExample : MonoBehaviour
     {
         List<GameObject> finalList = new List<GameObject>();
 
-        // 1) Stickers da área atual
+        // 1️⃣ Stickers da área atual (fixos + coletados)
         finalList.AddRange(GetStickersFromCurrentArea());
 
-        // 2) Todos stickers elegíveis das outras áreas
-        List<GameObject> others = GetEligibleStickersFromOtherAreas();
+        // 2️⃣ Coleta SOMENTE OS FIXOS (0–2) das OUTRAS áreas
+        List<GameObject> fixedOthers = GetOnlyFixedStickersFromOtherAreas();
 
-        // 3) Sorteia 3 sem repetição
-        int count = Mathf.Min(3, others.Count);
-        for (int i = 0; i < count; i++)
+        // ✅ GARANTE QUE SEMPRE EXISTAM 3
+        if (fixedOthers.Count < 3)
         {
-            int rnd = UnityEngine.Random.Range(0, others.Count);
-            finalList.Add(others[rnd]);
-            others.RemoveAt(rnd); // evita repetir
+            Debug.LogError("❌ ERRO: Não existem 3 stickers fixos suficientes nas outras áreas!");
+            return finalList.ToArray();
         }
+
+        // 3️⃣ Sorteia EXATAMENTE 3 sem repetição
+        for (int i = 0; i < 3; i++)
+        {
+            int rnd = UnityEngine.Random.Range(0, fixedOthers.Count);
+            finalList.Add(fixedOthers[rnd]);
+            fixedOthers.RemoveAt(rnd);
+        }
+
+        // ✅ ✅ ✅ EMBARALHA TUDO ANTES DE RETORNAR
+        ShuffleList(finalList);
 
         return finalList.ToArray();
     }
+
 
     private List<GameObject> GetStickersFromCurrentArea()
     {
@@ -336,36 +356,41 @@ public class NativeCameraExample : MonoBehaviour
         return list;
     }
 
-
-    private List<GameObject> GetEligibleStickersFromOtherAreas()
+    private List<GameObject> GetOnlyFixedStickersFromOtherAreas()
     {
         List<GameObject> list = new List<GameObject>();
 
-        foreach (string areaName in new string[] {
-        "Area1", "Area2", "CursoDagua", "Subosque",
-        "Dossel", "Epifitas", "Serrapilheira", "AreaTeste"
-    })
+        string[] areas = new string[]
         {
-            if (areaName == currentArea) continue; // pular a área atual
+         "CursoDagua", "Subosque",
+        "Dossel", "Epifitas", "Serrapilheira"
+        };
+
+        foreach (string areaName in areas)
+        {
+            if (areaName == currentArea) continue;
 
             GameObject[] arr = GetStickersArrayByArea(areaName);
             if (arr == null) continue;
 
-            for (int i = 0; i < arr.Length; i++)
-            {
-                bool isFixed = i < 3;
-                bool isCollectedExtra = true;
-
-                if (i >= 3)
-                    isCollectedExtra = locationManager.IsStickerCollected(areaName, i);
-
-                if (isFixed || isCollectedExtra)
-                    list.Add(arr[i]);
-            }
+            // ✅ Agora ele só adiciona se EXISTIR de verdade
+            if (arr.Length > 0 && arr[0] != null) list.Add(arr[0]);
+            if (arr.Length > 1 && arr[1] != null) list.Add(arr[1]);
+            if (arr.Length > 2 && arr[2] != null) list.Add(arr[2]);
         }
 
         return list;
     }
+
+
+
+
+
+
+
+
+
+
 
     private GameObject[] GetStickersArrayByArea(string area)
     {
@@ -426,11 +451,19 @@ public class NativeCameraExample : MonoBehaviour
 
     public void ClosePhotoView()
     {
+        // ✅ DESTRÓI A TEXTURA DA FOTO EXIBIDA
+        if (imageDisplay.texture != null)
+        {
+            Destroy(imageDisplay.texture);
+            imageDisplay.texture = null;
+            Resources.UnloadUnusedAssets();
+            GC.Collect();
+        }
+
         imageDisplay.gameObject.SetActive(false);
         closeButton?.SetActive(false);
         okButton?.SetActive(false);
-        backButton?.SetActive(false); // 🆕 Desativa o botão Voltar
-
+        backButton?.SetActive(false);
 
         foreach (var sticker in FindObjectsOfType<StickerController>())
             Destroy(sticker.gameObject);
@@ -443,6 +476,7 @@ public class NativeCameraExample : MonoBehaviour
 
         stickerMenuScrollView?.SetActive(false);
     }
+
 
     public void ConfirmarFotoDecorada()
     {
@@ -558,12 +592,17 @@ public class NativeCameraExample : MonoBehaviour
         if (!string.IsNullOrEmpty(currentArea))
         {
             galleryManager.SaveImage(currentArea, screenshot);
-            galleryManager.AtualizarMiniaturas();   // <-- ADICIONE AQUI
+            galleryManager.AtualizarMiniaturas();
         }
 
+        // ✅ DESTRÓI A TEXTURA DO PRINT
+        Destroy(screenshot);
+        Resources.UnloadUnusedAssets();
+        GC.Collect();
 
         ClosePhotoView();
         UpdateAllCountersFromLocationManager();
+
     }
 
     private void InicializarContadores()
@@ -633,6 +672,16 @@ public class NativeCameraExample : MonoBehaviour
     }
 
 
+    private void ShuffleList(List<GameObject> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int rnd = UnityEngine.Random.Range(0, i + 1);
+            GameObject temp = list[i];
+            list[i] = list[rnd];
+            list[rnd] = temp;
+        }
+    }
 
 
 

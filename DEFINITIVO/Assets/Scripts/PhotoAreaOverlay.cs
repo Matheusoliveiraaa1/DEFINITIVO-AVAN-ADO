@@ -265,7 +265,7 @@ public class PhotoAreaOverlay : MonoBehaviour
             // === GERAR TEXTO AUTOMÁTICO DO BALÃO ===
             string prettyName = FormatStickerName(mainSprite.name);
             Instance.stickerMessageText.text =
-                $"Parece que você encontrou a espécie <b>{prettyName}</b>!";
+                $"Parece que você encontrou a espécie: <b>{prettyName}</b>!";
 
 
 

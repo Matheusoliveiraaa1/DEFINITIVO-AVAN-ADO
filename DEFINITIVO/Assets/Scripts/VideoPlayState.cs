@@ -1,16 +1,15 @@
-using UnityEngine;
-
-public static class VideoPlayState
+ï»¿public static class VideoPlayState
 {
-    // Se o usuário já liberou o vídeo no overlay
     public static bool IsAuthorized = false;
-
-    // Se o vídeo já começou a tocar (para evitar tocar de novo)
     public static bool AlreadyPlayed = false;
+
+    // âœ… NOVO: nome do vÃ­deo atual da Ã¡rea
+    public static string CurrentVideoFile = "";
 
     public static void Reset()
     {
         IsAuthorized = false;
         AlreadyPlayed = false;
+        CurrentVideoFile = ""; // limpa o vÃ­deo atual
     }
 }
