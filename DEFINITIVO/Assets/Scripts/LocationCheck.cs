@@ -368,7 +368,7 @@ public class LocationServiceManager : MonoBehaviour
         switch (areaName)
         {
             case "CursoDagua":
-                return "TESTE.mp4";
+                return "curso_dagua.mp4";
 
             case "Serrapilheira":
                 return "TESTE.mp4";

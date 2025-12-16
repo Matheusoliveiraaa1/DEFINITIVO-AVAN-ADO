@@ -33,6 +33,16 @@ public class NativeCameraExample : MonoBehaviour
     public GameObject backButton; // 🆕 Botão "Voltar"
 
 
+
+    [Header("Imagem Deslizante")]
+    public RectTransform slidingImage;      // arraste a Image aqui no Inspector
+    public float slideDuration = 0.5f;      // tempo do movimento (entrada/saída)
+    public float slideStayTime = 4f;        // tempo parada no centro
+
+
+
+
+
     [Header("Sticker Limit")]
     public int maxStickersPerPhoto = 6;
 
@@ -226,6 +236,8 @@ public class NativeCameraExample : MonoBehaviour
                     closeButton?.SetActive(true);
                     okButton?.SetActive(true);
                     backButton?.SetActive(true); // 🆕 Ativa o botão Voltar
+
+                    StartCoroutine(PlaySlidingImage());
 
                 }
                 else
@@ -684,6 +696,55 @@ public class NativeCameraExample : MonoBehaviour
     }
 
 
+
+    private Vector2 slidingFinalPos; // posição final (a do Unity)
+
+    private IEnumerator PlaySlidingImage()
+    {
+        if (slidingImage == null)
+            yield break;
+
+        // garante que a imagem está ativa
+        slidingImage.gameObject.SetActive(true);
+
+        // posição final = onde você deixou no Unity
+        slidingFinalPos = slidingImage.anchoredPosition;
+
+        // calcula a posição inicial fora da tela (à esquerda)
+        Vector2 offScreenLeft = new Vector2(
+            slidingFinalPos.x - Screen.width,
+            slidingFinalPos.y
+        );
+
+        // começa fora da tela
+        slidingImage.anchoredPosition = offScreenLeft;
+
+        // ---- ENTRADA DA ESQUERDA ----
+        float t = 0;
+        while (t < slideDuration)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.Clamp01(t / slideDuration);
+            slidingImage.anchoredPosition = Vector2.Lerp(offScreenLeft, slidingFinalPos, p);
+            yield return null;
+        }
+
+        // fica parada um tempo
+        yield return new WaitForSeconds(slideStayTime);
+
+        // ---- SAÍDA PARA A ESQUERDA ----
+        t = 0;
+        while (t < slideDuration)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.Clamp01(t / slideDuration);
+            slidingImage.anchoredPosition = Vector2.Lerp(slidingFinalPos, offScreenLeft, p);
+            yield return null;
+        }
+
+        // desativa depois de sair
+        slidingImage.gameObject.SetActive(false);
+    }
 
 
 

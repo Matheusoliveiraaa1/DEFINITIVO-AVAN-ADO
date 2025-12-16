@@ -23,6 +23,24 @@ public class MapPinsController : MonoBehaviour
     public Transform stickersContentParent;
     public GameObject stickerImagePrefab;
 
+    [Header("Overlay do Species Info")]
+    public GameObject speciesOverlayPanel;
+
+
+    [Header("Visualização de Imagem Grande")]
+    public Image largeImage;                 // imagem grande na tela
+    public GameObject largeImageOverlay;     // overlay atrás
+    public Button largeImageBackButton;      // botão voltar
+
+
+    [Header("Imagem do Área")]
+    public Image areaImage; // imagem que vai mudar de acordo com a área
+
+
+
+
+
+
     [System.Serializable]
     public class PinData
     {
@@ -50,6 +68,15 @@ public class MapPinsController : MonoBehaviour
     public Image stickerImage;
     public TextMeshProUGUI descriptionText;
     public Button backButton;
+
+
+    [Header("Sprites por Área")]
+    public Sprite cursoDaguaImage;
+    public Sprite subosqueImage;
+    public Sprite dosselImage;
+    public Sprite epifitasImage;
+    public Sprite serrapilheiraImage;
+
 
     [System.Serializable]
     public class SpeciesData
@@ -82,7 +109,21 @@ public class MapPinsController : MonoBehaviour
 
     void Start()
     {
+        if (largeImage != null)
+            largeImage.gameObject.SetActive(false);
+
+        if (largeImageOverlay != null)
+            largeImageOverlay.SetActive(false);
+
+        if (largeImageBackButton != null)
+            largeImageBackButton.gameObject.SetActive(false);
+
+
+
         spawnedPins.Clear();
+        if (speciesOverlayPanel != null)
+            speciesOverlayPanel.SetActive(false);
+
 
         foreach (var pin in pins) AddPin(pin);
 
@@ -121,6 +162,36 @@ public class MapPinsController : MonoBehaviour
         areaInfoPanel.SetActive(true);
         areaTitleText.text = GetDisplayName(pinData.pinName);
         areaDescriptionText.text = string.IsNullOrEmpty(pinData.description) ? "Sem descrição disponível." : pinData.description;
+
+        if (areaImage != null)
+        {
+            switch (pinData.pinName)
+            {
+                case "CursoDagua":
+                    areaImage.sprite = cursoDaguaImage;
+                    break;
+                case "Subosque":
+                    areaImage.sprite = subosqueImage;
+                    break;
+                case "Dossel":
+                    areaImage.sprite = dosselImage;
+                    break;
+                case "Epifitas":
+                    areaImage.sprite = epifitasImage;
+                    break;
+                case "Serrapilheira":
+                    areaImage.sprite = serrapilheiraImage;
+                    break;
+                default:
+                    areaImage.sprite = null; // ou uma imagem padrão
+                    break;
+            }
+            areaImage.preserveAspect = true; // garante que não distorce
+        }
+
+
+
+
 
         viewStickersButton.onClick.RemoveAllListeners();
         viewStickersButton.onClick.AddListener(() => OpenStickers(pinData.pinName));
@@ -207,13 +278,66 @@ public class MapPinsController : MonoBehaviour
 
         Debug.Log("MAP: Ativando speciesInfoPanel");
 
+        if (speciesOverlayPanel != null)
+            speciesOverlayPanel.SetActive(true);
+
+
         speciesInfoPanel.SetActive(true);
         stickersPanel.SetActive(false);
         areaInfoPanel.SetActive(false);
 
         backButton.onClick.RemoveAllListeners();
         backButton.onClick.AddListener(GoBack);
+
+
+        AddImageClick(realImage);
+        AddImageClick(stickerImage);
+
+
     }
+    void AddImageClick(Image img)
+    {
+        if (img == null || img.sprite == null) return;
+
+        Button btn = img.GetComponent<Button>();
+        if (btn == null)
+            btn = img.gameObject.AddComponent<Button>();
+
+        btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(() => OpenLargeImage(img.sprite));
+    }
+
+
+    void OpenLargeImage(Sprite sprite)
+    {
+        if (sprite == null) return;
+
+        largeImage.sprite = sprite;
+        largeImage.preserveAspect = true;
+
+        largeImageOverlay.SetActive(true);
+        largeImage.gameObject.SetActive(true);
+        largeImageBackButton.gameObject.SetActive(true);
+
+        // esconde o conteúdo do species (opcional, mas recomendado)
+        speciesInfoPanel.SetActive(false);
+
+        largeImageBackButton.onClick.RemoveAllListeners();
+        largeImageBackButton.onClick.AddListener(CloseLargeImage);
+    }
+
+
+    void CloseLargeImage()
+    {
+        largeImage.gameObject.SetActive(false);
+        largeImageOverlay.SetActive(false);
+        largeImageBackButton.gameObject.SetActive(false);
+
+        speciesInfoPanel.SetActive(true);
+    }
+
+
+
 
     public void OpenSpeciesByName(string speciesCommonName)
     {
@@ -244,6 +368,12 @@ public class MapPinsController : MonoBehaviour
             GameObject currentPanel = panelHistory.Pop();
             currentPanel.SetActive(false);
 
+            // Se estiver saindo do Species Info, desliga o overlay
+            if (currentPanel == speciesInfoPanel && speciesOverlayPanel != null)
+            {
+                speciesOverlayPanel.SetActive(false);
+            }
+
             if (panelHistory.Count > 0)
             {
                 GameObject previousPanel = panelHistory.Peek();
@@ -251,6 +381,7 @@ public class MapPinsController : MonoBehaviour
             }
         }
     }
+
 
     // === NOVO: marca pin como visitado (verde / sprite trocado)
     public void MarkPinVisited(string areaName)
