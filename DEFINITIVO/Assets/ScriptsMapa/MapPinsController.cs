@@ -1,22 +1,23 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
+using System.Collections;
 
 public class MapPinsController : MonoBehaviour
 {
-    [Header("ReferÍncias")]
-    public RectTransform mapRectTransform; // ReferÍncia para o mapa
+    [Header("Refer√™ncias")]
+    public RectTransform mapRectTransform; // Refer√™ncia para o mapa
     public Button pinPrefab; // Prefab do pin (deve ter Image)
-    public GameObject areaInfoPanel; // Painel de informaÁıes da ·rea
-    public TextMeshProUGUI areaTitleText; // TÌtulo (nome da ·rea)
-    public TextMeshProUGUI areaDescriptionText; // DescriÁ„o da ·rea
-    public Button viewStickersButton; // Bot„o "Ver Stickers"
+    public GameObject areaInfoPanel; // Painel de informa√ß√µes da √°rea
+    public TextMeshProUGUI areaTitleText; // T√≠tulo (nome da √°rea)
+    public TextMeshProUGUI areaDescriptionText; // Descri√ß√£o da √°rea
+    public Button viewStickersButton; // Bot√£o "Ver Stickers"
 
-    [Header("AparÍncia do pin visitado (opcional)")]
-    public Sprite visitedPinSprite; // se atribuir, ser· trocado o sprite
-    public bool useSpriteSwap = false; // se true usa visitedPinSprite, senao aplica tint verde
-    public Color visitedTint = Color.green; // cor usada se n„o usar sprite swap
+    [Header("Sprites dos Pins")]
+    public Sprite defaultPinSprite;   // sprite inicial (cinza)
+    public Sprite completedPinSprite; // sprite ap√≥s concluir a √°rea (vermelho)
+
 
     [Header("Painel de Stickers")]
     public GameObject stickersPanel;
@@ -27,16 +28,35 @@ public class MapPinsController : MonoBehaviour
     public GameObject speciesOverlayPanel;
 
 
-    [Header("VisualizaÁ„o de Imagem Grande")]
+    [Header("Visualiza√ß√£o de Imagem Grande")]
     public Image largeImage;                 // imagem grande na tela
-    public GameObject largeImageOverlay;     // overlay atr·s
-    public Button largeImageBackButton;      // bot„o voltar
+    public GameObject largeImageOverlay;     // overlay atr√°s
+    public Button largeImageBackButton;      // bot√£o voltar
 
 
-    [Header("Imagem do ¡rea")]
-    public Image areaImage; // imagem que vai mudar de acordo com a ·rea
+    [Header("Imagem do √Årea")]
+    public Image areaImage; // imagem que vai mudar de acordo com a √°rea
 
 
+    [Header("DEBUG MOBILE")]
+    public TextMeshProUGUI debugText;
+
+    [Header("Imagem Tutorial do Mapa")]
+    public RectTransform tutorialImage;
+    public float tutorialStayTime = 10f;
+    public float tutorialAnimDuration = 0.5f;
+
+    [Header("Tela do Mapa")]
+    public GameObject mapScreen; // ARRASTE A TELA DO MAPA AQUI
+
+
+    [Header("Anima√ß√£o Suave Tutorial")]
+    public float floatAmplitude = 10f;   // quanto sobe/desce
+    public float floatSpeed = 1.5f;       // velocidade
+
+
+
+    private static bool tutorialImageAlreadyShown = false;
 
 
 
@@ -52,15 +72,15 @@ public class MapPinsController : MonoBehaviour
     [Header("Pins configurados")]
     public PinData[] pins;
 
-    [Header("Imagens de Stickers por ¡rea")]
+    [Header("Imagens de Stickers por √Årea")]
     public Sprite[] cursoDaguaStickers;
     public Sprite[] subosqueStickers;
     public Sprite[] dosselStickers;
     public Sprite[] epifitasStickers;
     public Sprite[] serrapilheiraStickers;
 
-    // ================= NOVA SE«√O =================
-    [Header("Painel de Detalhes da EspÈcie")]
+    // ================= NOVA SE√á√ÉO =================
+    [Header("Painel de Detalhes da Esp√©cie")]
     public GameObject speciesInfoPanel;
     public TextMeshProUGUI commonNameText;
     public TextMeshProUGUI scientificNameText;
@@ -70,7 +90,7 @@ public class MapPinsController : MonoBehaviour
     public Button backButton;
 
 
-    [Header("Sprites por ¡rea")]
+    [Header("Sprites por √Årea")]
     public Sprite cursoDaguaImage;
     public Sprite subosqueImage;
     public Sprite dosselImage;
@@ -88,14 +108,14 @@ public class MapPinsController : MonoBehaviour
         [TextArea] public string description;
     }
 
-    [Header("EspÈcies")]
+    [Header("Esp√©cies")]
     public SpeciesData[] speciesList;
     // ==============================================
 
-    // NOVO: HistÛrico de navegaÁ„o
+    // NOVO: Hist√≥rico de navega√ß√£o
     private Stack<GameObject> panelHistory = new Stack<GameObject>();
 
-    // NOVO: dicion·rio para acessar pins instanciados por nome
+    // NOVO: dicion√°rio para acessar pins instanciados por nome
     private Dictionary<string, Button> spawnedPins = new Dictionary<string, Button>();
 
     // Opcional: singleton simples para facilitar chamadas externas
@@ -130,38 +150,42 @@ public class MapPinsController : MonoBehaviour
         if (areaInfoPanel != null) areaInfoPanel.SetActive(false);
         if (stickersPanel != null) stickersPanel.SetActive(false);
         if (speciesInfoPanel != null) speciesInfoPanel.SetActive(false);
+
+     
+
+
     }
 
     void AddPin(PinData pinData)
     {
-        if (pinPrefab == null || mapRectTransform == null)
-        {
-            Debug.LogError("PinPrefab ou mapRectTransform n„o atribuÌdo!");
-            return;
-        }
-
         Button newPin = Instantiate(pinPrefab, mapRectTransform);
+
         RectTransform rt = newPin.GetComponent<RectTransform>();
         if (rt != null) rt.anchoredPosition = pinData.position;
 
         newPin.name = pinData.pinName;
         newPin.onClick.AddListener(() => OnPinClicked(pinData));
 
-        // Salva referÍncia no dicion·rio (substitui se j· existir)
-        if (spawnedPins.ContainsKey(pinData.pinName))
-            spawnedPins[pinData.pinName] = newPin;
-        else
-            spawnedPins.Add(pinData.pinName, newPin);
+        // üîπ DEFINE SPRITE INICIAL (CINZA)
+        Image img = newPin.GetComponent<Image>();
+        if (img != null && defaultPinSprite != null)
+        {
+            img.sprite = defaultPinSprite;
+            img.preserveAspect = true;
+        }
+
+        spawnedPins[pinData.pinName] = newPin;
     }
+
 
     void OnPinClicked(PinData pinData)
     {
-        if (pinData.pinName == "¡rea 1" || pinData.pinName == "¡rea 2" || pinData.pinName == "¡rea Teste") return;
+        if (pinData.pinName == "√Årea 1" || pinData.pinName == "√Årea 2" || pinData.pinName == "√Årea Teste") return;
 
         panelHistory.Push(areaInfoPanel);
         areaInfoPanel.SetActive(true);
         areaTitleText.text = GetDisplayName(pinData.pinName);
-        areaDescriptionText.text = string.IsNullOrEmpty(pinData.description) ? "Sem descriÁ„o disponÌvel." : pinData.description;
+        areaDescriptionText.text = string.IsNullOrEmpty(pinData.description) ? "Sem descri√ß√£o dispon√≠vel." : pinData.description;
 
         if (areaImage != null)
         {
@@ -183,10 +207,10 @@ public class MapPinsController : MonoBehaviour
                     areaImage.sprite = serrapilheiraImage;
                     break;
                 default:
-                    areaImage.sprite = null; // ou uma imagem padr„o
+                    areaImage.sprite = null; // ou uma imagem padr√£o
                     break;
             }
-            areaImage.preserveAspect = true; // garante que n„o distorce
+            areaImage.preserveAspect = true; // garante que n√£o distorce
         }
 
 
@@ -219,7 +243,7 @@ public class MapPinsController : MonoBehaviour
             case "Dossel": stickerSprites = dosselStickers; break;
             case "Epifitas": stickerSprites = epifitasStickers; break;
             case "Serrapilheira": stickerSprites = serrapilheiraStickers; break;
-            default: Debug.LogWarning("¡rea n„o reconhecida: " + areaName); return;
+            default: Debug.LogWarning("√Årea n√£o reconhecida: " + areaName); return;
         }
 
         if (stickerSprites == null || stickerSprites.Length == 0)
@@ -250,25 +274,25 @@ public class MapPinsController : MonoBehaviour
         SpeciesData found = null;
         foreach (var s in speciesList)
         {
-            Debug.Log("MAP: Comparando com sticker da espÈcie: " + s.stickerSprite?.name);
+            Debug.Log("MAP: Comparando com sticker da esp√©cie: " + s.stickerSprite?.name);
 
             if (s.stickerSprite == clickedSticker)
             {
                 found = s;
-                Debug.Log("MAP: ESP…CIE ENCONTRADA: " + s.commonName);
+                Debug.Log("MAP: ESP√âCIE ENCONTRADA: " + s.commonName);
                 break;
             }
         }
 
         if (found == null)
         {
-            Debug.LogError("MAP: ERRO ó Nenhuma espÈcie associada a este sticker!");
+            Debug.LogError("MAP: ERRO ‚Äî Nenhuma esp√©cie associada a este sticker!");
             return;
         }
 
         panelHistory.Push(speciesInfoPanel);
 
-        Debug.Log("MAP: Carregando dados no painel de espÈcies...");
+        Debug.Log("MAP: Carregando dados no painel de esp√©cies...");
 
         commonNameText.text = found.commonName;
         scientificNameText.text = found.scientificName;
@@ -319,7 +343,7 @@ public class MapPinsController : MonoBehaviour
         largeImage.gameObject.SetActive(true);
         largeImageBackButton.gameObject.SetActive(true);
 
-        // esconde o conte˙do do species (opcional, mas recomendado)
+        // esconde o conte√∫do do species (opcional, mas recomendado)
         speciesInfoPanel.SetActive(false);
 
         largeImageBackButton.onClick.RemoveAllListeners();
@@ -357,7 +381,7 @@ public class MapPinsController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"EspÈcie n„o encontrada: {speciesCommonName}");
+            Debug.LogWarning($"Esp√©cie n√£o encontrada: {speciesCommonName}");
         }
     }
 
@@ -386,49 +410,54 @@ public class MapPinsController : MonoBehaviour
     // === NOVO: marca pin como visitado (verde / sprite trocado)
     public void MarkPinVisited(string areaName)
     {
-        if (string.IsNullOrEmpty(areaName)) return;
+        if (debugText != null)
+            debugText.text = "MarkPinVisited chamado com: " + areaName;
 
         if (!spawnedPins.TryGetValue(areaName, out Button pinButton))
         {
-            Debug.LogWarning($"MarkPinVisited: pin n„o encontrado para ·rea '{areaName}'");
+            if (debugText != null)
+                debugText.text += "\nPIN N√ÉO ENCONTRADO";
+
             return;
         }
+
+        if (debugText != null)
+            debugText.text += "\nPin encontrado";
 
         Image pinImage = pinButton.GetComponent<Image>();
         if (pinImage == null)
         {
-            // tenta procurar imagem no filho
-            pinImage = pinButton.GetComponentInChildren<Image>();
-            if (pinImage == null)
-            {
-                Debug.LogWarning("MarkPinVisited: nenhum Image encontrado no pin para aplicar mudanÁa visual.");
-                return;
-            }
+            if (debugText != null)
+                debugText.text += "\nPin SEM Image";
+
+            return;
         }
 
-        if (useSpriteSwap && visitedPinSprite != null)
+        if (completedPinSprite == null)
         {
-            // troca sprite mantendo o tipo de Image
-            pinImage.sprite = visitedPinSprite;
-            pinImage.preserveAspect = true;
-        }
-        else
-        {
-            // aplica tint verde
-            pinImage.color = visitedTint;
+            if (debugText != null)
+                debugText.text += "\ncompletedPinSprite √© NULL";
+
+            return;
         }
 
-        Debug.Log($"Pin '{areaName}' marcado como visitado (visual atualizado).");
+        pinImage.sprite = completedPinSprite;
+        pinImage.preserveAspect = true;
+
+        if (debugText != null)
+            debugText.text += "\nSPRITE ALTERADO COM SUCESSO";
     }
+
+
 
     string GetDisplayName(string code)
     {
         return code switch
         {
-            "CursoDagua" => "Curso D'·gua",
+            "CursoDagua" => "Curso D'√°gua",
             "Subosque" => "Subosque",
             "Dossel" => "Dossel",
-            "Epifitas" => "EpÌfitas",
+            "Epifitas" => "Ep√≠fitas",
             "Serrapilheira" => "Serrapilheira",
             _ => code
         };
@@ -438,4 +467,101 @@ public class MapPinsController : MonoBehaviour
     {
         panelHistory.Clear();
     }
+
+
+    void LogDebug(string msg)
+    {
+        Debug.Log(msg); // continua logando no editor
+
+        if (debugText != null)
+        {
+            debugText.text += "\n" + msg;
+        }
+    }
+
+    IEnumerator PlayTutorialImage()
+    {
+        tutorialImageAlreadyShown = true;
+
+        tutorialImage.gameObject.SetActive(false);
+        yield return null; // espera 1 frame
+
+        RectTransform parent = tutorialImage.parent as RectTransform;
+
+        Vector2 finalPos = tutorialImage.anchoredPosition;
+
+        Vector2 startPos = finalPos + new Vector2(parent.rect.width, 0);
+        Vector2 exitPos = finalPos + new Vector2(parent.rect.width, 0);
+
+        tutorialImage.anchoredPosition = startPos;
+        tutorialImage.gameObject.SetActive(true);
+
+        // ENTRA
+        yield return MoveUI(tutorialImage, startPos, finalPos, tutorialAnimDuration);
+
+        // üîπ ANIMA√á√ÉO SUAVE ENQUANTO VIS√çVEL
+        Coroutine floatAnim = StartCoroutine(FloatTutorial(finalPos));
+
+        // ESPERA
+        yield return new WaitForSeconds(tutorialStayTime);
+
+        // PARA ANIMA√á√ÉO SUAVE
+        StopCoroutine(floatAnim);
+        tutorialImage.anchoredPosition = finalPos;
+
+        // SAI
+        yield return MoveUI(tutorialImage, finalPos, exitPos, tutorialAnimDuration);
+
+        tutorialImage.gameObject.SetActive(false);
+    }
+
+
+    IEnumerator FloatTutorial(Vector2 basePos)
+    {
+        float t = 0f;
+
+        while (true)
+        {
+            t += Time.deltaTime * floatSpeed;
+            float offsetY = Mathf.Sin(t) * floatAmplitude;
+            tutorialImage.anchoredPosition = basePos + new Vector2(0, offsetY);
+            yield return null;
+        }
+    }
+
+
+    IEnumerator MoveUI(RectTransform rt, Vector2 from, Vector2 to, float duration)
+    {
+        float t = 0f;
+
+        while (t < 1f)
+        {
+            t += Time.deltaTime / duration;
+            rt.anchoredPosition = Vector2.Lerp(from, to, t);
+            yield return null;
+        }
+
+        rt.anchoredPosition = to;
+    }
+
+    public void OnMapScreenOpened()
+    {
+        if (tutorialImageAlreadyShown) return;
+
+        tutorialImageAlreadyShown = true;
+
+        StopAllCoroutines();
+        StartCoroutine(DelayedTutorial());
+    }
+
+
+
+    IEnumerator DelayedTutorial()
+    {
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(PlayTutorialImage());
+    }
+
+
+
 }

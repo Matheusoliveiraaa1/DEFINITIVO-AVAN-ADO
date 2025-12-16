@@ -614,6 +614,11 @@ public class NativeCameraExample : MonoBehaviour
 
         ClosePhotoView();
         UpdateAllCountersFromLocationManager();
+        // 🔴 AVISA O MAPA QUE A ÁREA FOI CONCLUÍDA
+        if (!string.IsNullOrEmpty(currentArea) && MapPinsController.Instance != null)
+        {
+            MapPinsController.Instance.MarkPinVisited(currentArea);
+        }
 
     }
 

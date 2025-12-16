@@ -295,7 +295,7 @@ MonoBehaviour:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 6ccf2619504693f46b5ed7b298afe4b8, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -318,155 +318,19 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 53880231}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.025581447, y: 0.010108177, z: -0.17951751, w: 0.98337024}
+  m_LocalPosition: {x: 0, y: 0, z: 3.0948899}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1490138371}
   m_Father: {fileID: 986441944}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 3.092, y: 0.614, z: -20.675}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -258.41, y: -1002}
-  m_SizeDelta: {x: 317.4278, y: 765.4094}
+  m_AnchoredPosition: {x: -430, y: -923}
+  m_SizeDelta: {x: 487.713, y: 1076.1375}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &54849080
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 54849081}
-  - component: {fileID: 54849083}
-  - component: {fileID: 54849082}
-  m_Layer: 5
-  m_Name: Text (TMP)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &54849081
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 54849080}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 72262895}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 36}
-  m_SizeDelta: {x: 200, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &54849082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 54849080}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: "Ainda h\xE1 stickers dessa \xE1rea que n\xE3o foram utilizados!"
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4278190080
-  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 20
-  m_fontSizeBase: 20
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 1
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_EmojiFallbackSupport: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &54849083
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 54849080}
-  m_CullTransparentMesh: 1
 --- !u!1 &59949542
 GameObject:
   m_ObjectHideFlags: 0
@@ -694,82 +558,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
---- !u!1 &72262894
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 72262895}
-  - component: {fileID: 72262897}
-  - component: {fileID: 72262896}
-  m_Layer: 5
-  m_Name: Image
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &72262895
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72262894}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 54849081}
-  m_Father: {fileID: 1206328788}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 211, y: 161}
-  m_SizeDelta: {x: 334.5728, y: 273.91}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &72262896
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72262894}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 10c8228f337c225468fc1893421f36ba, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &72262897
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 72262894}
-  m_CullTransparentMesh: 1
 --- !u!1 &105222828
 GameObject:
   m_ObjectHideFlags: 0
@@ -5041,6 +4829,7 @@ GameObject:
   - component: {fileID: 556649114}
   - component: {fileID: 556649116}
   - component: {fileID: 556649115}
+  - component: {fileID: 556649117}
   m_Layer: 5
   m_Name: TelaMapa
   m_TagString: Untagged
@@ -5063,6 +4852,7 @@ RectTransform:
   - {fileID: 1964089031}
   - {fileID: 1952518335}
   - {fileID: 1821968685}
+  - {fileID: 2026129372}
   m_Father: {fileID: 822219749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -5108,6 +4898,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 556649113}
   m_CullTransparentMesh: 1
+--- !u!114 &556649117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 556649113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b1e88f0dd82704b86e04e5c5284980, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapController: {fileID: 1103364862}
 --- !u!1 &570093685
 GameObject:
   m_ObjectHideFlags: 0
@@ -6067,6 +5870,82 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!1 &693262099
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 693262100}
+  - component: {fileID: 693262102}
+  - component: {fileID: 693262101}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &693262100
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693262099}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0833291, w: 0.99652207}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1356501893}
+  m_Father: {fileID: 2026129372}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -9.56}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -259.47745, y: 780.951}
+  m_SizeDelta: {x: 698.2531, y: 1005.0009}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &693262101
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693262099}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: ffb3ca645137fe4418b4c5cbe2dab327, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &693262102
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 693262099}
+  m_CullTransparentMesh: 1
 --- !u!1 &749904799
 GameObject:
   m_ObjectHideFlags: 0
@@ -8499,11 +8378,8 @@ RectTransform:
   - {fileID: 1464722308}
   - {fileID: 2037489354}
   - {fileID: 1094861925}
-  - {fileID: 1681348014}
-  - {fileID: 1799374661}
   - {fileID: 1631988499}
   - {fileID: 53880235}
-  - {fileID: 1206328788}
   - {fileID: 1061186717}
   - {fileID: 1835086308}
   - {fileID: 1443789487}
@@ -9374,6 +9250,7 @@ GameObject:
   - component: {fileID: 1103364859}
   - component: {fileID: 1103364860}
   - component: {fileID: 1103364861}
+  - component: {fileID: 1103364862}
   m_Layer: 5
   m_Name: DevicesManager
   m_TagString: Untagged
@@ -9594,6 +9471,270 @@ MonoBehaviour:
   cameraButton: {fileID: 1464722305}
   slideDuration: 0.6
   stayTime: 30
+  floatAmplitude: 10
+  floatSpeed: 1.5
+--- !u!114 &1103364862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103364853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6dc1b04c40db6a458d280ebc64bc4d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapRectTransform: {fileID: 1964089031}
+  pinPrefab: {fileID: 1764674749902398241, guid: fc58a43497f719249ab66b545f38d174, type: 3}
+  areaInfoPanel: {fileID: 1952518334}
+  areaTitleText: {fileID: 1575146464}
+  areaDescriptionText: {fileID: 278752798}
+  viewStickersButton: {fileID: 1401370556}
+  defaultPinSprite: {fileID: 21300000, guid: 9fd4c6a43e9f1a84eb15e4176b520e3a, type: 3}
+  completedPinSprite: {fileID: 21300000, guid: 26826203fbecefc43be7b1cd2616047b, type: 3}
+  stickersPanel: {fileID: 1821968684}
+  stickersContentParent: {fileID: 690399560}
+  stickerImagePrefab: {fileID: 1858631504469661234, guid: 2214ae3939f037e48a4ae847256a058e, type: 3}
+  speciesOverlayPanel: {fileID: 1176460794}
+  largeImage: {fileID: 995349413}
+  largeImageOverlay: {fileID: 295754623}
+  largeImageBackButton: {fileID: 371847248}
+  areaImage: {fileID: 631935304}
+  debugText: {fileID: 0}
+  tutorialImage: {fileID: 2026129372}
+  tutorialStayTime: 15
+  tutorialAnimDuration: 0.5
+  mapScreen: {fileID: 556649113}
+  floatAmplitude: 10
+  floatSpeed: 1.5
+  pins:
+  - pinName: CursoDagua
+    position: {x: -250, y: -282}
+    description: "\u201CO curso d\u2019\xE1gua \xE9 um dos elementos mais vitais
+      do ecossistema do parque. Suas margens abrigam diversas esp\xE9cies de plantas
+      e animais que dependem da umidade e da sombra para sobreviver. "
+  - pinName: Subosque
+    position: {x: -143, y: 11}
+    description: Camada logo abaixo das copas, com pouca luz, onde vivem arbustos,
+      mudas e animais que preferem sombra.
+  - pinName: Dossel
+    position: {x: 45, y: 498}
+    description: "A camada superior da floresta formada pelas copas das \xE1rvores,
+      rica em luz e muito biodiversa."
+  - pinName: Epifitas
+    position: {x: 275, y: 430}
+    description: "Plantas que vivem sobre outras plantas (geralmente troncos e galhos),
+      mas sem tirar nutrientes delas \u2014 como brom\xE9lias e orqu\xEDdeas."
+  - pinName: Serrapilheira
+    position: {x: 66, y: 159}
+    description: "Camada de folhas, galhos e mat\xE9ria org\xE2nica no ch\xE3o da
+      floresta, essencial para nutrir o solo."
+  cursoDaguaStickers:
+  - {fileID: 21300000, guid: 3b4ca1a72ffe4a146b80c41b8a213f42, type: 3}
+  - {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
+  - {fileID: 21300000, guid: 3977d264d7261ca41962ae28e3be892b, type: 3}
+  - {fileID: 21300000, guid: 034235bde09704d41921a678a24489a5, type: 3}
+  - {fileID: 21300000, guid: 01868aa5e21777841b855ed20cddb290, type: 3}
+  - {fileID: 21300000, guid: dc0a371eda9c58f4f81493dfb6d0fbbd, type: 3}
+  subosqueStickers:
+  - {fileID: 21300000, guid: 5200baea30521924cb7c68cc99b798fd, type: 3}
+  - {fileID: 21300000, guid: 7a63eedbac48da4448d847459ef38e7d, type: 3}
+  - {fileID: 21300000, guid: e7218cacb5d2d434880bb7afd2ef0d7e, type: 3}
+  - {fileID: 21300000, guid: 1ea0266ffb53c5e4f81caf40e123a99d, type: 3}
+  - {fileID: 21300000, guid: 3579e950eaf144c46b925a029a88d30e, type: 3}
+  dosselStickers:
+  - {fileID: 21300000, guid: bb4dba59b6181f4478ed055e6020ceb4, type: 3}
+  - {fileID: 21300000, guid: e10c79eb4ebc0c2459ee7202c6b93836, type: 3}
+  - {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
+  - {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
+  - {fileID: 21300000, guid: c7e5297a1f8818947aa9538fe372838c, type: 3}
+  epifitasStickers:
+  - {fileID: 21300000, guid: c5f89903d92a4564592ddadf9c63778c, type: 3}
+  - {fileID: 21300000, guid: eb6668e6672b47f49b03c5ef769ee5c3, type: 3}
+  - {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
+  - {fileID: 21300000, guid: c7746fad7647b4140adbcb6622f425b9, type: 3}
+  - {fileID: 21300000, guid: 65f3d4eca75ff6c45b5ee82457e6527b, type: 3}
+  serrapilheiraStickers:
+  - {fileID: 21300000, guid: c20167e9d59c5594387f2b5943766f6c, type: 3}
+  - {fileID: 21300000, guid: ca6ba0df2c7a63746b13f432de15103a, type: 3}
+  - {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
+  - {fileID: 21300000, guid: 07e69e753e4aad74c8c5fa77a79ee153, type: 3}
+  - {fileID: 21300000, guid: f1b071ce6c8cf494287dacfe9a98e739, type: 3}
+  speciesInfoPanel: {fileID: 1535652481}
+  commonNameText: {fileID: 685874614}
+  scientificNameText: {fileID: 749904801}
+  realImage: {fileID: 1983818534}
+  stickerImage: {fileID: 514338060}
+  descriptionText: {fileID: 2137887358}
+  backButton: {fileID: 1923186124}
+  cursoDaguaImage: {fileID: 21300000, guid: bda595251d1f60f40a0876d83ef71eec, type: 3}
+  subosqueImage: {fileID: 21300000, guid: 2e4d546fef445a64ea356d5dce9ac1a5, type: 3}
+  dosselImage: {fileID: 21300000, guid: 87878b52b63501b4cbcc848e17786fac, type: 3}
+  epifitasImage: {fileID: 21300000, guid: 70d7513856a4e89459017322dfcf95e6, type: 3}
+  serrapilheiraImage: {fileID: 21300000, guid: ba9c62e8e35efcf4299e0a43b4c2666e, type: 3}
+  speciesList:
+  - commonName: "Camar\xE3o"
+    scientificName: Macrobrachium potiuna
+    realPhoto: {fileID: 21300000, guid: 89089987f6880e74e84f236c23b060c3, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 3b4ca1a72ffe4a146b80c41b8a213f42, type: 3}
+    description: "Vive em riachos limpos e bem oxigenados. Esse pequeno camar\xE3o
+      de \xE1gua\r\ndoce ajuda a manter o equil\xEDbrio do ecossistema e indica boa
+      qualidade da \xE1gua.\r"
+  - commonName: Girino
+    scientificName: 
+    realPhoto: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 034235bde09704d41921a678a24489a5, type: 3}
+    description: "Fase jovem dos anf\xEDbios, vive na \xE1gua e respira por br\xE2nquias.
+      Alimenta-se de algas e restos org\xE2nicos, ajudando a manter o ambiente limpo.\r        
+      \r"
+  - commonName: Anfibio
+    scientificName: Leptodactylus latrans
+    realPhoto: {fileID: 21300000, guid: 5cef873b1b6c7674d9b173ae851991ef, type: 3}
+    stickerSprite: {fileID: 21300000, guid: dc0a371eda9c58f4f81493dfb6d0fbbd, type: 3}
+    description: "R\xE3 de coaxar forte que vive perto da \xE1gua. Alimenta-se de
+      insetos e \xE9 sens\xEDvel \xE0 polui\xE7\xE3o -- um importante indicador da
+      sa\xFAde ambiental como todo anf\xEDbio."
+  - commonName: "Caet\xE9"
+    scientificName: Heliconia farinosa
+    realPhoto: {fileID: 21300000, guid: f50ca8544ab03f5448083fe682bc2815, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 01868aa5e21777841b855ed20cddb290, type: 3}
+    description: "Planta tropical de cores vibrantes que atrai beija-flores. Suas
+      flores ajudam na poliniza\xE7\xE3o e embelezam o interior da floresta.\r"
+  - commonName: Caranguejo
+    scientificName: Trichodactylus fluviatilis
+    realPhoto: {fileID: 21300000, guid: cd8dcf7da8a35374aa7ba93c04b9c958, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 3977d264d7261ca41962ae28e3be892b, type: 3}
+    description: "Mora nas margens de rios e c\xF3rregos. Alimenta-se de restos de
+      plantas e animais, auxiliando na decomposi\xE7\xE3o e ciclagem de nutrientes
+      do ambiente.\r\n\r"
+  - commonName: Peixe
+    scientificName: Phalloceros sp.
+    realPhoto: {fileID: 21300000, guid: 22d2331933e82754695ab9ac575e9411, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
+    description: "Pequeno e resistente, vive em riachos calmos. Alimenta-se de algas
+      e insetos, mantendo o equil\xEDbrio da vida aqu\xE1tica.\r"
+  - commonName: Cogumelo
+    scientificName: Agaricus sp.
+    realPhoto: {fileID: 21300000, guid: 444e377210359484baf670ddfe4bfcd5, type: 3}
+    stickerSprite: {fileID: 21300000, guid: c20167e9d59c5594387f2b5943766f6c, type: 3}
+    description: "Surge em locais \xFAmidos e ricos em mat\xE9ria org\xE2nica. Recicla
+      nutrientes, transformando o que morreu em nova vida no solo."
+  - commonName: Aranha-lobo
+    scientificName: Ctenus ornatus
+    realPhoto: {fileID: 21300000, guid: 93685cc29d5787640ae3a2a024716ceb, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 07e69e753e4aad74c8c5fa77a79ee153, type: 3}
+    description: "Ca\xE7adora \xE1gil que vive no ch\xE3o da floresta. Controla popula\xE7\xF5es
+      de insetos, sendo uma das principais predadoras da serrapilheira."
+  - commonName: Semente germinando
+    scientificName: Euterpe edulis
+    realPhoto: {fileID: 21300000, guid: e21fed4b69fcaee4ab5c30784db10f42, type: 3}
+    stickerSprite: {fileID: 21300000, guid: f1b071ce6c8cf494287dacfe9a98e739, type: 3}
+    description: "O nascimento de um novo palmito-ju\xE7ara, \xE1rvore essencial
+      da Mata Atl\xE2ntica, alimento para aves e s\xEDmbolo de regenera\xE7\xE3o.\r"
+  - commonName: Inhambu
+    scientificName: Crypturellus tataupa
+    realPhoto: {fileID: 21300000, guid: 15df305961e6f5242b26e57f93ca2680, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
+    description: "Ave terr\xEDcola e discreta. Come sementes e insetos, ajudando
+      na manuten\xE7\xE3o e regenera\xE7\xE3o da floresta.\r"
+  - commonName: Rato-do-mato
+    scientificName: Akodon azarae
+    realPhoto: {fileID: 21300000, guid: b17dde6b4d3a8434b8161e0d5df92721, type: 3}
+    stickerSprite: {fileID: 21300000, guid: ca6ba0df2c7a63746b13f432de15103a, type: 3}
+    description: "Pequeno roedor da floresta. Espalha sementes e serve de alimento
+      para v\xE1rios predadores, mantendo o ciclo natural."
+  - commonName: 'Muda de palmito '
+    scientificName: Euterpe edulis
+    realPhoto: {fileID: 21300000, guid: c8cfd13485cd6524288134d0c4405231, type: 3}
+    stickerSprite: {fileID: 21300000, guid: e7218cacb5d2d434880bb7afd2ef0d7e, type: 3}
+    description: "Jovem palmito-ju\xE7ara crescendo sob a sombra da floresta. Sua
+      presen\xE7a garante alimento e abrigo para muitas esp\xE9cies.\r"
+  - commonName: Samambaia
+    scientificName: Danaea geniculata
+    realPhoto: {fileID: 21300000, guid: 3b051c94d0c1545469b7dc94d224680d, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 5200baea30521924cb7c68cc99b798fd, type: 3}
+    description: "Gosta de lugares \xFAmidos e sombreados. Suas folhas ajudam a manter
+      a umidade e proteger o solo da eros\xE3o.\r"
+  - commonName: 'Planta '
+    scientificName: Goeppertia monophylla
+    realPhoto: {fileID: 21300000, guid: 1ee8d6a05030f2e4f8549aaf60829258, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 1ea0266ffb53c5e4f81caf40e123a99d, type: 3}
+    description: "Esp\xE9cie de folhas largas do sub-bosque. Ajuda a manter o microclima
+      \xFAmido e abriga pequenos animais da floresta."
+  - commonName: "Camale\xE3ozinho"
+    scientificName: Enyalius iheringii
+    realPhoto: {fileID: 21300000, guid: 95307ff9ef65f964f97ed8c5cae90f0e, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 7a63eedbac48da4448d847459ef38e7d, type: 3}
+    description: "Lagarto que vive entre as \xE1rvores e muda de cor para se camuflar.
+      Ca\xE7a insetos e ajuda a manter o equil\xEDbrio ecol\xF3gico.\r"
+  - commonName: "Ti\xE9-sangue"
+    scientificName: Ramphocelus bresilius
+    realPhoto: {fileID: 21300000, guid: 080c143f16dc7d546997a28dc213b6c9, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 3579e950eaf144c46b925a029a88d30e, type: 3}
+    description: "Ave de plumagem vermelha intensa. Alimenta-se de frutos e espalha
+      sementes, colorindo e renovando a floresta.\r"
+  - commonName: "Brom\xE9lia"
+    scientificName: Vriesea incurvata
+    realPhoto: {fileID: 21300000, guid: db33459cfee14e542871f43e2b4002d7, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 65f3d4eca75ff6c45b5ee82457e6527b, type: 3}
+    description: "Acumula \xE1gua entre as folhas, criando abrigos para insetos e
+      pererecas. Um pequeno universo dentro da floresta."
+  - commonName: Beija-Flor
+    scientificName: Eupetomena macroura
+    realPhoto: {fileID: 21300000, guid: d00d43f5abdca9d4d9ea19b4e92978f9, type: 3}
+    stickerSprite: {fileID: 21300000, guid: eb6668e6672b47f49b03c5ef769ee5c3, type: 3}
+    description: "Com voo r\xE1pido e preciso, visita flores em busca de n\xE9ctar.
+      Poliniza plantas de diversas esp\xE9cies, especialmente com flores tubulares. "
+  - commonName: Perereca
+    scientificName: Phyllodytes luteolus
+    realPhoto: {fileID: 21300000, guid: f86999f0c594e374bbd7c577cdec5e5f, type: 3}
+    stickerSprite: {fileID: 21300000, guid: c7746fad7647b4140adbcb6622f425b9, type: 3}
+    description: "Vive em brom\xE9lias e nelas cria seus filhotes. \xC9 sens\xEDvel
+      \xE0s mudan\xE7as do ambiente e indica equil\xEDbrio ecol\xF3gico."
+  - commonName: Musgo
+    scientificName: 
+    realPhoto: {fileID: 21300000, guid: 68cb51f1529b32c46b7ada2e599b7b7f, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
+    description: "Pequeno e delicado, cresce onde h\xE1 umidade. Ret\xE9m \xE1gua
+      e prepara o solo para novas plantas. "
+  - commonName: "Orqu\xEDdea"
+    scientificName: Cattleya purpurata
+    realPhoto: {fileID: 21300000, guid: b1ca91e7902d56143ace7e13be2b9029, type: 3}
+    stickerSprite: {fileID: 21300000, guid: c5f89903d92a4564592ddadf9c63778c, type: 3}
+    description: "Flor s\xEDmbolo de Santa Catarina, vive sobre \xE1rvores sem prejudic\xE1-las.
+      Atrai polinizadores e representa a beleza da Mata Atl\xE2ntica."
+  - commonName: Bugio
+    scientificName: Alouatta guariba
+    realPhoto: {fileID: 21300000, guid: 88fdf662b18ca7a47b18bf544d988a57, type: 3}
+    stickerSprite: {fileID: 21300000, guid: bb4dba59b6181f4478ed055e6020ceb4, type: 3}
+    description: "Macaco de grande porte e vocaliza\xE7\xE3o poderosa. Vive em grupos
+      e ajuda a espalhar sementes por toda a floresta. "
+  - commonName: Morcego
+    scientificName: Artibeus sp.
+    realPhoto: {fileID: 21300000, guid: ebcc18b6b83770346a81df5886b912da, type: 3}
+    stickerSprite: {fileID: 21300000, guid: e10c79eb4ebc0c2459ee7202c6b93836, type: 3}
+    description: "Alimenta-se de frutos e espalha sementes ao voar longas dist\xE2ncias.
+      Um jardineiro noturno essencial para a regenera\xE7\xE3o das matas."
+  - commonName: "Cobra-cip\xF3"
+    scientificName: Philodryas olfersii
+    realPhoto: {fileID: 21300000, guid: 65b7bfea9c3abc84d85e01fb45a130b4, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
+    description: "Serpente esguia e verde, camuflada entre os galhos. Ca\xE7a anf\xEDbios
+      e pequenos animais, controlando suas popula\xE7\xF5es na copa das \xE1rvores. "
+  - commonName: Fruto do cedro
+    scientificName: Cedrela fissilis
+    realPhoto: {fileID: 21300000, guid: e2d2412dbe7af904d9beb793b697e584, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
+    description: "Libera sementes aladas que voam com o vento. D\xE1 origem a \xE1rvores
+      de grande porte (emergentes), importantes para o equil\xEDbrio e a manuten\xE7\xE3o
+      da floresta."
+  - commonName: "Gavi\xE3o"
+    scientificName: Spizaetus tyrannus
+    realPhoto: {fileID: 21300000, guid: e0084057524a8564d86f406c723cf792, type: 3}
+    stickerSprite: {fileID: 21300000, guid: c7e5297a1f8818947aa9538fe372838c, type: 3}
+    description: "Predador de topo, conhecido como gavi\xE3o-pega-macaco. Mant\xE9m
+      o equil\xEDbrio natural controlando popula\xE7\xF5es de outras esp\xE9cies."
 --- !u!1 &1117080312
 GameObject:
   m_ObjectHideFlags: 0
@@ -10089,82 +10230,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176460794}
   m_CullTransparentMesh: 1
---- !u!1 &1206328784
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1206328788}
-  - component: {fileID: 1206328787}
-  - component: {fileID: 1206328786}
-  m_Layer: 5
-  m_Name: WarningImage2
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1206328786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206328784}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9b06a0326bb75db4db74cfb961abd134, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &1206328787
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206328784}
-  m_CullTransparentMesh: 1
---- !u!224 &1206328788
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206328784}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 72262895}
-  m_Father: {fileID: 986441944}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -724, y: -1070.9}
-  m_SizeDelta: {x: 317.4278, y: 765.4094}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1217307030
 GameObject:
   m_ObjectHideFlags: 0
@@ -10917,6 +10982,143 @@ RectTransform:
   m_AnchoredPosition: {x: 59.5, y: -57.833}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1356501892
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1356501893}
+  - component: {fileID: 1356501895}
+  - component: {fileID: 1356501894}
+  m_Layer: 5
+  m_Name: Text (TMP)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1356501893
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356501892}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 693262100}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 23, y: 209}
+  m_SizeDelta: {x: 200, y: 50}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1356501894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356501892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_text: "No mapa, os pontos registrados por voc\xEA ficar\xE3o em vermelho! Quando
+    estiverem registrados, voc\xEA poder\xE1 clicar neles afim de saber mais informa\xE7\xF5es."
+  m_isRightToLeft: 0
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontSharedMaterials: []
+  m_fontMaterial: {fileID: 0}
+  m_fontMaterials: []
+  m_fontColor32:
+    serializedVersion: 2
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
+  m_enableVertexGradient: 0
+  m_colorMode: 3
+  m_fontColorGradient:
+    topLeft: {r: 1, g: 1, b: 1, a: 1}
+    topRight: {r: 1, g: 1, b: 1, a: 1}
+    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
+    bottomRight: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColorGradientPreset: {fileID: 0}
+  m_spriteAsset: {fileID: 0}
+  m_tintAllSprites: 0
+  m_StyleSheet: {fileID: 0}
+  m_TextStyleHashCode: -1183493901
+  m_overrideHtmlColors: 0
+  m_faceColor:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_fontSize: 36
+  m_fontSizeBase: 36
+  m_fontWeight: 400
+  m_enableAutoSizing: 0
+  m_fontSizeMin: 18
+  m_fontSizeMax: 72
+  m_fontStyle: 1
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 256
+  m_textAlignment: 65535
+  m_characterSpacing: 0
+  m_wordSpacing: 0
+  m_lineSpacing: 0
+  m_lineSpacingMax: 0
+  m_paragraphSpacing: 0
+  m_charWidthMaxAdj: 0
+  m_TextWrappingMode: 1
+  m_wordWrappingRatios: 0.4
+  m_overflowMode: 0
+  m_linkedTextComponent: {fileID: 0}
+  parentLinkedComponent: {fileID: 0}
+  m_enableKerning: 0
+  m_ActiveFontFeatures: 6e72656b
+  m_enableExtraPadding: 0
+  checkPaddingRequired: 0
+  m_isRichText: 1
+  m_EmojiFallbackSupport: 1
+  m_parseCtrlCharacters: 1
+  m_isOrthographic: 1
+  m_isCullingEnabled: 0
+  m_horizontalMapping: 0
+  m_verticalMapping: 0
+  m_uvLineOffset: 0
+  m_geometrySortingOrder: 0
+  m_IsTextObjectScaleStatic: 0
+  m_VertexBufferAutoSizeReduction: 0
+  m_useMaxVisibleDescender: 1
+  m_pageToDisplay: 1
+  m_margin: {x: -129.52174, y: 0, z: -78.87044, w: 0}
+  m_isUsingLegacyAnimationComponent: 0
+  m_isVolumetricText: 0
+  m_hasFontAssetChanged: 0
+  m_baseMaterial: {fileID: 0}
+  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!222 &1356501895
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1356501892}
+  m_CullTransparentMesh: 1
 --- !u!1 &1356704066
 GameObject:
   m_ObjectHideFlags: 0
@@ -12912,18 +13114,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1490138370}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.0051528965, y: 0.008276425, z: 0.17702208, w: 0.9841586}
+  m_LocalPosition: {x: 0, y: 0, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2093003149}
   m_Father: {fileID: 53880235}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.749, y: 0.829, z: 20.388}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 327.58276, y: 326}
-  m_SizeDelta: {x: 585.5847, y: 347.0954}
+  m_AnchoredPosition: {x: 296, y: 561}
+  m_SizeDelta: {x: 755.0681, y: 519.1107}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1490138372
 MonoBehaviour:
@@ -14804,142 +15006,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1671931761}
   m_CullTransparentMesh: 1
---- !u!1 &1681348011
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1681348014}
-  - component: {fileID: 1681348013}
-  - component: {fileID: 1681348012}
-  m_Layer: 5
-  m_Name: WarningText
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1681348012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681348011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: 
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_EmojiFallbackSupport: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -122.746704, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1681348013
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681348011}
-  m_CullTransparentMesh: 1
---- !u!224 &1681348014
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1681348011}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 986441944}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 42, y: -831.17}
-  m_SizeDelta: {x: 200, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1707338164
 GameObject:
   m_ObjectHideFlags: 0
@@ -15251,7 +15317,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
   - {fileID: 21300000, guid: f1b071ce6c8cf494287dacfe9a98e739, type: 3}
   locationManager: {fileID: 1103364857}
-  mapPinsController: {fileID: 1964089035}
+  mapPinsController: {fileID: 1103364862}
   checkmarkSprite: {fileID: 21300000, guid: f7fca6dcfe43fd2458c982d0fcf095e8, type: 3}
   checkmarkSize: {x: 30, y: 30}
   checkmarkPosition: {x: 35, y: 10}
@@ -15645,142 +15711,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1780923017}
   m_CullTransparentMesh: 1
---- !u!1 &1799374658
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1799374661}
-  - component: {fileID: 1799374660}
-  - component: {fileID: 1799374659}
-  m_Layer: 5
-  m_Name: Warning2Text
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1799374659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799374658}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_text: 
-  m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_fontSharedMaterials: []
-  m_fontMaterial: {fileID: 0}
-  m_fontMaterials: []
-  m_fontColor32:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
-  m_enableVertexGradient: 0
-  m_colorMode: 3
-  m_fontColorGradient:
-    topLeft: {r: 1, g: 1, b: 1, a: 1}
-    topRight: {r: 1, g: 1, b: 1, a: 1}
-    bottomLeft: {r: 1, g: 1, b: 1, a: 1}
-    bottomRight: {r: 1, g: 1, b: 1, a: 1}
-  m_fontColorGradientPreset: {fileID: 0}
-  m_spriteAsset: {fileID: 0}
-  m_tintAllSprites: 0
-  m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: -1183493901
-  m_overrideHtmlColors: 0
-  m_faceColor:
-    serializedVersion: 2
-    rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
-  m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
-  m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 65535
-  m_characterSpacing: 0
-  m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
-  m_paragraphSpacing: 0
-  m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
-  m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
-  m_linkedTextComponent: {fileID: 0}
-  parentLinkedComponent: {fileID: 0}
-  m_enableKerning: 0
-  m_ActiveFontFeatures: 6e72656b
-  m_enableExtraPadding: 0
-  checkPaddingRequired: 0
-  m_isRichText: 1
-  m_EmojiFallbackSupport: 1
-  m_parseCtrlCharacters: 1
-  m_isOrthographic: 1
-  m_isCullingEnabled: 0
-  m_horizontalMapping: 0
-  m_verticalMapping: 0
-  m_uvLineOffset: 0
-  m_geometrySortingOrder: 0
-  m_IsTextObjectScaleStatic: 0
-  m_VertexBufferAutoSizeReduction: 0
-  m_useMaxVisibleDescender: 1
-  m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
-  m_isUsingLegacyAnimationComponent: 0
-  m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
-  m_baseMaterial: {fileID: 0}
-  m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!222 &1799374660
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799374658}
-  m_CullTransparentMesh: 1
---- !u!224 &1799374661
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799374658}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 986441944}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 59.5, y: -831.17}
-  m_SizeDelta: {x: 200, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1821968684
 GameObject:
   m_ObjectHideFlags: 0
@@ -16493,7 +16423,6 @@ GameObject:
   - component: {fileID: 1964089033}
   - component: {fileID: 1964089032}
   - component: {fileID: 1964089034}
-  - component: {fileID: 1964089035}
   m_Layer: 5
   m_Name: ImagemMapa
   m_TagString: Untagged
@@ -16578,262 +16507,6 @@ MonoBehaviour:
   mapPanel: {fileID: 556649113}
   areaInfoPanel: {fileID: 1952518334}
   stickerPanel: {fileID: 1821968684}
---- !u!114 &1964089035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1964089030}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6dc1b04c40db6a458d280ebc64bc4d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mapRectTransform: {fileID: 1964089031}
-  pinPrefab: {fileID: 1764674749902398241, guid: fc58a43497f719249ab66b545f38d174, type: 3}
-  areaInfoPanel: {fileID: 1952518334}
-  areaTitleText: {fileID: 1575146464}
-  areaDescriptionText: {fileID: 278752798}
-  viewStickersButton: {fileID: 1401370556}
-  visitedPinSprite: {fileID: 0}
-  useSpriteSwap: 0
-  visitedTint: {r: 0, g: 1, b: 0, a: 1}
-  stickersPanel: {fileID: 1821968684}
-  stickersContentParent: {fileID: 690399560}
-  stickerImagePrefab: {fileID: 1858631504469661234, guid: 2214ae3939f037e48a4ae847256a058e, type: 3}
-  speciesOverlayPanel: {fileID: 1176460794}
-  largeImage: {fileID: 995349413}
-  largeImageOverlay: {fileID: 295754623}
-  largeImageBackButton: {fileID: 371847248}
-  areaImage: {fileID: 631935304}
-  pins:
-  - pinName: CursoDagua
-    position: {x: -250, y: -282}
-    description: "\u201CO curso d\u2019\xE1gua \xE9 um dos elementos mais vitais
-      do ecossistema do parque. Suas margens abrigam diversas esp\xE9cies de plantas
-      e animais que dependem da umidade e da sombra para sobreviver. "
-  - pinName: Subosque
-    position: {x: -143, y: 11}
-    description: Camada logo abaixo das copas, com pouca luz, onde vivem arbustos,
-      mudas e animais que preferem sombra.
-  - pinName: Dossel
-    position: {x: 45, y: 498}
-    description: "A camada superior da floresta formada pelas copas das \xE1rvores,
-      rica em luz e muito biodiversa."
-  - pinName: Epifitas
-    position: {x: 275, y: 430}
-    description: "Plantas que vivem sobre outras plantas (geralmente troncos e galhos),
-      mas sem tirar nutrientes delas \u2014 como brom\xE9lias e orqu\xEDdeas."
-  - pinName: Serrapilheira
-    position: {x: 66, y: 159}
-    description: "Camada de folhas, galhos e mat\xE9ria org\xE2nica no ch\xE3o da
-      floresta, essencial para nutrir o solo."
-  cursoDaguaStickers:
-  - {fileID: 21300000, guid: 3b4ca1a72ffe4a146b80c41b8a213f42, type: 3}
-  - {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
-  - {fileID: 21300000, guid: 3977d264d7261ca41962ae28e3be892b, type: 3}
-  - {fileID: 21300000, guid: 034235bde09704d41921a678a24489a5, type: 3}
-  - {fileID: 21300000, guid: 01868aa5e21777841b855ed20cddb290, type: 3}
-  - {fileID: 21300000, guid: dc0a371eda9c58f4f81493dfb6d0fbbd, type: 3}
-  subosqueStickers:
-  - {fileID: 21300000, guid: 5200baea30521924cb7c68cc99b798fd, type: 3}
-  - {fileID: 21300000, guid: 7a63eedbac48da4448d847459ef38e7d, type: 3}
-  - {fileID: 21300000, guid: e7218cacb5d2d434880bb7afd2ef0d7e, type: 3}
-  - {fileID: 21300000, guid: 1ea0266ffb53c5e4f81caf40e123a99d, type: 3}
-  - {fileID: 21300000, guid: 3579e950eaf144c46b925a029a88d30e, type: 3}
-  dosselStickers:
-  - {fileID: 21300000, guid: bb4dba59b6181f4478ed055e6020ceb4, type: 3}
-  - {fileID: 21300000, guid: e10c79eb4ebc0c2459ee7202c6b93836, type: 3}
-  - {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
-  - {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
-  - {fileID: 21300000, guid: c7e5297a1f8818947aa9538fe372838c, type: 3}
-  epifitasStickers:
-  - {fileID: 21300000, guid: c5f89903d92a4564592ddadf9c63778c, type: 3}
-  - {fileID: 21300000, guid: eb6668e6672b47f49b03c5ef769ee5c3, type: 3}
-  - {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
-  - {fileID: 21300000, guid: c7746fad7647b4140adbcb6622f425b9, type: 3}
-  - {fileID: 21300000, guid: 65f3d4eca75ff6c45b5ee82457e6527b, type: 3}
-  serrapilheiraStickers:
-  - {fileID: 21300000, guid: c20167e9d59c5594387f2b5943766f6c, type: 3}
-  - {fileID: 21300000, guid: ca6ba0df2c7a63746b13f432de15103a, type: 3}
-  - {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
-  - {fileID: 21300000, guid: 07e69e753e4aad74c8c5fa77a79ee153, type: 3}
-  - {fileID: 21300000, guid: f1b071ce6c8cf494287dacfe9a98e739, type: 3}
-  speciesInfoPanel: {fileID: 1535652481}
-  commonNameText: {fileID: 685874614}
-  scientificNameText: {fileID: 749904801}
-  realImage: {fileID: 1983818534}
-  stickerImage: {fileID: 514338060}
-  descriptionText: {fileID: 2137887358}
-  backButton: {fileID: 1923186124}
-  cursoDaguaImage: {fileID: 21300000, guid: bda595251d1f60f40a0876d83ef71eec, type: 3}
-  subosqueImage: {fileID: 21300000, guid: 2e4d546fef445a64ea356d5dce9ac1a5, type: 3}
-  dosselImage: {fileID: 21300000, guid: 87878b52b63501b4cbcc848e17786fac, type: 3}
-  epifitasImage: {fileID: 21300000, guid: 70d7513856a4e89459017322dfcf95e6, type: 3}
-  serrapilheiraImage: {fileID: 21300000, guid: ba9c62e8e35efcf4299e0a43b4c2666e, type: 3}
-  speciesList:
-  - commonName: "Camar\xE3o"
-    scientificName: Macrobrachium potiuna
-    realPhoto: {fileID: 21300000, guid: 89089987f6880e74e84f236c23b060c3, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 3b4ca1a72ffe4a146b80c41b8a213f42, type: 3}
-    description: "Vive em riachos limpos e bem oxigenados. Esse pequeno camar\xE3o
-      de \xE1gua\r\ndoce ajuda a manter o equil\xEDbrio do ecossistema e indica boa
-      qualidade da \xE1gua.\r"
-  - commonName: Girino
-    scientificName: 
-    realPhoto: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 034235bde09704d41921a678a24489a5, type: 3}
-    description: "Fase jovem dos anf\xEDbios, vive na \xE1gua e respira por br\xE2nquias.
-      Alimenta-se de algas e restos org\xE2nicos, ajudando a manter o ambiente limpo.\r        
-      \r"
-  - commonName: Anfibio
-    scientificName: Leptodactylus latrans
-    realPhoto: {fileID: 21300000, guid: 5cef873b1b6c7674d9b173ae851991ef, type: 3}
-    stickerSprite: {fileID: 21300000, guid: dc0a371eda9c58f4f81493dfb6d0fbbd, type: 3}
-    description: "R\xE3 de coaxar forte que vive perto da \xE1gua. Alimenta-se de
-      insetos e \xE9 sens\xEDvel \xE0 polui\xE7\xE3o -- um importante indicador da
-      sa\xFAde ambiental como todo anf\xEDbio."
-  - commonName: "Caet\xE9"
-    scientificName: Heliconia farinosa
-    realPhoto: {fileID: 21300000, guid: f50ca8544ab03f5448083fe682bc2815, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 01868aa5e21777841b855ed20cddb290, type: 3}
-    description: "Planta tropical de cores vibrantes que atrai beija-flores. Suas
-      flores ajudam na poliniza\xE7\xE3o e embelezam o interior da floresta.\r"
-  - commonName: Caranguejo
-    scientificName: Trichodactylus fluviatilis
-    realPhoto: {fileID: 21300000, guid: cd8dcf7da8a35374aa7ba93c04b9c958, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 3977d264d7261ca41962ae28e3be892b, type: 3}
-    description: "Mora nas margens de rios e c\xF3rregos. Alimenta-se de restos de
-      plantas e animais, auxiliando na decomposi\xE7\xE3o e ciclagem de nutrientes
-      do ambiente.\r\n\r"
-  - commonName: Peixe
-    scientificName: Phalloceros sp.
-    realPhoto: {fileID: 21300000, guid: 22d2331933e82754695ab9ac575e9411, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
-    description: "Pequeno e resistente, vive em riachos calmos. Alimenta-se de algas
-      e insetos, mantendo o equil\xEDbrio da vida aqu\xE1tica.\r"
-  - commonName: Cogumelo
-    scientificName: Agaricus sp.
-    realPhoto: {fileID: 21300000, guid: 444e377210359484baf670ddfe4bfcd5, type: 3}
-    stickerSprite: {fileID: 21300000, guid: c20167e9d59c5594387f2b5943766f6c, type: 3}
-    description: "Surge em locais \xFAmidos e ricos em mat\xE9ria org\xE2nica. Recicla
-      nutrientes, transformando o que morreu em nova vida no solo."
-  - commonName: Aranha-lobo
-    scientificName: Ctenus ornatus
-    realPhoto: {fileID: 21300000, guid: 93685cc29d5787640ae3a2a024716ceb, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 07e69e753e4aad74c8c5fa77a79ee153, type: 3}
-    description: "Ca\xE7adora \xE1gil que vive no ch\xE3o da floresta. Controla popula\xE7\xF5es
-      de insetos, sendo uma das principais predadoras da serrapilheira."
-  - commonName: Semente germinando
-    scientificName: Euterpe edulis
-    realPhoto: {fileID: 21300000, guid: e21fed4b69fcaee4ab5c30784db10f42, type: 3}
-    stickerSprite: {fileID: 21300000, guid: f1b071ce6c8cf494287dacfe9a98e739, type: 3}
-    description: "O nascimento de um novo palmito-ju\xE7ara, \xE1rvore essencial
-      da Mata Atl\xE2ntica, alimento para aves e s\xEDmbolo de regenera\xE7\xE3o.\r"
-  - commonName: Inhambu
-    scientificName: Crypturellus tataupa
-    realPhoto: {fileID: 21300000, guid: 15df305961e6f5242b26e57f93ca2680, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
-    description: "Ave terr\xEDcola e discreta. Come sementes e insetos, ajudando
-      na manuten\xE7\xE3o e regenera\xE7\xE3o da floresta.\r"
-  - commonName: Rato-do-mato
-    scientificName: Akodon azarae
-    realPhoto: {fileID: 21300000, guid: b17dde6b4d3a8434b8161e0d5df92721, type: 3}
-    stickerSprite: {fileID: 21300000, guid: ca6ba0df2c7a63746b13f432de15103a, type: 3}
-    description: "Pequeno roedor da floresta. Espalha sementes e serve de alimento
-      para v\xE1rios predadores, mantendo o ciclo natural."
-  - commonName: 'Muda de palmito '
-    scientificName: Euterpe edulis
-    realPhoto: {fileID: 21300000, guid: c8cfd13485cd6524288134d0c4405231, type: 3}
-    stickerSprite: {fileID: 21300000, guid: e7218cacb5d2d434880bb7afd2ef0d7e, type: 3}
-    description: "Jovem palmito-ju\xE7ara crescendo sob a sombra da floresta. Sua
-      presen\xE7a garante alimento e abrigo para muitas esp\xE9cies.\r"
-  - commonName: Samambaia
-    scientificName: Danaea geniculata
-    realPhoto: {fileID: 21300000, guid: 3b051c94d0c1545469b7dc94d224680d, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 5200baea30521924cb7c68cc99b798fd, type: 3}
-    description: "Gosta de lugares \xFAmidos e sombreados. Suas folhas ajudam a manter
-      a umidade e proteger o solo da eros\xE3o.\r"
-  - commonName: 'Planta '
-    scientificName: Goeppertia monophylla
-    realPhoto: {fileID: 21300000, guid: 1ee8d6a05030f2e4f8549aaf60829258, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 1ea0266ffb53c5e4f81caf40e123a99d, type: 3}
-    description: "Esp\xE9cie de folhas largas do sub-bosque. Ajuda a manter o microclima
-      \xFAmido e abriga pequenos animais da floresta."
-  - commonName: "Camale\xE3ozinho"
-    scientificName: Enyalius iheringii
-    realPhoto: {fileID: 21300000, guid: 95307ff9ef65f964f97ed8c5cae90f0e, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 7a63eedbac48da4448d847459ef38e7d, type: 3}
-    description: "Lagarto que vive entre as \xE1rvores e muda de cor para se camuflar.
-      Ca\xE7a insetos e ajuda a manter o equil\xEDbrio ecol\xF3gico.\r"
-  - commonName: "Ti\xE9-sangue"
-    scientificName: Ramphocelus bresilius
-    realPhoto: {fileID: 21300000, guid: 080c143f16dc7d546997a28dc213b6c9, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 3579e950eaf144c46b925a029a88d30e, type: 3}
-    description: "Ave de plumagem vermelha intensa. Alimenta-se de frutos e espalha
-      sementes, colorindo e renovando a floresta.\r"
-  - commonName: "Brom\xE9lia"
-    scientificName: Vriesea incurvata
-    realPhoto: {fileID: 21300000, guid: db33459cfee14e542871f43e2b4002d7, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 65f3d4eca75ff6c45b5ee82457e6527b, type: 3}
-    description: "Acumula \xE1gua entre as folhas, criando abrigos para insetos e
-      pererecas. Um pequeno universo dentro da floresta."
-  - commonName: Beija-Flor
-    scientificName: Eupetomena macroura
-    realPhoto: {fileID: 21300000, guid: d00d43f5abdca9d4d9ea19b4e92978f9, type: 3}
-    stickerSprite: {fileID: 21300000, guid: eb6668e6672b47f49b03c5ef769ee5c3, type: 3}
-    description: "Com voo r\xE1pido e preciso, visita flores em busca de n\xE9ctar.
-      Poliniza plantas de diversas esp\xE9cies, especialmente com flores tubulares. "
-  - commonName: Perereca
-    scientificName: Phyllodytes luteolus
-    realPhoto: {fileID: 21300000, guid: f86999f0c594e374bbd7c577cdec5e5f, type: 3}
-    stickerSprite: {fileID: 21300000, guid: c7746fad7647b4140adbcb6622f425b9, type: 3}
-    description: "Vive em brom\xE9lias e nelas cria seus filhotes. \xC9 sens\xEDvel
-      \xE0s mudan\xE7as do ambiente e indica equil\xEDbrio ecol\xF3gico."
-  - commonName: Musgo
-    scientificName: 
-    realPhoto: {fileID: 21300000, guid: 68cb51f1529b32c46b7ada2e599b7b7f, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
-    description: "Pequeno e delicado, cresce onde h\xE1 umidade. Ret\xE9m \xE1gua
-      e prepara o solo para novas plantas. "
-  - commonName: "Orqu\xEDdea"
-    scientificName: Cattleya purpurata
-    realPhoto: {fileID: 21300000, guid: b1ca91e7902d56143ace7e13be2b9029, type: 3}
-    stickerSprite: {fileID: 21300000, guid: c5f89903d92a4564592ddadf9c63778c, type: 3}
-    description: "Flor s\xEDmbolo de Santa Catarina, vive sobre \xE1rvores sem prejudic\xE1-las.
-      Atrai polinizadores e representa a beleza da Mata Atl\xE2ntica."
-  - commonName: Bugio
-    scientificName: Alouatta guariba
-    realPhoto: {fileID: 21300000, guid: 88fdf662b18ca7a47b18bf544d988a57, type: 3}
-    stickerSprite: {fileID: 21300000, guid: bb4dba59b6181f4478ed055e6020ceb4, type: 3}
-    description: "Macaco de grande porte e vocaliza\xE7\xE3o poderosa. Vive em grupos
-      e ajuda a espalhar sementes por toda a floresta. "
-  - commonName: Morcego
-    scientificName: Artibeus sp.
-    realPhoto: {fileID: 21300000, guid: ebcc18b6b83770346a81df5886b912da, type: 3}
-    stickerSprite: {fileID: 21300000, guid: e10c79eb4ebc0c2459ee7202c6b93836, type: 3}
-    description: "Alimenta-se de frutos e espalha sementes ao voar longas dist\xE2ncias.
-      Um jardineiro noturno essencial para a regenera\xE7\xE3o das matas."
-  - commonName: "Cobra-cip\xF3"
-    scientificName: Philodryas olfersii
-    realPhoto: {fileID: 21300000, guid: 65b7bfea9c3abc84d85e01fb45a130b4, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
-    description: "Serpente esguia e verde, camuflada entre os galhos. Ca\xE7a anf\xEDbios
-      e pequenos animais, controlando suas popula\xE7\xF5es na copa das \xE1rvores. "
-  - commonName: Fruto do cedro
-    scientificName: Cedrela fissilis
-    realPhoto: {fileID: 21300000, guid: e2d2412dbe7af904d9beb793b697e584, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
-    description: "Libera sementes aladas que voam com o vento. D\xE1 origem a \xE1rvores
-      de grande porte (emergentes), importantes para o equil\xEDbrio e a manuten\xE7\xE3o
-      da floresta."
-  - commonName: "Gavi\xE3o"
-    scientificName: Spizaetus tyrannus
-    realPhoto: {fileID: 21300000, guid: e0084057524a8564d86f406c723cf792, type: 3}
-    stickerSprite: {fileID: 21300000, guid: c7e5297a1f8818947aa9538fe372838c, type: 3}
-    description: "Predador de topo, conhecido como gavi\xE3o-pega-macaco. Mant\xE9m
-      o equil\xEDbrio natural controlando popula\xE7\xF5es de outras esp\xE9cies."
 --- !u!1 &1964602097
 GameObject:
   m_ObjectHideFlags: 0
@@ -17366,6 +17039,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2009529761}
   m_CullTransparentMesh: 1
+--- !u!1 &2026129371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2026129372}
+  - component: {fileID: 2026129374}
+  - component: {fileID: 2026129373}
+  m_Layer: 5
+  m_Name: SassafrasMapTutorial
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &2026129372
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026129371}
+  m_LocalRotation: {x: -0, y: -0, z: 0.08427214, w: 0.9964428}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 693262100}
+  m_Father: {fileID: 556649114}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 9.668}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 422.45337, y: -651.99207}
+  m_SizeDelta: {x: 905.6987, y: 1215.6951}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2026129373
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026129371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 7674df92c005ec745900b58144c75aa8, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &2026129374
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2026129371}
+  m_CullTransparentMesh: 1
 --- !u!1 &2037489349
 GameObject:
   m_ObjectHideFlags: 0
@@ -17764,7 +17513,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2093003148}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -17772,7 +17521,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -21.5217, y: 47}
+  m_AnchoredPosition: {x: -24, y: 78}
   m_SizeDelta: {x: 156.9567, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2093003150
@@ -17822,8 +17571,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 30
-  m_fontSizeBase: 30
+  m_fontSize: 36
+  m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

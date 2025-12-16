@@ -12,6 +12,14 @@ public class PostVideoImageController : MonoBehaviour
     public float slideDuration = 0.6f;
     public float stayTime = 30f;
 
+    [Header("Animação Suave")]
+    public float floatAmplitude = 10f;
+    public float floatSpeed = 1.5f;
+
+
+    private Coroutine floatRoutine;
+
+
     private Vector2 offLeft;
     private Vector2 offRight;
     private Vector2 center;
@@ -70,11 +78,34 @@ public class PostVideoImageController : MonoBehaviour
         }
 
         imageTransform.anchoredPosition = center;
-        Debug.Log("✅ Imagem posicionada no centro");
+
+        // inicia animação suave
+        if (floatRoutine != null)
+            StopCoroutine(floatRoutine);
+
+        floatRoutine = StartCoroutine(FloatImage(center));
+
+        Debug.Log("✅ Imagem posicionada no centro + animação suave iniciada");
+
     }
 
     private IEnumerator SlideOut()
+
+
     {
+
+        // para animação suave antes de sair
+        if (floatRoutine != null)
+        {
+            StopCoroutine(floatRoutine);
+            floatRoutine = null;
+        }
+
+        imageTransform.anchoredPosition = center;
+
+
+
+
         Debug.Log("⬅️ Iniciando saída da imagem para a ESQUERDA");
 
         float t = 0f;
@@ -114,4 +145,30 @@ public class PostVideoImageController : MonoBehaviour
             StartCoroutine(SlideOut());
         }
     }
+
+
+
+
+
+    IEnumerator FloatImage(Vector2 basePos)
+    {
+        float t = 0f;
+
+        while (true)
+        {
+            t += Time.deltaTime * floatSpeed;
+            float offsetY = Mathf.Sin(t) * floatAmplitude;
+            imageTransform.anchoredPosition = basePos + new Vector2(0, offsetY);
+            yield return null;
+        }
+    }
+
+
+
+
+
+
+
+
+
 }
