@@ -558,7 +558,7 @@ public class MapPinsController : MonoBehaviour
 
     IEnumerator DelayedTutorial()
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
         StartCoroutine(PlayTutorialImage());
     }
 

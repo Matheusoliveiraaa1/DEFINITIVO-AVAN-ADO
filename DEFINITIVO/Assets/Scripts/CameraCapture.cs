@@ -225,7 +225,7 @@ public class NativeCameraExample : MonoBehaviour
                     GC.Collect();
                 }
 
-                Texture2D texture = NativeCamera.LoadImageAtPath(path, 1024);
+                Texture2D texture = NativeCamera.LoadImageAtPath(path, 512);
 
 
                 if (texture != null && imageDisplay != null)

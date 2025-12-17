@@ -53,12 +53,14 @@ public class TutorialManager : MonoBehaviour
 
     void Awake()
     {
-        if (PlayerPrefs.GetInt("TutorialVisto", 0) == 1)
-        {
-            tutorialPanel.SetActive(false);
-            enabled = false;
-            return;
-        }
+        /*
+     if (PlayerPrefs.GetInt("TutorialVisto", 0) == 1)
+     {
+         tutorialPanel.SetActive(false);
+         enabled = false;
+         return;
+     }
+     */
 
         tutorialPanel.SetActive(true);
     }
