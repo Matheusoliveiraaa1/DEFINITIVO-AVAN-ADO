@@ -118,6 +118,12 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
                     }
 
                     cameraExample.RegisterSticker(this);
+                    cameraExample.SetStickerState(
+    AreaName,
+    StickerIndex,
+    NativeCameraExample.StickerState.InPhoto
+);
+
                 }
             }
         }
@@ -148,6 +154,12 @@ public class StickerController : MonoBehaviour, IBeginDragHandler, IDragHandler,
         if (cameraExample != null)
         {
             cameraExample.UnregisterSticker(this);
+            cameraExample.SetStickerState(
+    AreaName,
+    StickerIndex,
+    NativeCameraExample.StickerState.InMenu
+);
+
         }
     }
 

@@ -17,14 +17,26 @@ public class LocationServiceManager : MonoBehaviour
     public GameObject cameraButton;
     public Image stickerNotificationImage;
 
+
+
     [Header("Settings")]
     public bool areaTeste = false;
     public float detectionRadius = 7f;
+    public float entryDetectionRadius = 25f;    // 👈 SOMENTE entradas
     public float notificationDuration = 3f;
 
     [Header("Points of Interest")]
     public List<AreaPoint> areaPoints = new List<AreaPoint>();
     public List<StickerPoint> stickerPoints = new List<StickerPoint>();
+
+
+    [Header("Park Entries")]
+    public ParkEntryPoint entry1;
+    public ParkEntryPoint entry2;
+
+    private ParkStartMode currentStartMode = ParkStartMode.None;
+    private const string START_MODE_KEY = "ParkStartMode";
+
 
     [Header("Inventory")]
     public InventoryManager inventoryManager;
@@ -43,6 +55,30 @@ public class LocationServiceManager : MonoBehaviour
     }
 
     [System.Serializable]
+    public class ParkEntryPoint
+    {
+        public string entryName; // "Entrada1" ou "Entrada2"
+        public double latitude;
+        public double longitude;
+    }
+
+    public enum ParkStartMode
+    {
+        None,
+        Entry1,
+        Entry2
+    }
+
+
+
+
+    public enum StickerEntryMode
+    {
+        Entry1,
+        Entry2
+    }
+
+    [System.Serializable]
     public class StickerPoint
     {
         public double latitude;
@@ -50,11 +86,17 @@ public class LocationServiceManager : MonoBehaviour
         public string message;
         public string areaName;
         public int stickerIndex;
+        public StickerEntryMode entryMode;
     }
+
 
     private Dictionary<string, List<int>> collectedStickers = new Dictionary<string, List<int>>();
     private Dictionary<string, List<int>> usedStickers = new Dictionary<string, List<int>>(); // NOVO: stickers usados nas fotos confirmadas
     private List<PointOfInterest> allPoints = new List<PointOfInterest>();
+
+  
+
+
 
     private class PointOfInterest
     {
@@ -65,8 +107,16 @@ public class LocationServiceManager : MonoBehaviour
         public string areaName;
         public int stickerIndex;
         public bool alreadyTriggered;
+        public StickerEntryMode entryMode;
 
-        public PointOfInterest(double lat, double lon, string msg, bool isSticker, string area, int index = -1)
+        public PointOfInterest(
+      double lat,
+      double lon,
+      string msg,
+      bool isSticker,
+      string area,
+      int index = -1,
+      StickerEntryMode mode = StickerEntryMode.Entry1)
         {
             latitude = lat;
             longitude = lon;
@@ -74,8 +124,10 @@ public class LocationServiceManager : MonoBehaviour
             isStickerPoint = isSticker;
             areaName = area;
             stickerIndex = index;
+            entryMode = mode;
             alreadyTriggered = false;
         }
+
     }
 
     [Serializable]
@@ -100,9 +152,11 @@ public class LocationServiceManager : MonoBehaviour
     // CARREGA o estado antes de qualquer Start() - evita problema de ordem de execução.
     private void Awake()
     {
+        LoadStartMode();           // 🔹 NOVO
         LoadCollectedStickers();
-        LoadUsedStickers(); // NOVO: carrega stickers usados
+        LoadUsedStickers();
     }
+
 
     private void Start()
     {
@@ -118,6 +172,55 @@ public class LocationServiceManager : MonoBehaviour
         StartCoroutine(StartLocationService());
     }
 
+    private void LoadStartMode()
+    {
+        if (PlayerPrefs.HasKey(START_MODE_KEY))
+        {
+            currentStartMode = (ParkStartMode)PlayerPrefs.GetInt(START_MODE_KEY);
+        }
+    }
+
+    private void SetStartMode(ParkStartMode mode)
+    {
+        if (currentStartMode != ParkStartMode.None)
+            return;
+
+        currentStartMode = mode;
+        PlayerPrefs.SetInt(START_MODE_KEY, (int)mode);
+        PlayerPrefs.Save();
+
+        Debug.Log("🚪 Entrada inicial detectada: " + mode);
+    }
+
+
+    private void DetectStartEntry(LocationInfo data)
+    {
+        if (currentStartMode != ParkStartMode.None)
+            return;
+
+        double distEntry1 = CalculateDistance(
+            data.latitude, data.longitude,
+            entry1.latitude, entry1.longitude);
+
+        double distEntry2 = CalculateDistance(
+            data.latitude, data.longitude,
+            entry2.latitude, entry2.longitude);
+
+        if (distEntry1 <= entryDetectionRadius)
+        {
+            SetStartMode(ParkStartMode.Entry1);
+        }
+        else if (distEntry2 <= entryDetectionRadius)
+        {
+            SetStartMode(ParkStartMode.Entry2);
+        }
+
+    }
+
+
+
+
+
     private void InitializePoints()
     {
         allPoints.Clear();
@@ -131,8 +234,16 @@ public class LocationServiceManager : MonoBehaviour
         foreach (var sp in stickerPoints)
         {
             allPoints.Add(new PointOfInterest(
-                sp.latitude, sp.longitude, sp.message, true, sp.areaName, sp.stickerIndex));
+                sp.latitude,
+                sp.longitude,
+                sp.message,
+                true,
+                sp.areaName,
+                sp.stickerIndex,
+                sp.entryMode
+            ));
         }
+
     }
 
     private IEnumerator StartLocationService()
@@ -201,8 +312,27 @@ public class LocationServiceManager : MonoBehaviour
         accuracyText.text = $"Precisão: {data.horizontalAccuracy:F1} m";
     }
 
+    private bool IsStickerAllowedForCurrentMode(PointOfInterest poi)
+    {
+        if (currentStartMode == ParkStartMode.Entry1 &&
+            poi.entryMode == StickerEntryMode.Entry1)
+            return true;
+
+        if (currentStartMode == ParkStartMode.Entry2 &&
+            poi.entryMode == StickerEntryMode.Entry2)
+            return true;
+
+        return false;
+    }
+
+
     private void CheckNearbyPoints(LocationInfo data)
     {
+
+        DetectStartEntry(data); // 🔹 NOVO
+
+        if (currentStartMode == ParkStartMode.None)
+            return; // ainda não entrou no parque
         bool isInsideAnyArea = false;
         PointOfInterest activeArea = null;
 
@@ -216,6 +346,12 @@ public class LocationServiceManager : MonoBehaviour
             {
                 isInsideAnyArea = true;
                 activeArea = poi;
+                if (poi.isStickerPoint)
+                {
+                    if (!IsStickerAllowedForCurrentMode(poi))
+                        continue;
+                }
+
                 HandlePointTrigger(poi, ref isInsideAnyArea);
                 break;
             }
@@ -368,7 +504,7 @@ public class LocationServiceManager : MonoBehaviour
         switch (areaName)
         {
             case "CursoDagua":
-                return "curso_dagua.mp4";
+                return "TESTE.mp4";
 
             case "Serrapilheira":
                 return "TESTE.mp4";
@@ -454,17 +590,23 @@ public class LocationServiceManager : MonoBehaviour
         }
 
         string json = JsonUtility.ToJson(data);
-        PlayerPrefs.SetString("UsedStickers", json);
+        PlayerPrefs.SetString(GetUsedKey(), json);
         PlayerPrefs.Save();
+
     }
 
     private void LoadUsedStickers()
     {
         usedStickers.Clear();
 
-        if (PlayerPrefs.HasKey("UsedStickers"))
+        usedStickers.Clear();
+
+        string key = GetUsedKey();
+
+        if (PlayerPrefs.HasKey(key))
         {
-            string json = PlayerPrefs.GetString("UsedStickers");
+            string json = PlayerPrefs.GetString(key);
+
             if (!string.IsNullOrEmpty(json))
             {
                 UsedStickerSaveData data = JsonUtility.FromJson<UsedStickerSaveData>(json);
@@ -573,18 +715,24 @@ public class LocationServiceManager : MonoBehaviour
         }
 
         string json = JsonUtility.ToJson(data);
-        PlayerPrefs.SetString("CollectedStickers", json);
+        PlayerPrefs.SetString(GetCollectedKey(), json);
+
         PlayerPrefs.Save();
         //Debug.Log("[LocationServiceManager] Saved stickers: " + json);
     }
 
     private void LoadCollectedStickers()
     {
+
         collectedStickers.Clear();
 
-        if (PlayerPrefs.HasKey("CollectedStickers"))
+        collectedStickers.Clear();
+        string key = GetCollectedKey();
+
+        if (PlayerPrefs.HasKey(key))
         {
-            string json = PlayerPrefs.GetString("CollectedStickers");
+            string json = PlayerPrefs.GetString(key);
+
             if (!string.IsNullOrEmpty(json))
             {
                 StickerSaveData data = JsonUtility.FromJson<StickerSaveData>(json);
@@ -621,4 +769,29 @@ public class LocationServiceManager : MonoBehaviour
         Input.location.Stop();
         CancelInvoke();
     }
+
+    private string GetCollectedKey()
+    {
+        return "CollectedStickers_" + currentStartMode;
+    }
+
+    private string GetUsedKey()
+    {
+        return "UsedStickers_" + currentStartMode;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

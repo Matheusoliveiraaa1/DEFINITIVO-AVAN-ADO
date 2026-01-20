@@ -41,6 +41,17 @@ public class NativeCameraExample : MonoBehaviour
 
 
 
+    // Parte do novo sistema de páginas 
+    [Header("Sticker Pages")]
+    public Button nextPageButton;
+    public Button prevPageButton;
+
+    private List<GameObject[]> stickerPages = new List<GameObject[]>();
+    private int currentPageIndex = 0;
+
+
+
+
 
 
     [Header("Sticker Limit")]
@@ -73,6 +84,17 @@ public class NativeCameraExample : MonoBehaviour
     private Dictionary<GameObject, string> stickerAreaCache = new Dictionary<GameObject, string>();
     private Dictionary<GameObject, int> stickerIndexCache = new Dictionary<GameObject, int>();
     private Dictionary<string, int> spawnedStickersCount = new Dictionary<string, int>();
+
+
+    public enum StickerState
+    {
+        InMenu,
+        InPhoto
+    }
+
+    private Dictionary<string, StickerState> stickerStates
+        = new Dictionary<string, StickerState>();
+
 
     private void Start()
     {
@@ -250,44 +272,143 @@ public class NativeCameraExample : MonoBehaviour
 
     public void ShowStickers()
     {
-        if (stickerMenuContent == null || stickerMenuScrollView == null || locationManager == null) return;
+        if (stickerMenuContent == null || stickerMenuScrollView == null || locationManager == null)
+            return;
 
-        foreach (Transform child in stickerMenuContent)
-            Destroy(child.gameObject);
+        ClearStickerMenu();
 
         stickerMenuScrollView.SetActive(true);
         spawnedStickersCount.Clear();
 
-        GameObject[] stickersToShow = GetAllStickers();
-        if (stickersToShow == null || stickersToShow.Length == 0) return;
+        GameObject[] stickers = GetAllStickers();
+        if (stickers == null || stickers.Length == 0) return;
 
-        foreach (var stickerPrefab in stickersToShow)
+        stickerStates.Clear();
+
+        foreach (var sticker in GetAllStickers())
         {
-            if (stickerPrefab != null)
-            {
-                var sticker = Instantiate(stickerPrefab, stickerMenuContent);
-                var controller = sticker.GetComponent<StickerController>() ?? sticker.AddComponent<StickerController>();
-                controller.SetRawImageRect(imageDisplay.rectTransform);
+            if (!stickerAreaCache.ContainsKey(sticker)) continue;
 
-                string areaName = null;
-                if (stickerAreaCache.TryGetValue(stickerPrefab, out areaName))
-                    controller.AreaName = areaName;
+            string area = stickerAreaCache[sticker];
+            int index = GetIndexForPrefab(sticker);
+            string key = $"{area}_{index}";
 
-                int idx = GetIndexForPrefab(stickerPrefab);
-                controller.StickerIndex = idx;
-
-                if (areaName != null)
-                {
-                    if (spawnedStickersCount.ContainsKey(areaName))
-                        spawnedStickersCount[areaName]++;
-                    else
-                        spawnedStickersCount[areaName] = 1;
-                }
-            }
+            if (!stickerStates.ContainsKey(key))
+                stickerStates[key] = StickerState.InMenu;
         }
 
-        UpdateAllCountersFromLocationManager();
+
+        BuildStickerPages(stickers);
+        currentPageIndex = 0;
+
+        ShowCurrentPage();
+        UpdateArrowVisibility();
     }
+
+
+
+    public void SetStickerState(string area, int index, StickerState state)
+    {
+        string key = $"{area}_{index}";
+        stickerStates[key] = state;
+    }
+
+
+
+
+
+    private void ClearStickerMenu()
+    {
+        foreach (Transform child in stickerMenuContent)
+            Destroy(child.gameObject);
+    }
+
+
+    private void BuildStickerPages(GameObject[] stickers)
+    {
+        stickerPages.Clear();
+
+        for (int i = 0; i < stickers.Length; i += 2)
+        {
+            if (i + 1 < stickers.Length)
+                stickerPages.Add(new GameObject[] { stickers[i], stickers[i + 1] });
+            else
+                stickerPages.Add(new GameObject[] { stickers[i] }); // última com 1
+        }
+    }
+
+    private void ShowCurrentPage()
+    {
+        ClearStickerMenu();
+
+        GameObject[] page = stickerPages[currentPageIndex];
+
+        foreach (var stickerPrefab in page)
+        {
+            if (stickerPrefab == null) continue;
+
+            var sticker = Instantiate(stickerPrefab, stickerMenuContent);
+            var controller = sticker.GetComponent<StickerController>()
+                             ?? sticker.AddComponent<StickerController>();
+
+            controller.SetRawImageRect(imageDisplay.rectTransform);
+
+            if (stickerAreaCache.TryGetValue(stickerPrefab, out string area))
+                controller.AreaName = area;
+
+            controller.StickerIndex = GetIndexForPrefab(stickerPrefab);
+
+            // ====== AQUI: FILTRO CRÍTICO ======
+            string key = $"{controller.AreaName}_{controller.StickerIndex}";
+
+            if (stickerStates.TryGetValue(key, out StickerState state)
+                && state == StickerState.InPhoto)
+            {
+                Destroy(sticker);
+                continue;
+            }
+            // ====== FIM ======
+
+            if (!string.IsNullOrEmpty(controller.AreaName))
+            {
+                if (spawnedStickersCount.ContainsKey(controller.AreaName))
+                    spawnedStickersCount[controller.AreaName]++;
+                else
+                    spawnedStickersCount[controller.AreaName] = 1;
+            }
+        }
+    }
+
+
+    public void NextPage()
+    {
+        if (currentPageIndex < stickerPages.Count - 1)
+        {
+            currentPageIndex++;
+            ShowCurrentPage();
+            UpdateArrowVisibility();
+        }
+    }
+
+
+    public void PrevPage()
+    {
+        if (currentPageIndex > 0)
+        {
+            currentPageIndex--;
+            ShowCurrentPage();
+            UpdateArrowVisibility();
+        }
+    }
+
+    private void UpdateArrowVisibility()
+    {
+        prevPageButton.gameObject.SetActive(currentPageIndex > 0);
+        nextPageButton.gameObject.SetActive(currentPageIndex < stickerPages.Count - 1);
+    }
+
+
+
 
     private int GetIndexForPrefab(GameObject prefab)
     {
@@ -487,6 +608,8 @@ public class NativeCameraExample : MonoBehaviour
                 Destroy(child.gameObject);
 
         stickerMenuScrollView?.SetActive(false);
+        stickerStates.Clear();
+
     }
 
 
@@ -545,14 +668,22 @@ public class NativeCameraExample : MonoBehaviour
 
     private bool AreThereUnusedStickersFromCurrentArea()
     {
-        if (!spawnedStickersCount.ContainsKey(currentArea) || spawnedStickersCount[currentArea] == 0)
-            return false;
+        foreach (var kv in stickerStates)
+        {
+            string key = kv.Key;
+            StickerState state = kv.Value;
 
-        int usedStickersCount = CountStickersFromAreaInPhoto(currentArea);
-        int spawnedCount = spawnedStickersCount.ContainsKey(currentArea) ? spawnedStickersCount[currentArea] : 0;
+            // key = "Area1_3"
+            if (!key.StartsWith(currentArea + "_"))
+                continue;
 
-        return usedStickersCount < spawnedCount;
+            if (state == StickerState.InMenu)
+                return true; // ainda existe sticker da área fora da foto
+        }
+
+        return false; // todos os stickers da área estão na foto
     }
+
 
     private int CountStickersFromAreaInPhoto(string areaName)
     {
