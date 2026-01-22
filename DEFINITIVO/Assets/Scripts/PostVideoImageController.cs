@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using TMPro;
+
+
 
 public class PostVideoImageController : MonoBehaviour
 {
@@ -15,6 +18,10 @@ public class PostVideoImageController : MonoBehaviour
     [Header("Animação Suave")]
     public float floatAmplitude = 10f;
     public float floatSpeed = 1.5f;
+
+    [Header("Texto")]
+    public TextMeshProUGUI infoText;
+
 
 
     private Coroutine floatRoutine;
@@ -54,6 +61,8 @@ public class PostVideoImageController : MonoBehaviour
     {
         Debug.Log("🖼️ ShowAfterVideo chamado");
 
+        UpdateText(); // 👈 AQUI É A CHAVE
+
         imageTransform.gameObject.SetActive(true);
 
         if (autoHideRoutine != null)
@@ -62,6 +71,7 @@ public class PostVideoImageController : MonoBehaviour
         StartCoroutine(SlideIn());
         autoHideRoutine = StartCoroutine(AutoHide());
     }
+
 
     private IEnumerator SlideIn()
     {
@@ -143,6 +153,66 @@ public class PostVideoImageController : MonoBehaviour
                 StopCoroutine(autoHideRoutine);
 
             StartCoroutine(SlideOut());
+        }
+    }
+
+
+    private string GetSuffixByArea(string areaName)
+    {
+        switch (areaName)
+        {
+            
+            case "Serrapilheira":
+                return "da";
+
+
+            case "CursoDagua":
+            case "Dossel":
+            case "Subosque":
+                return "do";
+
+            case "Epifitas":
+                return "das";
+
+            default:
+                Debug.LogWarning("Área desconhecida: " + areaName);
+                return "";
+        }
+    }
+
+
+    private void UpdateText()
+    {
+        NativeCameraExample cameraExample = FindObjectOfType<NativeCameraExample>();
+
+        if (cameraExample == null || string.IsNullOrEmpty(cameraExample.currentArea))
+        {
+            Debug.LogWarning("Área atual não encontrada");
+            return;
+        }
+
+        string suffix = GetSuffixByArea(cameraExample.currentArea);
+        string areaName = cameraExample.currentArea;
+
+        string areaFormatted = FormatAreaName(cameraExample.currentArea);
+
+        infoText.text =
+            "Agora que você sabe mais sobre esse ambiente, tire uma foto "
+            + suffix + " " + areaFormatted;
+
+
+    }
+
+    private string FormatAreaName(string area)
+    {
+        switch (area)
+        {
+            case "CursoDagua": return "Curso d’água";
+            case "Serrapilheira": return "Serrapilheira";
+            case "Dossel": return "Dossel";
+            case "Subosque": return "Sub-bosque";
+            case "Epifitas": return "Epífitas";
+            default: return area;
         }
     }
 

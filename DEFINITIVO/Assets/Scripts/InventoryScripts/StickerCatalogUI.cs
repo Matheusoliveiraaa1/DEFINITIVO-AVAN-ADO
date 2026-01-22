@@ -5,6 +5,12 @@ using System.Linq;
 
 public class StickerCatalogUI : MonoBehaviour
 {
+
+
+    [Header("UI Feedback")]
+    public LockedStickerHintController lockedStickerHint;
+
+
     public RectTransform content;
     public GameObject stickerSlotPrefab;
 
@@ -30,6 +36,8 @@ public class StickerCatalogUI : MonoBehaviour
 
     // NOVO: Mapa para comparação confiável de sprites
     private Dictionary<string, Sprite> stickerSpriteMap = new Dictionary<string, Sprite>();
+
+
 
     void Start()
     {
@@ -268,7 +276,13 @@ public class StickerCatalogUI : MonoBehaviour
             else
             {
                 Debug.Log("Sticker ainda não desbloqueado!");
+
+                if (lockedStickerHint != null)
+                {
+                    lockedStickerHint.ShowOrExtend();
+                }
             }
+
         }
     }
 
@@ -279,7 +293,10 @@ public class StickerCatalogUI : MonoBehaviour
         darkOverlayObj.transform.SetParent(slot.transform, false);
 
         Image darkOverlayImage = darkOverlayObj.AddComponent<Image>();
-        darkOverlayImage.color = new Color(0f, 0f, 0f, 0.85f); // preto semi-transparente
+        darkOverlayImage.color = new Color(0f, 0f, 0f, 0.85f);
+
+        // 🚨 ISSO É O MAIS IMPORTANTE
+        darkOverlayImage.raycastTarget = false;
 
         RectTransform darkRect = darkOverlayObj.GetComponent<RectTransform>();
         darkRect.anchorMin = Vector2.zero;
@@ -288,22 +305,15 @@ public class StickerCatalogUI : MonoBehaviour
         darkRect.offsetMax = Vector2.zero;
         darkRect.localScale = Vector3.one;
 
-        // Posiciona atrás do sticker
-        darkOverlayObj.transform.SetSiblingIndex(1); // Após a imagem do sticker
-
-        // Começa ativado (todos começam escuros)
+        darkOverlayObj.transform.SetSiblingIndex(1);
         darkOverlayObj.SetActive(true);
 
-        // Guarda referência
         if (index >= darkOverlays.Count)
-        {
             darkOverlays.Add(darkOverlayObj);
-        }
         else
-        {
             darkOverlays[index] = darkOverlayObj;
-        }
     }
+
 
     // MODIFICADO: Checkmark pequeno no canto
     void CreateCheckmarkForSlot(GameObject slot, int index)
