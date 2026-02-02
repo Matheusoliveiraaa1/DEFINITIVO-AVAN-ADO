@@ -5,6 +5,9 @@ using System.IO;
 
 public class GalleryManager : MonoBehaviour
 {
+
+
+
     [System.Serializable]
     public class AreaSlot
     {
@@ -26,6 +29,15 @@ public class GalleryManager : MonoBehaviour
     private Dictionary<string, string> savedImagePaths = new Dictionary<string, string>();
 
     private Texture2D currentFullTexture; // ✅ controle de memória
+
+    void Awake()
+    {
+        if (!Application.isPlaying)
+            return;
+    }
+
+
+
 
     private void Start()
     {

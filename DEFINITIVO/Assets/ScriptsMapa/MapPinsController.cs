@@ -3,9 +3,46 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections.Generic;
 using System.Collections;
+using System.IO;
 
 public class MapPinsController : MonoBehaviour
+
+
 {
+
+    [Header("Bloco de Stickers")]
+    public GameObject stickersBlock;
+
+
+
+
+
+
+
+    [Header("Video do Mapa")]
+    public MapVideoPlayer mapVideoPlayer;
+
+    private Texture placeholderDecoratedThumb; // guarda o placeholder original
+
+
+
+    [Header("Thumbnail do Vídeo")]
+    public Button videoButton;          // botão central
+    public Image videoImage;            // imagem da thumb
+    public Sprite lockedVideoSprite;    // imagem bloqueada
+    public Sprite unlockedVideoSprite;  // imagem desbloqueada
+
+
+
+    [Header("Foto Decorada")]
+    public RawImage decoratedImageThumb;        // miniatura
+    public GameObject decoratedImageFullPanel;  // overlay da foto grande
+    public RawImage decoratedImageFull;         // foto grande
+    public Button decoratedImageBackButton;     // botão voltar
+
+
+
+
     [Header("Referências")]
     public RectTransform mapRectTransform; // Referência para o mapa
     public Button pinPrefab; // Prefab do pin (deve ter Image)
@@ -19,8 +56,7 @@ public class MapPinsController : MonoBehaviour
     public Sprite completedPinSprite; // sprite após concluir a área (vermelho)
 
 
-    [Header("Painel de Stickers")]
-    public GameObject stickersPanel;
+   
     public Transform stickersContentParent;
     public GameObject stickerImagePrefab;
 
@@ -123,6 +159,9 @@ public class MapPinsController : MonoBehaviour
 
     void Awake()
     {
+
+        if (!Application.isPlaying)
+            return;
         if (Instance == null) Instance = this;
         else if (Instance != this) Destroy(gameObject);
     }
@@ -138,23 +177,44 @@ public class MapPinsController : MonoBehaviour
         if (largeImageBackButton != null)
             largeImageBackButton.gameObject.SetActive(false);
 
-
-
         spawnedPins.Clear();
+
+        // Guarda a textura inicial do thumb como placeholder
+        if (decoratedImageThumb != null)
+            placeholderDecoratedThumb = decoratedImageThumb.texture;
+
+
         if (speciesOverlayPanel != null)
             speciesOverlayPanel.SetActive(false);
 
+        // ======= ADICIONA E MARCA OS PINS =========
+        foreach (var pin in pins)
+        {
+            AddPin(pin);
 
-        foreach (var pin in pins) AddPin(pin);
+            // Verifica se já foi visitado em sessões anteriores
+            if (PlayerPrefs.GetInt("Visited_" + pin.pinName, 0) == 1) // 0 = não visitado
+            {
+                // Marca o pin como visitado sem salvar de novo
+                if (spawnedPins.TryGetValue(pin.pinName, out Button pinButton))
+                {
+                    Image pinImage = pinButton.GetComponent<Image>();
+                    if (pinImage != null && completedPinSprite != null)
+                    {
+                        pinImage.sprite = completedPinSprite;
+                        pinImage.preserveAspect = true;
+                    }
+                }
+            }
+        }
 
-        if (areaInfoPanel != null) areaInfoPanel.SetActive(false);
-        if (stickersPanel != null) stickersPanel.SetActive(false);
-        if (speciesInfoPanel != null) speciesInfoPanel.SetActive(false);
-
-     
-
-
+        if (areaInfoPanel != null)
+            areaInfoPanel.SetActive(false);
+      
+        if (speciesInfoPanel != null)
+            speciesInfoPanel.SetActive(false);
     }
+
 
     void AddPin(PinData pinData)
     {
@@ -179,63 +239,126 @@ public class MapPinsController : MonoBehaviour
 
 
     void OnPinClicked(PinData pinData)
-    {
-        if (pinData.pinName == "Área 1" || pinData.pinName == "Área 2" || pinData.pinName == "Área Teste") return;
 
+
+    {
+
+        
+
+        // Evita pins de teste
+        if (pinData.pinName == "Área 1" || pinData.pinName == "Área 2" || pinData.pinName == "Área Teste")
+            return;
+
+        // Histórico de navegação
         panelHistory.Push(areaInfoPanel);
         areaInfoPanel.SetActive(true);
+
+        // Título e descrição
         areaTitleText.text = GetDisplayName(pinData.pinName);
         areaDescriptionText.text = string.IsNullOrEmpty(pinData.description) ? "Sem descrição disponível." : pinData.description;
 
+        // ---------- IMAGEM ORIGINAL ----------
         if (areaImage != null)
         {
             switch (pinData.pinName)
             {
-                case "CursoDagua":
-                    areaImage.sprite = cursoDaguaImage;
-                    break;
-                case "Subosque":
-                    areaImage.sprite = subosqueImage;
-                    break;
-                case "Dossel":
-                    areaImage.sprite = dosselImage;
-                    break;
-                case "Epifitas":
-                    areaImage.sprite = epifitasImage;
-                    break;
-                case "Serrapilheira":
-                    areaImage.sprite = serrapilheiraImage;
-                    break;
-                default:
-                    areaImage.sprite = null; // ou uma imagem padrão
-                    break;
+                case "CursoDagua": areaImage.sprite = cursoDaguaImage; break;
+                case "Subosque": areaImage.sprite = subosqueImage; break;
+                case "Dossel": areaImage.sprite = dosselImage; break;
+                case "Epifitas": areaImage.sprite = epifitasImage; break;
+                case "Serrapilheira": areaImage.sprite = serrapilheiraImage; break;
+                default: areaImage.sprite = null; break;
             }
-            areaImage.preserveAspect = true; // garante que não distorce
+            areaImage.preserveAspect = true;
         }
 
+        // ---------- FOTO DECORADA ----------
+        string photoPath = Path.Combine(Application.temporaryCachePath, $"{pinData.pinName}_photo.jpg");
+
+        // sempre mostra a miniatura (placeholder inicial)
+        decoratedImageThumb.gameObject.SetActive(true);
+        decoratedImageFullPanel.SetActive(false); // overlay inicia fechado
+
+        Button thumbButton = decoratedImageThumb.GetComponent<Button>();
+        thumbButton.onClick.RemoveAllListeners(); // limpa listeners antigos
+
+        if (File.Exists(photoPath))
+        {
+            byte[] bytes = File.ReadAllBytes(photoPath);
+            Texture2D tex = new Texture2D(2, 2);
+            tex.LoadImage(bytes);
+
+            // substitui placeholder pela foto real
+            decoratedImageThumb.texture = tex;
+            decoratedImageFull.texture = tex;
+
+            // ativa botão e adiciona listener
+            thumbButton.interactable = true;
+            thumbButton.onClick.AddListener(() =>
+            {
+                decoratedImageFullPanel.SetActive(true);
+            });
+        }
+        else
+        {
+            // restaura o placeholder original
+            decoratedImageThumb.texture = placeholderDecoratedThumb;
+            decoratedImageFull.texture = placeholderDecoratedThumb;
+
+            // desativa botão, não clicável
+            thumbButton.interactable = false;
+        }
+
+        // botão voltar da foto grande
+        decoratedImageBackButton.onClick.RemoveAllListeners();
+        decoratedImageBackButton.onClick.AddListener(() =>
+        {
+            decoratedImageFullPanel.SetActive(false);
+        });
+
+        // ---------- VÍDEO ----------
+        UpdateVideoThumb(pinData.pinName);
+
+        ShowStickerImages(pinData.pinName);
 
 
+        // ---------- STICKERS ----------
 
 
-        viewStickersButton.onClick.RemoveAllListeners();
-        viewStickersButton.onClick.AddListener(() => OpenStickers(pinData.pinName));
     }
 
-    void OpenStickers(string areaName)
-    {
-        panelHistory.Push(stickersPanel);
-        ShowStickerImages(areaName);
 
-        if (stickersPanel != null) stickersPanel.SetActive(true);
-        areaInfoPanel.SetActive(false);
-        speciesInfoPanel.SetActive(false);
-    }
+
+
+
+
+
+
+
+
 
     void ShowStickerImages(string areaName)
+
+
     {
-        foreach (Transform child in stickersContentParent) Destroy(child.gameObject);
+
+        Debug.Log("===== ShowStickerImages =====");
+        Debug.Log("areaName: [" + areaName + "]");
+        Debug.Log("stickersContentParent: " + stickersContentParent);
+        Debug.Log("stickerImagePrefab: " + stickerImagePrefab);
+
+        Debug.Log("Chegou antes da linha 377");
+
+
+        // garante que o bloco está visível
+        stickersBlock.SetActive(true);
+
+        // limpa stickers antigos
+        foreach (Transform child in stickersContentParent)
+            Destroy(child.gameObject);
 
         Sprite[] stickerSprites = null;
+
         switch (areaName)
         {
             case "CursoDagua": stickerSprites = cursoDaguaStickers; break;
@@ -243,29 +366,43 @@ public class MapPinsController : MonoBehaviour
             case "Dossel": stickerSprites = dosselStickers; break;
             case "Epifitas": stickerSprites = epifitasStickers; break;
             case "Serrapilheira": stickerSprites = serrapilheiraStickers; break;
-            default: Debug.LogWarning("Área não reconhecida: " + areaName); return;
+            default:
+                Debug.LogWarning("Área não reconhecida: " + areaName);
+                return;
         }
 
         if (stickerSprites == null || stickerSprites.Length == 0)
-        {
-            Debug.Log("Nenhuma imagem de sticker configurada para " + areaName);
             return;
-        }
 
         foreach (var sprite in stickerSprites)
         {
             if (sprite == null) continue;
 
+            // Instancia o prefab dentro do content
             GameObject newImageObj = Instantiate(stickerImagePrefab, stickersContentParent);
-            Image newImage = newImageObj.GetComponent<Image>();
-            newImage.sprite = sprite;
-            newImage.preserveAspect = true;
 
+            // 🔹 Reset do transform para LayoutGroup funcionar
+            RectTransform rt = newImageObj.GetComponent<RectTransform>();
+            rt.localScale = Vector3.one;
+            rt.anchoredPosition = Vector2.zero;
+            rt.localRotation = Quaternion.identity;
+
+            // Configura a imagem
+            Image img = newImageObj.GetComponent<Image>();
+            img.sprite = sprite;
+            img.preserveAspect = true;
+
+            // Configura o botão
             Button btn = newImageObj.GetComponent<Button>();
-            if (btn == null) btn = newImageObj.AddComponent<Button>();
+            btn.onClick.RemoveAllListeners();
             btn.onClick.AddListener(() => OpenSpeciesInfo(sprite));
         }
+
+
+        // força o scroll recalcular tamanho
+        Canvas.ForceUpdateCanvases();
     }
+
 
     public void OpenSpeciesInfo(Sprite clickedSticker)
     {
@@ -276,7 +413,9 @@ public class MapPinsController : MonoBehaviour
         {
             Debug.Log("MAP: Comparando com sticker da espécie: " + s.stickerSprite?.name);
 
-            if (s.stickerSprite == clickedSticker)
+            if (s.stickerSprite != null && clickedSticker != null &&
+       s.stickerSprite.name == clickedSticker.name)
+
             {
                 found = s;
                 Debug.Log("MAP: ESPÉCIE ENCONTRADA: " + s.commonName);
@@ -307,7 +446,7 @@ public class MapPinsController : MonoBehaviour
 
 
         speciesInfoPanel.SetActive(true);
-        stickersPanel.SetActive(false);
+     
         areaInfoPanel.SetActive(false);
 
         backButton.onClick.RemoveAllListeners();
@@ -421,31 +560,19 @@ public class MapPinsController : MonoBehaviour
             return;
         }
 
-        if (debugText != null)
-            debugText.text += "\nPin encontrado";
-
         Image pinImage = pinButton.GetComponent<Image>();
-        if (pinImage == null)
-        {
-            if (debugText != null)
-                debugText.text += "\nPin SEM Image";
+        if (pinImage == null || completedPinSprite == null) return;
 
-            return;
-        }
-
-        if (completedPinSprite == null)
-        {
-            if (debugText != null)
-                debugText.text += "\ncompletedPinSprite é NULL";
-
-            return;
-        }
-
+        // Troca o sprite do pin
         pinImage.sprite = completedPinSprite;
         pinImage.preserveAspect = true;
 
+        // ======= SALVA A PERSISTÊNCIA =======
+        PlayerPrefs.SetInt("Visited_" + areaName, 1); // 1 = visitado
+        PlayerPrefs.Save(); // garante que seja salvo imediatamente
+
         if (debugText != null)
-            debugText.text += "\nSPRITE ALTERADO COM SUCESSO";
+            debugText.text += "\nSPRITE ALTERADO E SALVO COM SUCESSO";
     }
 
 
@@ -561,6 +688,57 @@ public class MapPinsController : MonoBehaviour
         yield return new WaitForSeconds(1f);
         StartCoroutine(PlayTutorialImage());
     }
+
+
+    string GetVideoFileForArea(string areaName)
+    {
+        switch (areaName)
+        {
+            case "CursoDagua":
+                return "TESTE.mp4";
+
+            case "Serrapilheira":
+                return "TESTE.mp4";
+
+            case "Epifitas":
+                return "TESTE.mp4";
+
+            case "Subosque":
+                return "subosque.mp4";
+
+            case "Dossel":
+                return "dossel.mp4";
+
+            default:
+                Debug.LogError("❌ Área desconhecida recebida: [" + areaName + "]");
+                return "TESTE.mp4";
+        }
+    }
+
+
+    void UpdateVideoThumb(string areaName)
+    {
+        bool unlocked = VideoUnlockManager.IsUnlocked(areaName);
+
+        // Define a imagem correta
+        videoImage.sprite = unlocked ? unlockedVideoSprite : lockedVideoSprite;
+        videoImage.preserveAspect = true;
+
+        // Configura o botão
+        videoButton.interactable = unlocked;
+        videoButton.onClick.RemoveAllListeners();
+
+        if (unlocked)
+        {
+            videoButton.onClick.AddListener(() =>
+            {
+                string videoFile = GetVideoFileForArea(areaName);
+                mapVideoPlayer.Play(areaName, videoFile);
+            });
+        }
+    }
+
+
 
 
 

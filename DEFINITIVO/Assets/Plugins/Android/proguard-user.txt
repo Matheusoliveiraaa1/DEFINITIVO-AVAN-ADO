@@ -1,0 +1,4 @@
+-keep class com.unity3d.player.** { *; }
+-keepclassmembers class * extends UnityEngine.MonoBehaviour {
+    public void OnServiceStoppedFromNotification(java.lang.String);
+}

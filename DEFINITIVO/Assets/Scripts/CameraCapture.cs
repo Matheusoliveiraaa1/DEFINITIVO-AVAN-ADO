@@ -7,10 +7,13 @@ using System; // Necessário para System.GC
 
 public class NativeCameraExample : MonoBehaviour
 {
+
+
+
     [Header("Photo Display")]
     public RawImage imageDisplay;
     public GameObject closeButton;
-    public string currentArea;
+    [HideInInspector]  public string currentArea;
 
     [Header("Sticker Settings")]
     public Transform stickerMenuContent;
@@ -32,6 +35,12 @@ public class NativeCameraExample : MonoBehaviour
     public GameObject okButton;
     public GameObject backButton; // 🆕 Botão "Voltar"
 
+    [Header("Imagem Deslizante Pós Confirmação")]
+    public RectTransform confirmSlidingImage;
+    public float confirmSlideDuration = 0.5f;
+    public float confirmSlideStayTime = 5f;
+
+
 
 
     [Header("Imagem Deslizante")]
@@ -46,8 +55,8 @@ public class NativeCameraExample : MonoBehaviour
     public Button nextPageButton;
     public Button prevPageButton;
 
-    private List<GameObject[]> stickerPages = new List<GameObject[]>();
-    private int currentPageIndex = 0;
+    [HideInInspector] private List<GameObject[]> stickerPages = new List<GameObject[]>();
+    [HideInInspector] private int currentPageIndex = 0;
 
 
 
@@ -81,8 +90,11 @@ public class NativeCameraExample : MonoBehaviour
     public TextMeshProUGUI areaTesteCountText;
 
     private List<StickerController> activeStickers = new List<StickerController>();
+    [NonSerialized]
     private Dictionary<GameObject, string> stickerAreaCache = new Dictionary<GameObject, string>();
+    [NonSerialized]
     private Dictionary<GameObject, int> stickerIndexCache = new Dictionary<GameObject, int>();
+    [NonSerialized]
     private Dictionary<string, int> spawnedStickersCount = new Dictionary<string, int>();
 
 
@@ -94,10 +106,17 @@ public class NativeCameraExample : MonoBehaviour
 
     private Dictionary<string, StickerState> stickerStates
         = new Dictionary<string, StickerState>();
+    void Awake()
+    {
+        if (!Application.isPlaying)
+            return;
+    }
 
 
     private void Start()
     {
+        if (!Application.isPlaying)
+            return;
         stickerMenuScrollView?.SetActive(false);
         closeButton?.SetActive(false);
         locationManager ??= FindAnyObjectByType<LocationServiceManager>();
@@ -152,6 +171,59 @@ public class NativeCameraExample : MonoBehaviour
             }
         }
     }
+
+
+    private IEnumerator PlayConfirmSlidingImage()
+    {
+        if (confirmSlidingImage == null)
+            yield break;
+
+        confirmSlidingImage.gameObject.SetActive(true);
+
+        Vector2 finalPos = confirmSlidingImage.anchoredPosition;
+
+        Vector2 offScreenLeft = new Vector2(
+            finalPos.x - Screen.width,
+            finalPos.y
+        );
+
+        Vector2 offScreenRight = new Vector2(
+            finalPos.x + Screen.width,
+            finalPos.y
+        );
+
+        // COMEÇA FORA DA TELA (ESQUERDA)
+        confirmSlidingImage.anchoredPosition = offScreenLeft;
+
+        // ===== ENTRADA (esquerda → centro) =====
+        float t = 0f;
+        while (t < confirmSlideDuration)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.Clamp01(t / confirmSlideDuration);
+            confirmSlidingImage.anchoredPosition =
+                Vector2.Lerp(offScreenLeft, finalPos, p);
+            yield return null;
+        }
+
+        // ===== PERMANECE =====
+        yield return new WaitForSeconds(confirmSlideStayTime);
+
+        // ===== SAÍDA (centro → esquerda) =====
+        t = 0f;
+        while (t < confirmSlideDuration)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.Clamp01(t / confirmSlideDuration);
+            confirmSlidingImage.anchoredPosition =
+                Vector2.Lerp(finalPos, offScreenLeft, p);
+            yield return null;
+        }
+
+        confirmSlidingImage.gameObject.SetActive(false);
+    }
+
+
 
     public bool CanAddSticker() => activeStickers.Count < maxStickersPerPhoto;
 
@@ -744,7 +816,9 @@ public class NativeCameraExample : MonoBehaviour
         GC.Collect();
 
         ClosePhotoView();
+        StartCoroutine(PlayConfirmSlidingImage());
         UpdateAllCountersFromLocationManager();
+
         // 🔴 AVISA O MAPA QUE A ÁREA FOI CONCLUÍDA
         if (!string.IsNullOrEmpty(currentArea) && MapPinsController.Instance != null)
         {

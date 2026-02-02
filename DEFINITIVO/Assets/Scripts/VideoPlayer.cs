@@ -91,5 +91,18 @@ public class VideoAutoPlayer : MonoBehaviour
 
             Debug.LogError("❌ PostVideoImageController NÃO atribuído no Inspector!");
         }
+
+        // 🔓 Marca vídeo como desbloqueado permanentemente
+        if (!string.IsNullOrEmpty(VideoPlayState.CurrentVideoFile))
+        {
+            string areaName = FindAnyObjectByType<NativeCameraExample>()?.currentArea;
+            if (!string.IsNullOrEmpty(areaName))
+            {
+                VideoUnlockManager.Unlock(areaName);
+                Debug.Log("🔓 Vídeo desbloqueado para área: " + areaName);
+            }
+        }
+
+
     }
 }

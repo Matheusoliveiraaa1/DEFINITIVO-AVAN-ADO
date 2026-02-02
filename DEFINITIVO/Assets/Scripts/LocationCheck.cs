@@ -7,8 +7,17 @@ using System.Linq;
 using System;
 using UnityEngine.Android;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+
 public class LocationServiceManager : MonoBehaviour
 {
+
+
+
+
     [Header("UI References")]
     public TextMeshProUGUI latitudeText;
     public TextMeshProUGUI longitudeText;
@@ -27,7 +36,7 @@ public class LocationServiceManager : MonoBehaviour
 
     [Header("Points of Interest")]
     public List<AreaPoint> areaPoints = new List<AreaPoint>();
-    public List<StickerPoint> stickerPoints = new List<StickerPoint>();
+   public List<StickerPoint> stickerPoints = new List<StickerPoint>();
 
 
     [Header("Park Entries")]
@@ -89,8 +98,9 @@ public class LocationServiceManager : MonoBehaviour
         public StickerEntryMode entryMode;
     }
 
-
+    [NonSerialized]
     private Dictionary<string, List<int>> collectedStickers = new Dictionary<string, List<int>>();
+    [NonSerialized]
     private Dictionary<string, List<int>> usedStickers = new Dictionary<string, List<int>>(); // NOVO: stickers usados nas fotos confirmadas
     private List<PointOfInterest> allPoints = new List<PointOfInterest>();
 
@@ -152,25 +162,36 @@ public class LocationServiceManager : MonoBehaviour
     // CARREGA o estado antes de qualquer Start() - evita problema de ordem de execução.
     private void Awake()
     {
-        LoadStartMode();           // 🔹 NOVO
+        if (!Application.isPlaying)
+            return;
+
+        LoadStartMode();
         LoadCollectedStickers();
         LoadUsedStickers();
     }
 
 
+
     private void Start()
     {
+      
+
+        if (!Application.isPlaying)
+            return;
+
         InitializePoints();
         cameraButton.SetActive(false);
+
         if (stickerNotificationImage != null)
             stickerNotificationImage.gameObject.SetActive(false);
 
-        // Se o InventoryManager estiver referenciado via inspector, força uma atualização da UI (Start rodará depois do Awake).
-        inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
+        if (Application.isPlaying)
+            inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
         inventoryManager?.UpdateInventoryUI();
 
         StartCoroutine(StartLocationService());
     }
+
 
     private void LoadStartMode()
     {
@@ -422,6 +443,7 @@ public class LocationServiceManager : MonoBehaviour
         messageText.text = poi.message;
         Handheld.Vibrate();
 
+
         NativeCameraExample cameraExample = FindObjectOfType<NativeCameraExample>();
         if (cameraExample != null)
         {
@@ -499,7 +521,7 @@ public class LocationServiceManager : MonoBehaviour
 
 
 
-    private string GetVideoFileForArea(string areaName)
+    public string GetVideoFileForArea(string areaName)
     {
         switch (areaName)
         {
@@ -649,7 +671,8 @@ public class LocationServiceManager : MonoBehaviour
             }
             else
             {
-                inventoryManager = FindObjectOfType<InventoryManager>();
+                if (Application.isPlaying)
+                    inventoryManager = FindObjectOfType<InventoryManager>();
                 inventoryManager?.UpdateInventoryUI();
             }
         }
@@ -658,6 +681,7 @@ public class LocationServiceManager : MonoBehaviour
     // NOVO: Notifica o StickerCatalogUI sobre o novo sticker
     private void NotifyStickerCatalog(string areaName, int stickerIndex)
     {
+
         StickerCatalogUI catalog = FindObjectOfType<StickerCatalogUI>();
         if (catalog != null)
         {
