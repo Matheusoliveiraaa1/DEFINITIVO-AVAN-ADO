@@ -11,20 +11,8 @@ using UnityEngine.Android;
 using UnityEditor;
 #endif
 
-#if UNITY_IOS
-using System.Runtime.InteropServices;
-#endif
-
 public class LocationServiceManager : MonoBehaviour
 {
-#if UNITY_IOS
-    [DllImport("__Internal")]
-    private static extern void StartNativeiOS(string data);
-    
-    [DllImport("__Internal")]
-    private static extern void StopNativeiOS();
-#endif
-
     [Header("UI References")]
     public TextMeshProUGUI latitudeText;
     public TextMeshProUGUI longitudeText;
@@ -159,95 +147,27 @@ public class LocationServiceManager : MonoBehaviour
     // CARREGA o estado antes de qualquer Start() - evita problema de ordem de execução.
     private void Awake()
     {
-        if (!Application.isPlaying) return;
 
+        // CUIDADO: Isso apaga TUDO do PlayerPrefs toda vez que o app inicia.
+        // Use apenas para garantir que o celular limpou tudo.
+       
+
+        Debug.Log("LocationServiceManager AWAKE: " + GetInstanceID());
+
+        if (!Application.isPlaying) return;
         LoadStartMode();
         LoadCollectedStickers();
         LoadUsedStickers();
     }
 
-    private void StartBackgroundService()
-    {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        try
-        {
-            string data = BuildGeofenceDataForService();
-            
-            using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-            {
-                AndroidJavaObject context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity")
-                    .Call<AndroidJavaObject>("getApplicationContext");
-                
-                AndroidJavaClass serviceClass = new AndroidJavaClass("com.unity.location.UnityLocationService");
-                AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent", context, serviceClass);
-                intent.Call<AndroidJavaObject>("putExtra", "points_data", data);
-                
-                using (AndroidJavaClass version = new AndroidJavaClass("android.os.Build$VERSION"))
-                {
-                    if (version.GetStatic<int>("SDK_INT") >= 26)
-                        context.Call<AndroidJavaObject>("startForegroundService", intent);
-                    else
-                        context.Call<AndroidJavaObject>("startService", intent);
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.LogError("[BG SERVICE] " + e.Message);
-        }
-#elif UNITY_IOS && !UNITY_EDITOR
-        StartNativeiOS(BuildGeofenceDataForService());
-#endif
-    }
-
-    private void StopBackgroundService()
-    {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
-        {
-            AndroidJavaObject context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity")
-                .Call<AndroidJavaObject>("getApplicationContext");
-            
-            AndroidJavaObject intent = new AndroidJavaObject(
-                "android.content.Intent",
-                context,
-                new AndroidJavaClass("com.unity.location.UnityLocationService")
-            );
-            intent.Call<AndroidJavaObject>("setAction", "STOP_SERVICE");
-            context.Call<AndroidJavaObject>("startService", intent);
-        }
-#elif UNITY_IOS && !UNITY_EDITOR
-        StopNativeiOS();
-#endif
-    }
-
     private void Start()
     {
         if (!Application.isPlaying) return;
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-        // 🔔 Android 13+
-        if (GetAndroidSDK() >= 33 && !Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
-        {
-            Permission.RequestUserPermission("android.permission.POST_NOTIFICATIONS");
-        }
-        
-        // 📍 Android 10+ → localização em background
-        if (GetAndroidSDK() >= 29 && !Permission.HasUserAuthorizedPermission("android.permission.ACCESS_BACKGROUND_LOCATION"))
-        {
-            Permission.RequestUserPermission("android.permission.ACCESS_BACKGROUND_LOCATION");
-        }
-#endif
-
         InitializePoints();
         cameraButton.SetActive(false);
-
-        if (stickerNotificationImage != null)
-            stickerNotificationImage.gameObject.SetActive(false);
-
-        inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
+        if (stickerNotificationImage != null) stickerNotificationImage.gameObject.SetActive(false);
+        if (Application.isPlaying) inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
         inventoryManager?.UpdateInventoryUI();
-
         StartCoroutine(StartLocationService());
     }
 
@@ -262,24 +182,20 @@ public class LocationServiceManager : MonoBehaviour
     private void SetStartMode(ParkStartMode mode)
     {
         if (currentStartMode != ParkStartMode.None) return;
-
         currentStartMode = mode;
         PlayerPrefs.SetInt(START_MODE_KEY, (int)mode);
         PlayerPrefs.Save();
-
         Debug.Log("🚪 Entrada inicial detectada: " + mode);
     }
 
     private void DetectStartEntry(LocationInfo data)
     {
         if (currentStartMode != ParkStartMode.None) return;
-
         double distEntry1 = CalculateDistance(
             data.latitude,
             data.longitude,
             entry1.latitude,
             entry1.longitude);
-
         double distEntry2 = CalculateDistance(
             data.latitude,
             data.longitude,
@@ -299,7 +215,6 @@ public class LocationServiceManager : MonoBehaviour
     private void InitializePoints()
     {
         allPoints.Clear();
-
         foreach (var ap in areaPoints)
         {
             allPoints.Add(new PointOfInterest(
@@ -309,7 +224,6 @@ public class LocationServiceManager : MonoBehaviour
                 false,
                 ap.areaName));
         }
-
         foreach (var sp in stickerPoints)
         {
             allPoints.Add(new PointOfInterest(
@@ -326,6 +240,7 @@ public class LocationServiceManager : MonoBehaviour
 
     private IEnumerator StartLocationService()
     {
+        // Adicione esta verificação inicial
         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation) ||
                !Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
         {
@@ -339,7 +254,6 @@ public class LocationServiceManager : MonoBehaviour
         }
 
         Input.location.Start(1f, 0.1f);
-
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
@@ -354,17 +268,6 @@ public class LocationServiceManager : MonoBehaviour
         }
 
         InvokeRepeating(nameof(UpdateLocation), 0f, 0.5f);
-
-#if UNITY_ANDROID && !UNITY_EDITOR
-        // ⚠️ Android 10+ exige permissão "o tempo todo"
-        if (GetAndroidSDK() >= 29 && !Permission.HasUserAuthorizedPermission("android.permission.ACCESS_BACKGROUND_LOCATION"))
-        {
-            Debug.Log("⚠️ Ative 'Permitir o tempo todo' para localização.");
-        }
-#endif
-
-        // ✅ GARANTE que o background já sobe com os pontos carregados
-        StartBackgroundService();
     }
 
     private void UpdateLocation()
@@ -401,19 +304,14 @@ public class LocationServiceManager : MonoBehaviour
 
     private bool IsStickerAllowedForCurrentMode(PointOfInterest poi)
     {
-        if (currentStartMode == ParkStartMode.Entry1 && poi.entryMode == StickerEntryMode.Entry1)
-            return true;
-
-        if (currentStartMode == ParkStartMode.Entry2 && poi.entryMode == StickerEntryMode.Entry2)
-            return true;
-
+        if (currentStartMode == ParkStartMode.Entry1 && poi.entryMode == StickerEntryMode.Entry1) return true;
+        if (currentStartMode == ParkStartMode.Entry2 && poi.entryMode == StickerEntryMode.Entry2) return true;
         return false;
     }
 
     private void CheckNearbyPoints(LocationInfo data)
     {
         DetectStartEntry(data); // 🔹 NOVO
-
         if (currentStartMode == ParkStartMode.None) return; // ainda não entrou no parque
 
         bool isInsideAnyArea = false;
@@ -423,18 +321,15 @@ public class LocationServiceManager : MonoBehaviour
         foreach (var poi in allPoints)
         {
             double distance = CalculateDistance(data.latitude, data.longitude, poi.latitude, poi.longitude);
-
             // Dentro do raio de detecção
             if (distance <= detectionRadius)
             {
                 isInsideAnyArea = true;
                 activeArea = poi;
-
                 if (poi.isStickerPoint)
                 {
                     if (!IsStickerAllowedForCurrentMode(poi)) continue;
                 }
-
                 HandlePointTrigger(poi, ref isInsideAnyArea);
                 break;
             }
@@ -452,11 +347,8 @@ public class LocationServiceManager : MonoBehaviour
         else
         {
             // Fora de qualquer área → desativa câmera e limpa mensagens
-            if (cameraButton.activeSelf)
-                cameraButton.SetActive(false);
-
-            if (!string.IsNullOrEmpty(messageText.text))
-                StartCoroutine(HideNotificationAfterDelay(1.5f));
+            if (cameraButton.activeSelf) cameraButton.SetActive(false);
+            if (!string.IsNullOrEmpty(messageText.text)) StartCoroutine(HideNotificationAfterDelay(1.5f));
         }
 
         // -------------------------
@@ -467,8 +359,7 @@ public class LocationServiceManager : MonoBehaviour
         foreach (var poi in allPoints)
         {
             double distance = CalculateDistance(data.latitude, data.longitude, poi.latitude, poi.longitude);
-            if (distance > detectionRadius + 3f)
-                poi.alreadyTriggered = false;
+            if (distance > detectionRadius + 3f) poi.alreadyTriggered = false;
         }
     }
 
@@ -503,7 +394,6 @@ public class LocationServiceManager : MonoBehaviour
     {
         messageText.text = poi.message;
         Handheld.Vibrate();
-
         NativeCameraExample cameraExample = FindObjectOfType<NativeCameraExample>();
         if (cameraExample != null)
         {
@@ -524,9 +414,7 @@ public class LocationServiceManager : MonoBehaviour
         float elapsedTime = 0f;
 
         if (stickerNotificationImage == null) yield break;
-
         stickerNotificationImage.transform.localScale = Vector3.one * startScale;
-
         while (elapsedTime < duration)
         {
             float scale = Mathf.Lerp(startScale, endScale, elapsedTime / duration);
@@ -534,7 +422,6 @@ public class LocationServiceManager : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-
         stickerNotificationImage.transform.localScale = Vector3.one * endScale;
     }
 
@@ -542,7 +429,6 @@ public class LocationServiceManager : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         messageText.text = "";
-
         if (stickerNotificationImage != null && stickerNotificationImage.gameObject.activeSelf)
         {
             yield return StartCoroutine(ScaleAnimation(false));
@@ -557,40 +443,30 @@ public class LocationServiceManager : MonoBehaviour
             poi.alreadyTriggered = true;
             messageText.text = poi.message;
             Handheld.Vibrate();
-
             FindAnyObjectByType<NativeCameraExample>().currentArea = poi.areaName;
-
             // Resetar estado de vídeo para nova área
             // ✅ Resetar estado de vídeo para nova área
             VideoPlayState.Reset();
-
             // ✅ Define qual vídeo deve tocar nesta área
             VideoPlayState.CurrentVideoFile = GetVideoFileForArea(poi.areaName);
-
             // Mostrar overlay
             PhotoAreaOverlay.Show();
         }
 
         // Só habilita o botão da câmera se a área NÃO estiver completa
         bool allowCamera = !IsAreaCompleted(poi.areaName);
-        if (cameraButton != null)
-            cameraButton.SetActive(allowCamera);
+        if (cameraButton != null) cameraButton.SetActive(allowCamera);
     }
 
     public string GetVideoFileForArea(string areaName)
     {
         switch (areaName)
         {
-            case "CursoDagua":
-                return "TESTE.mp4";
-            case "Serrapilheira":
-                return "TESTE.mp4";
-            case "Epifitas":
-                return "TESTE.mp4";
-            case "Subosque":
-                return "subosque.mp4";
-            case "Dossel":
-                return "dossel.mp4";
+            case "CursoDagua": return "TESTE.mp4";
+            case "Serrapilheira": return "TESTE.mp4";
+            case "Epifitas": return "TESTE.mp4";
+            case "Subosque": return "subosque.mp4";
+            case "Dossel": return "dossel.mp4";
             default:
                 Debug.LogError("❌ Área desconhecida recebida: [" + areaName + "]");
                 return "TESTE.mp4"; // fallback de segurança
@@ -603,10 +479,7 @@ public class LocationServiceManager : MonoBehaviour
     private void RegisterUsedSticker(string areaName, int index)
     {
         if (index < 0) return;
-
-        if (!usedStickers.ContainsKey(areaName))
-            usedStickers[areaName] = new List<int>();
-
+        if (!usedStickers.ContainsKey(areaName)) usedStickers[areaName] = new List<int>();
         if (!usedStickers[areaName].Contains(index))
         {
             usedStickers[areaName].Add(index);
@@ -618,7 +491,6 @@ public class LocationServiceManager : MonoBehaviour
     public void MarkStickerAsUsed(string areaName, int index)
     {
         RegisterUsedSticker(areaName, index);
-
         // se atingiu 6 então marca área como completa implicitamente (persistência é através de usedStickers)
         if (GetUsedStickerCount(areaName) >= 6)
         {
@@ -635,8 +507,7 @@ public class LocationServiceManager : MonoBehaviour
 
     public int GetUsedStickerCount(string areaName)
     {
-        if (usedStickers.ContainsKey(areaName))
-            return usedStickers[areaName].Count;
+        if (usedStickers.ContainsKey(areaName)) return usedStickers[areaName].Count;
         return 0;
     }
 
@@ -648,7 +519,6 @@ public class LocationServiceManager : MonoBehaviour
     private void SaveUsedStickers()
     {
         UsedStickerSaveData data = new UsedStickerSaveData();
-
         foreach (var kvp in usedStickers)
         {
             data.areas.Add(new AreaStickerData
@@ -657,7 +527,6 @@ public class LocationServiceManager : MonoBehaviour
                 stickerIndices = kvp.Value
             });
         }
-
         string json = JsonUtility.ToJson(data);
         PlayerPrefs.SetString(GetUsedKey(), json);
         PlayerPrefs.Save();
@@ -667,7 +536,6 @@ public class LocationServiceManager : MonoBehaviour
     {
         usedStickers.Clear();
         usedStickers.Clear();
-
         string key = GetUsedKey();
         if (PlayerPrefs.HasKey(key))
         {
@@ -685,6 +553,7 @@ public class LocationServiceManager : MonoBehaviour
             }
         }
     }
+
     // --------------------------
     // Fim persistência usados
     // --------------------------
@@ -695,7 +564,6 @@ public class LocationServiceManager : MonoBehaviour
         {
             collectedStickers[poi.areaName] = new List<int>();
         }
-
         if (!collectedStickers[poi.areaName].Contains(poi.stickerIndex))
         {
             collectedStickers[poi.areaName].Add(poi.stickerIndex);
@@ -712,8 +580,7 @@ public class LocationServiceManager : MonoBehaviour
             }
             else
             {
-                if (Application.isPlaying)
-                    inventoryManager = FindObjectOfType<InventoryManager>();
+                if (Application.isPlaying) inventoryManager = FindObjectOfType<InventoryManager>();
                 inventoryManager?.UpdateInventoryUI();
             }
         }
@@ -739,11 +606,9 @@ public class LocationServiceManager : MonoBehaviour
         const double R = 6371000;
         double dLat = DegToRad(lat2 - lat1);
         double dLon = DegToRad(lon2 - lon1);
-
         double a = System.Math.Sin(dLat / 2) * System.Math.Sin(dLat / 2) +
                    System.Math.Cos(DegToRad(lat1)) * System.Math.Cos(DegToRad(lat2)) *
                    System.Math.Sin(dLon / 2) * System.Math.Sin(dLon / 2);
-
         double c = 2 * System.Math.Atan2(System.Math.Sqrt(a), System.Math.Sqrt(1 - a));
         return R * c;
     }
@@ -757,8 +622,7 @@ public class LocationServiceManager : MonoBehaviour
             int count = 0;
             foreach (int index in collectedStickers[areaName])
             {
-                if (index >= 3 && index <= 5)
-                    count++;
+                if (index >= 3 && index <= 5) count++;
             }
             return count;
         }
@@ -768,7 +632,6 @@ public class LocationServiceManager : MonoBehaviour
     private void SaveCollectedStickers()
     {
         StickerSaveData data = new StickerSaveData();
-
         foreach (var kvp in collectedStickers)
         {
             data.areas.Add(new AreaStickerData
@@ -777,11 +640,9 @@ public class LocationServiceManager : MonoBehaviour
                 stickerIndices = kvp.Value
             });
         }
-
         string json = JsonUtility.ToJson(data);
         PlayerPrefs.SetString(GetCollectedKey(), json);
         PlayerPrefs.Save();
-
         //Debug.Log("[LocationServiceManager] Saved stickers: " + json);
     }
 
@@ -789,7 +650,6 @@ public class LocationServiceManager : MonoBehaviour
     {
         collectedStickers.Clear();
         collectedStickers.Clear();
-
         string key = GetCollectedKey();
         if (PlayerPrefs.HasKey(key))
         {
@@ -815,15 +675,6 @@ public class LocationServiceManager : MonoBehaviour
         {
             SaveCollectedStickers();
             SaveUsedStickers();
-            CancelInvoke();
-            Input.location.Stop(); // foreground OFF
-            StartBackgroundService(); // background ON
-        }
-        else
-        {
-            StopBackgroundService(); // background OFF
-            Input.location.Start(1f, 0.1f);
-            InvokeRepeating(nameof(UpdateLocation), 0f, 0.5f);
         }
     }
 
@@ -847,42 +698,5 @@ public class LocationServiceManager : MonoBehaviour
     private string GetUsedKey()
     {
         return "UsedStickers_" + currentStartMode;
-    }
-
-    private int GetAndroidSDK()
-    {
-#if UNITY_ANDROID && !UNITY_EDITOR
-        using (AndroidJavaClass version = new AndroidJavaClass("android.os.Build$VERSION"))
-        {
-            return version.GetStatic<int>("SDK_INT");
-        }
-#else
-        return 0;
-#endif
-    }
-
-    private string BuildGeofenceDataForService()
-    {
-        System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-        foreach (var poi in allPoints)
-        {
-            // Usa areaName como ID estável
-            string safeName = poi.areaName
-                .Replace("|", "")
-                .Replace(";", "")
-                .Trim();
-
-            float radius = poi.isStickerPoint ? detectionRadius : detectionRadius;
-
-            sb.Append(
-                $"{safeName}|" +
-                $"{poi.latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}|" +
-                $"{poi.longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)}|" +
-                $"{radius.ToString(System.Globalization.CultureInfo.InvariantCulture)};"
-            );
-        }
-
-        return sb.ToString().TrimEnd(';');
     }
 }

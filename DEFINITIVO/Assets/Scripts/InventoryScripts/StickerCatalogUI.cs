@@ -41,6 +41,12 @@ public class StickerCatalogUI : MonoBehaviour
 
     void Start()
     {
+        Debug.Log("StickerCatalogUI START: " + GetInstanceID());
+
+
+
+
+
         InitializeStickerMap(); // Inicializa o mapa de sprites
         GenerateSlots();
         LoadInitialStickersFromLocationManager();

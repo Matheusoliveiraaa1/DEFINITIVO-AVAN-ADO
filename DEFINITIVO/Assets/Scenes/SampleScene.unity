@@ -9196,15 +9196,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1103364858}
   - component: {fileID: 1103364857}
-  - component: {fileID: 1103364856}
   - component: {fileID: 1103364854}
-  - component: {fileID: 1103364859}
   - component: {fileID: 1103364860}
   - component: {fileID: 1103364861}
   - component: {fileID: 1103364862}
   - component: {fileID: 1103364863}
   - component: {fileID: 1103364864}
   - component: {fileID: 1103364865}
+  - component: {fileID: 1103364866}
   m_Layer: 5
   m_Name: DevicesManager
   m_TagString: Untagged
@@ -9267,7 +9266,7 @@ MonoBehaviour:
   - {fileID: 2018666548081544111, guid: 9d3d00ffcda3cb246a901a6ab7c77d22, type: 3}
   areaTesteStickers: []
   locationManager: {fileID: 1103364857}
-  galleryManager: {fileID: 1103364859}
+  galleryManager: {fileID: 1103364866}
   photoAreaToCapture: {fileID: 2037489354}
   okButton: {fileID: 1626442314}
   backButton: {fileID: 2009529761}
@@ -9294,18 +9293,6 @@ MonoBehaviour:
   epifitasCountText: {fileID: 379072846}
   serrapilheiraCountText: {fileID: 1444877333}
   areaTesteCountText: {fileID: 1225525360}
---- !u!114 &1103364856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103364853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a565c006985e1084c938838e33b167e2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1103364857
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9325,14 +9312,10 @@ MonoBehaviour:
   cameraButton: {fileID: 1464722304}
   stickerNotificationImage: {fileID: 1323261248}
   areaTeste: 0
-  detectionRadius: 9
+  detectionRadius: 10
   entryDetectionRadius: 50
   notificationDuration: 3
   areaPoints:
-  - latitude: -26.921153
-    longitude: -49.072008
-    message: 
-    areaName: CursoDagua
   - latitude: -26.921064
     longitude: -49.07395
     message: 
@@ -9349,6 +9332,10 @@ MonoBehaviour:
     longitude: -49.0725
     message: 
     areaName: Serrapilheira
+  - latitude: -26.921153
+    longitude: -49.072008
+    message: 
+    areaName: CursoDagua
   stickerPoints:
   - latitude: -26.921272
     longitude: -49.071814
@@ -9404,8 +9391,8 @@ MonoBehaviour:
     longitude: -49.071814
   entry2:
     entryName: Entrada2
-    latitude: 222
-    longitude: 333
+    latitude: 0
+    longitude: 0
   inventoryManager: {fileID: 0}
 --- !u!224 &1103364858
 RectTransform:
@@ -9426,32 +9413,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1103364859
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1103364853}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4682fe228cbc7d84a8f366034cfd8e57, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  slots:
-  - areaName: CursoDagua
-    slotImage: {fileID: 570093688}
-  - areaName: Subosque
-    slotImage: {fileID: 1726187844}
-  - areaName: Dossel
-    slotImage: {fileID: 1172862730}
-  - areaName: Epifitas
-    slotImage: {fileID: 1217307033}
-  - areaName: Serrapilheira
-    slotImage: {fileID: 1724130134}
-  fullImagePanel: {fileID: 0}
-  fullImageDisplay: {fileID: 897202932}
-  galeriaPainel: {fileID: 1614823583}
 --- !u!114 &1103364860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9866,6 +9827,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ace0ae80ed8a0f241a644622bd1474a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1103364866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103364853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4682fe228cbc7d84a8f366034cfd8e57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slots: []
+  fullImagePanel: {fileID: 570093685}
+  fullImageDisplay: {fileID: 1172862730}
+  galeriaPainel: {fileID: 1614823583}
 --- !u!1 &1117080312
 GameObject:
   m_ObjectHideFlags: 0
@@ -16047,7 +16024,6 @@ GameObject:
   - component: {fileID: 1707952948}
   - component: {fileID: 1707952947}
   - component: {fileID: 1707952946}
-  - component: {fileID: 1707952949}
   m_Layer: 5
   m_Name: TelaMochila
   m_TagString: Untagged
@@ -16115,60 +16091,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.003994, y: 27.833008}
   m_SizeDelta: {x: 1080, y: 1920}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1707952949
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1707952945}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24a740290e6684e43a32e9369e39f189, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lockedStickerHint: {fileID: 1103364863}
-  content: {fileID: 1064278402}
-  stickerSlotPrefab: {fileID: 6871702897271296346, guid: 1148d173830da7345942c36936a22ab1, type: 3}
-  allStickers:
-  - {fileID: 21300000, guid: 07e69e753e4aad74c8c5fa77a79ee153, type: 3}
-  - {fileID: 21300000, guid: d5ceaec2e53b50e4d8e9223562ce42b2, type: 3}
-  - {fileID: 21300000, guid: 65f3d4eca75ff6c45b5ee82457e6527b, type: 3}
-  - {fileID: 21300000, guid: 1ea0266ffb53c5e4f81caf40e123a99d, type: 3}
-  - {fileID: 21300000, guid: 7a63eedbac48da4448d847459ef38e7d, type: 3}
-  - {fileID: 21300000, guid: 3b4ca1a72ffe4a146b80c41b8a213f42, type: 3}
-  - {fileID: 21300000, guid: 3977d264d7261ca41962ae28e3be892b, type: 3}
-  - {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
-  - {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
-  - {fileID: 21300000, guid: c20167e9d59c5594387f2b5943766f6c, type: 3}
-  - {fileID: 21300000, guid: c7e5297a1f8818947aa9538fe372838c, type: 3}
-  - {fileID: 21300000, guid: 034235bde09704d41921a678a24489a5, type: 3}
-  - {fileID: 21300000, guid: 01868aa5e21777841b855ed20cddb290, type: 3}
-  - {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
-  - {fileID: 21300000, guid: bb4dba59b6181f4478ed055e6020ceb4, type: 3}
-  - {fileID: 21300000, guid: e10c79eb4ebc0c2459ee7202c6b93836, type: 3}
-  - {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
-  - {fileID: 21300000, guid: c5f89903d92a4564592ddadf9c63778c, type: 3}
-  - {fileID: 21300000, guid: e7218cacb5d2d434880bb7afd2ef0d7e, type: 3}
-  - {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
-  - {fileID: 21300000, guid: ca6ba0df2c7a63746b13f432de15103a, type: 3}
-  - {fileID: 21300000, guid: c7746fad7647b4140adbcb6622f425b9, type: 3}
-  - {fileID: 21300000, guid: 5200baea30521924cb7c68cc99b798fd, type: 3}
-  - {fileID: 21300000, guid: dc0a371eda9c58f4f81493dfb6d0fbbd, type: 3}
-  - {fileID: 21300000, guid: f1b071ce6c8cf494287dacfe9a98e739, type: 3}
-  - {fileID: 21300000, guid: 3579e950eaf144c46b925a029a88d30e, type: 3}
-  unlockedStickers:
-  - {fileID: 21300000, guid: 07e69e753e4aad74c8c5fa77a79ee153, type: 3}
-  - {fileID: 21300000, guid: 3b4ca1a72ffe4a146b80c41b8a213f42, type: 3}
-  - {fileID: 21300000, guid: 3977d264d7261ca41962ae28e3be892b, type: 3}
-  - {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
-  - {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
-  - {fileID: 21300000, guid: f1b071ce6c8cf494287dacfe9a98e739, type: 3}
-  locationManager: {fileID: 1103364857}
-  mapPinsController: {fileID: 1103364862}
-  checkmarkSprite: {fileID: 21300000, guid: f7fca6dcfe43fd2458c982d0fcf095e8, type: 3}
-  checkmarkSize: {x: 30, y: 30}
-  checkmarkPosition: {x: 35, y: 10}
 --- !u!1 &1720227053
 GameObject:
   m_ObjectHideFlags: 0
