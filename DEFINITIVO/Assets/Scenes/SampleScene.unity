@@ -9204,6 +9204,7 @@ GameObject:
   - component: {fileID: 1103364862}
   - component: {fileID: 1103364863}
   - component: {fileID: 1103364864}
+  - component: {fileID: 1103364865}
   m_Layer: 5
   m_Name: DevicesManager
   m_TagString: Untagged
@@ -9324,43 +9325,83 @@ MonoBehaviour:
   cameraButton: {fileID: 1464722304}
   stickerNotificationImage: {fileID: 1323261248}
   areaTeste: 0
-  detectionRadius: 30
-  entryDetectionRadius: 25
+  detectionRadius: 9
+  entryDetectionRadius: 50
   notificationDuration: 3
   areaPoints:
-  - latitude: -26.90553
-    longitude: -49.07983
+  - latitude: -26.921153
+    longitude: -49.072008
     message: 
     areaName: CursoDagua
+  - latitude: -26.921064
+    longitude: -49.07395
+    message: 
+    areaName: Subosque
+  - latitude: -26.921367
+    longitude: -49.075164
+    message: 
+    areaName: Dossel
+  - latitude: -26.921361
+    longitude: -49.073411
+    message: 
+    areaName: Epifitas
+  - latitude: -26.921389
+    longitude: -49.0725
+    message: 
+    areaName: Serrapilheira
   stickerPoints:
-  - latitude: -26.90567
-    longitude: -49.07935
-    message: 
+  - latitude: -26.921272
+    longitude: -49.071814
+    message: coleta1
+    areaName: Serrapilheira
+    stickerIndex: 3
+    entryMode: 0
+  - latitude: -26.921447
+    longitude: -49.072914
+    message: coleta2
+    areaName: Epifitas
+    stickerIndex: 3
+    entryMode: 0
+  - latitude: -26.921339
+    longitude: -49.073961
+    message: coleta3
+    areaName: Dossel
+    stickerIndex: 3
+    entryMode: 0
+  - latitude: -26.921347
+    longitude: -49.074342
+    message: coleta4
+    areaName: Dossel
+    stickerIndex: 4
+    entryMode: 0
+  - latitude: -26.920503
+    longitude: -49.075869
+    message: coleta5
+    areaName: Subosque
+    stickerIndex: 3
+    entryMode: 0
+  - latitude: -26.920925
+    longitude: -49.074908
+    message: coleta6
+    areaName: Subosque
+    stickerIndex: 4
+    entryMode: 0
+  - latitude: -26.921083
+    longitude: -49.073208
+    message: coleta7
     areaName: CursoDagua
     stickerIndex: 3
     entryMode: 0
-  - latitude: -26.90567
-    longitude: -49.07909
-    message: 
+  - latitude: -26.921039
+    longitude: -49.072347
+    message: coleta8
     areaName: CursoDagua
     stickerIndex: 4
     entryMode: 0
-  - latitude: -26.90589
-    longitude: -49.07928
-    message: 
-    areaName: Subosque
-    stickerIndex: 3
-    entryMode: 1
-  - latitude: -26.90586
-    longitude: -49.07956
-    message: 
-    areaName: Subosque
-    stickerIndex: 4
-    entryMode: 1
   entry1:
     entryName: Entrada1
-    latitude: -26.90553
-    longitude: -49.07983
+    latitude: -26.921272
+    longitude: -49.071814
   entry2:
     entryName: Entrada2
     latitude: 222
@@ -9813,6 +9854,18 @@ MonoBehaviour:
   checkmarkSprite: {fileID: 21300000, guid: f7fca6dcfe43fd2458c982d0fcf095e8, type: 3}
   checkmarkSize: {x: 30, y: 30}
   checkmarkPosition: {x: 35, y: 10}
+--- !u!114 &1103364865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103364853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ace0ae80ed8a0f241a644622bd1474a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1117080312
 GameObject:
   m_ObjectHideFlags: 0
