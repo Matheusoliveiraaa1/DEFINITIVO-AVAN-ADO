@@ -14,6 +14,10 @@ public class MapPinsController : MonoBehaviour
     public GameObject stickersBlock;
 
 
+    [Header("Visualização Grande da Area Image")]
+    public GameObject areaImageOverlay;
+    public Image areaImageLarge;
+    public Button areaImageBackButton;
 
 
 
@@ -56,7 +60,12 @@ public class MapPinsController : MonoBehaviour
     public Sprite completedPinSprite; // sprite após concluir a área (vermelho)
 
 
-   
+    [Header("Botão Pular Tutorial")]
+    public Button skipTutorialButton;
+
+
+
+
     public Transform stickersContentParent;
     public GameObject stickerImagePrefab;
 
@@ -93,6 +102,19 @@ public class MapPinsController : MonoBehaviour
 
 
     private static bool tutorialImageAlreadyShown = false;
+
+
+    [Header("Animação Botão Pular")]
+    public float skipButtonAppearDuration = 0.25f;
+    public float skipButtonPulseScale = 1.1f;
+    public float skipButtonPulseSpeed = 1.5f;
+
+    private Coroutine skipButtonPulseCoroutine;
+
+    private Coroutine tutorialCoroutine;
+    private bool tutorialExiting = false;
+
+    private const string TUTORIAL_SEEN_KEY = "MapTutorialSeen";
 
 
 
@@ -193,9 +215,8 @@ public class MapPinsController : MonoBehaviour
             AddPin(pin);
 
             // Verifica se já foi visitado em sessões anteriores
-            if (PlayerPrefs.GetInt("Visited_" + pin.pinName, 0) == 1) // 0 = não visitado
+            if (PlayerPrefs.GetInt("Visited_" + pin.pinName, 0) == 1)
             {
-                // Marca o pin como visitado sem salvar de novo
                 if (spawnedPins.TryGetValue(pin.pinName, out Button pinButton))
                 {
                     Image pinImage = pinButton.GetComponent<Image>();
@@ -203,6 +224,9 @@ public class MapPinsController : MonoBehaviour
                     {
                         pinImage.sprite = completedPinSprite;
                         pinImage.preserveAspect = true;
+
+                        // 🔥 REABILITA O BOTÃO PARA PINS JÁ VISITADOS
+                        pinButton.interactable = true;  // <--- IMPORTANTE!
                     }
                 }
             }
@@ -210,9 +234,17 @@ public class MapPinsController : MonoBehaviour
 
         if (areaInfoPanel != null)
             areaInfoPanel.SetActive(false);
-      
+
         if (speciesInfoPanel != null)
             speciesInfoPanel.SetActive(false);
+
+        // Overlay da Area Image começa desligado
+        if (areaImageOverlay != null)
+            areaImageOverlay.SetActive(false);
+
+        // Torna a areaImage clicável
+        SetupAreaImageClick();
+
     }
 
 
@@ -226,7 +258,7 @@ public class MapPinsController : MonoBehaviour
         newPin.name = pinData.pinName;
         newPin.onClick.AddListener(() => OnPinClicked(pinData));
 
-        // 🔹 DEFINE SPRITE INICIAL (CINZA)
+        // 🔹 DEFINE SPRITE INICIAL (CINZA) E BOTÃO DESABILITADO
         Image img = newPin.GetComponent<Image>();
         if (img != null && defaultPinSprite != null)
         {
@@ -234,16 +266,18 @@ public class MapPinsController : MonoBehaviour
             img.preserveAspect = true;
         }
 
+        // 🔥 IMPEDE CLIQUE ENQUANTO FOR CINZA
+        newPin.interactable = false;  // <--- BOTÃO DESABILITADO!
+
         spawnedPins[pinData.pinName] = newPin;
     }
-
 
     void OnPinClicked(PinData pinData)
 
 
     {
 
-        
+
 
         // Evita pins de teste
         if (pinData.pinName == "Área 1" || pinData.pinName == "Área 2" || pinData.pinName == "Área Teste")
@@ -270,6 +304,10 @@ public class MapPinsController : MonoBehaviour
                 default: areaImage.sprite = null; break;
             }
             areaImage.preserveAspect = true;
+            Button btn = areaImage.GetComponent<Button>();
+            if (btn != null)
+                btn.interactable = areaImage.sprite != null;
+
         }
 
         // ---------- FOTO DECORADA ----------
@@ -446,7 +484,7 @@ public class MapPinsController : MonoBehaviour
 
 
         speciesInfoPanel.SetActive(true);
-     
+
         areaInfoPanel.SetActive(false);
 
         backButton.onClick.RemoveAllListeners();
@@ -556,7 +594,6 @@ public class MapPinsController : MonoBehaviour
         {
             if (debugText != null)
                 debugText.text += "\nPIN NÃO ENCONTRADO";
-
             return;
         }
 
@@ -567,12 +604,15 @@ public class MapPinsController : MonoBehaviour
         pinImage.sprite = completedPinSprite;
         pinImage.preserveAspect = true;
 
-        // ======= SALVA A PERSISTÊNCIA =======
-        PlayerPrefs.SetInt("Visited_" + areaName, 1); // 1 = visitado
-        PlayerPrefs.Save(); // garante que seja salvo imediatamente
+        // 🔥 HABILITA O BOTÃO AGORA QUE É VERMELHO!
+        pinButton.interactable = true;   // <--- AGORA PODE CLICAR!
+
+        // Salva a persistência
+        PlayerPrefs.SetInt("Visited_" + areaName, 1);
+        PlayerPrefs.Save();
 
         if (debugText != null)
-            debugText.text += "\nSPRITE ALTERADO E SALVO COM SUCESSO";
+            debugText.text += "\nSPRITE ALTERADO E BOTÃO HABILITADO";
     }
 
 
@@ -608,39 +648,84 @@ public class MapPinsController : MonoBehaviour
 
     IEnumerator PlayTutorialImage()
     {
-        tutorialImageAlreadyShown = true;
+        tutorialExiting = false;
+
+        // 🔒 TRAVA OS PINS
+        SetPinsInteractable(false);
 
         tutorialImage.gameObject.SetActive(false);
-        yield return null; // espera 1 frame
+        skipTutorialButton.gameObject.SetActive(false);
+        yield return null;
 
         RectTransform parent = tutorialImage.parent as RectTransform;
 
         Vector2 finalPos = tutorialImage.anchoredPosition;
-
         Vector2 startPos = finalPos + new Vector2(parent.rect.width, 0);
         Vector2 exitPos = finalPos + new Vector2(parent.rect.width, 0);
 
         tutorialImage.anchoredPosition = startPos;
         tutorialImage.gameObject.SetActive(true);
 
-        // ENTRA
+        // Mostra botão pular
+        skipTutorialButton.onClick.RemoveAllListeners();
+        skipTutorialButton.onClick.AddListener(ForceSkipTutorial);
+
+        StartCoroutine(AnimateSkipButtonAppear());
+
+
+        // ENTRADA
         yield return MoveUI(tutorialImage, startPos, finalPos, tutorialAnimDuration);
 
-        // 🔹 ANIMAÇÃO SUAVE ENQUANTO VISÍVEL
+        // Animação flutuante
         Coroutine floatAnim = StartCoroutine(FloatTutorial(finalPos));
 
-        // ESPERA
-        yield return new WaitForSeconds(tutorialStayTime);
+        float timer = 0f;
+        while (timer < tutorialStayTime && !tutorialExiting)
+        {
+            timer += Time.deltaTime;
+            yield return null;
+        }
 
-        // PARA ANIMAÇÃO SUAVE
+        // Para flutuação
         StopCoroutine(floatAnim);
         tutorialImage.anchoredPosition = finalPos;
 
-        // SAI
+        // 🔥 some o botão IMEDIATAMENTE quando a saída começa
+        if (skipButtonPulseCoroutine != null)
+        {
+            StopCoroutine(skipButtonPulseCoroutine);
+            skipButtonPulseCoroutine = null;
+        }
+
+        skipTutorialButton.gameObject.SetActive(false);
+
+
+        // SAÍDA
         yield return MoveUI(tutorialImage, finalPos, exitPos, tutorialAnimDuration);
 
         tutorialImage.gameObject.SetActive(false);
+        skipTutorialButton.gameObject.SetActive(false);
+
+        SetPinsInteractable(true);
     }
+
+
+
+    void ForceSkipTutorial()
+    {
+        if (tutorialExiting) return;
+
+        tutorialExiting = true;
+
+        // some IMEDIATAMENTE
+        if (skipButtonPulseCoroutine != null)
+            StopCoroutine(skipButtonPulseCoroutine);
+
+        skipTutorialButton.gameObject.SetActive(false);
+        SetPinsInteractable(true);
+    }
+
+
 
 
     IEnumerator FloatTutorial(Vector2 basePos)
@@ -673,21 +758,29 @@ public class MapPinsController : MonoBehaviour
 
     public void OnMapScreenOpened()
     {
-        if (tutorialImageAlreadyShown) return;
+        // se já viu o tutorial alguma vez, não mostra mais
+        if (PlayerPrefs.GetInt(TUTORIAL_SEEN_KEY, 0) == 1)
+            return;
 
-        tutorialImageAlreadyShown = true;
+        // marca como visto ANTES de mostrar
+        PlayerPrefs.SetInt(TUTORIAL_SEEN_KEY, 1);
+        PlayerPrefs.Save();
 
         StopAllCoroutines();
-        StartCoroutine(DelayedTutorial());
+        tutorialCoroutine = StartCoroutine(PlayTutorialImage());
     }
+
+
+
 
 
 
     IEnumerator DelayedTutorial()
     {
         yield return new WaitForSeconds(1f);
-        StartCoroutine(PlayTutorialImage());
+        tutorialCoroutine = StartCoroutine(PlayTutorialImage());
     }
+
 
 
     string GetVideoFileForArea(string areaName)
@@ -732,14 +825,105 @@ public class MapPinsController : MonoBehaviour
         {
             videoButton.onClick.AddListener(() =>
             {
-                string videoFile = GetVideoFileForArea(areaName);
-                mapVideoPlayer.Play(areaName, videoFile);
+                mapVideoPlayer.Play(areaName);
             });
+
         }
     }
 
 
 
+
+
+    IEnumerator AnimateSkipButtonAppear()
+    {
+        RectTransform rt = skipTutorialButton.GetComponent<RectTransform>();
+
+        rt.localScale = Vector3.zero;
+        skipTutorialButton.gameObject.SetActive(true);
+
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.deltaTime / skipButtonAppearDuration;
+            rt.localScale = Vector3.Lerp(Vector3.zero, Vector3.one, t);
+            yield return null;
+        }
+
+        rt.localScale = Vector3.one;
+
+        // começa o pulso depois que terminou de crescer
+        skipButtonPulseCoroutine = StartCoroutine(PulseSkipButton());
+    }
+
+
+
+    IEnumerator PulseSkipButton()
+    {
+        RectTransform rt = skipTutorialButton.GetComponent<RectTransform>();
+
+        float t = 0f;
+        while (true)
+        {
+            t += Time.deltaTime * skipButtonPulseSpeed;
+            float scale = 1f + Mathf.Sin(t) * (skipButtonPulseScale - 1f);
+            rt.localScale = Vector3.one * scale;
+            yield return null;
+        }
+    }
+
+
+
+    void SetPinsInteractable(bool value)
+    {
+        foreach (var kvp in spawnedPins)
+        {
+            string areaName = kvp.Key;
+            Button pin = kvp.Value;
+
+            bool visited = PlayerPrefs.GetInt("Visited_" + areaName, 0) == 1;
+
+            // 👉 só pode clicar se:
+            // - tutorial liberou
+            // - pin já foi visitado
+            pin.interactable = value && visited;
+        }
+    }
+
+
+    void SetupAreaImageClick()
+    {
+        if (areaImage == null) return;
+
+        Button btn = areaImage.GetComponent<Button>();
+
+        if (btn == null)
+            btn = areaImage.gameObject.AddComponent<Button>();
+
+        btn.onClick.RemoveAllListeners();
+        btn.onClick.AddListener(OpenAreaImageLarge);
+    }
+
+
+
+    void OpenAreaImageLarge()
+    {
+        if (areaImage == null || areaImage.sprite == null) return;
+
+        areaImageLarge.sprite = areaImage.sprite;
+        areaImageLarge.preserveAspect = true;
+
+        areaImageOverlay.SetActive(true);
+
+        areaImageBackButton.onClick.RemoveAllListeners();
+        areaImageBackButton.onClick.AddListener(CloseAreaImageLarge);
+    }
+
+
+    void CloseAreaImageLarge()
+    {
+        areaImageOverlay.SetActive(false);
+    }
 
 
 }

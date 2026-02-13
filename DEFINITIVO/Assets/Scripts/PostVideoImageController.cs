@@ -1,236 +1,116 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-using TMPro;
+using System.Collections.Generic;
 
-
-
-public class PostVideoImageController : MonoBehaviour
+public class PostVideoImageManager : MonoBehaviour
 {
-    [Header("Referências")]
-    public RectTransform imageTransform;
-    public Button cameraButton;
-
-    [Header("Config")]
-    public float slideDuration = 0.6f;
-    public float stayTime = 30f;
-
-    [Header("Animação Suave")]
-    public float floatAmplitude = 10f;
-    public float floatSpeed = 1.5f;
-
-    [Header("Texto")]
-    public TextMeshProUGUI infoText;
-
-
-
-    private Coroutine floatRoutine;
-
-
-    private Vector2 offLeft;
-    private Vector2 offRight;
-    private Vector2 center;
-
-    private Coroutine autoHideRoutine;
-
-    void Start()
+    [System.Serializable]
+    public class AreaPostPrefab
     {
-        float width = imageTransform.rect.width;
-
-        // ✅ Fora da tela à esquerda (entrada)
-        offLeft = new Vector2(-Screen.width - width, imageTransform.anchoredPosition.y);
-
-        // ✅ Fora da tela à direita (saída)
-        offRight = new Vector2(Screen.width + width, imageTransform.anchoredPosition.y);
-
-        // ✅ Posição central original
-        center = imageTransform.anchoredPosition;
-
-        // ✅ Começa escondido à esquerda
-        imageTransform.anchoredPosition = offLeft;
-        imageTransform.gameObject.SetActive(false);
-
-        if (cameraButton != null)
-            cameraButton.onClick.AddListener(HideByCameraClick);
-
-        Debug.Log("✅ PostVideoImageController inicializado");
+        public string areaName;
+        public GameObject prefab; // ← PREFAB, não Sprite
     }
 
-    // ✅ CHAMADO PELO VÍDEO QUANDO TERMINAR
-    public void ShowAfterVideo()
+    public List<AreaPostPrefab> areaPrefabs;
+
+    [Header("Animation")]
+    public float enterDuration = 1.0f;
+    public float stayDuration = 7.0f;
+    public float exitDuration = 1.0f;
+    public float breathingAmplitude = 0.02f;
+    public float breathingSpeed = 1.5f;
+
+    private Dictionary<string, GameObject> prefabByArea;
+    private GameObject currentInstance;
+    private Vector2 targetPosition;
+    private Coroutine animCoroutine;
+
+    private NavigationManager nav;
+
+
+    private void Awake()
     {
-        Debug.Log("🖼️ ShowAfterVideo chamado");
-
-        UpdateText(); // 👈 AQUI É A CHAVE
-
-        imageTransform.gameObject.SetActive(true);
-
-        if (autoHideRoutine != null)
-            StopCoroutine(autoHideRoutine);
-
-        StartCoroutine(SlideIn());
-        autoHideRoutine = StartCoroutine(AutoHide());
-    }
-
-
-    private IEnumerator SlideIn()
-    {
-        Debug.Log("➡️ Iniciando entrada da imagem");
-
-        float t = 0f;
-        Vector2 start = offLeft;
-
-        while (t < slideDuration)
+        prefabByArea = new Dictionary<string, GameObject>();
+        foreach (var a in areaPrefabs)
         {
-            imageTransform.anchoredPosition = Vector2.Lerp(start, center, t / slideDuration);
-            t += Time.deltaTime;
-            yield return null;
+            if (!prefabByArea.ContainsKey(a.areaName) && a.prefab != null)
+                prefabByArea.Add(a.areaName, a.prefab);
         }
-
-        imageTransform.anchoredPosition = center;
-
-        // inicia animação suave
-        if (floatRoutine != null)
-            StopCoroutine(floatRoutine);
-
-        floatRoutine = StartCoroutine(FloatImage(center));
-
-        Debug.Log("✅ Imagem posicionada no centro + animação suave iniciada");
-
+        nav = FindObjectOfType<NavigationManager>();
     }
 
-    private IEnumerator SlideOut()
-
-
+    public void ShowForArea(string areaName)
     {
+        if (!prefabByArea.ContainsKey(areaName))
+            return;
 
-        // para animação suave antes de sair
-        if (floatRoutine != null)
+        if (animCoroutine != null)
+            StopCoroutine(animCoroutine);
+
+        if (currentInstance != null)
+            Destroy(currentInstance);
+
+        currentInstance = Instantiate(prefabByArea[areaName], transform);
+        RectTransform rt = currentInstance.GetComponent<RectTransform>();
+
+        if (rt == null)
         {
-            StopCoroutine(floatRoutine);
-            floatRoutine = null;
-        }
-
-        imageTransform.anchoredPosition = center;
-
-
-
-
-        Debug.Log("⬅️ Iniciando saída da imagem para a ESQUERDA");
-
-        float t = 0f;
-        Vector2 start = center;
-        Vector2 target = offLeft; // 👈 agora sai pela esquerda
-
-        while (t < slideDuration)
-        {
-            imageTransform.anchoredPosition = Vector2.Lerp(start, target, t / slideDuration);
-            t += Time.deltaTime;
-            yield return null;
-        }
-
-        imageTransform.anchoredPosition = target;
-        imageTransform.gameObject.SetActive(false);
-
-        Debug.Log("✅ Imagem saiu da tela para a esquerda");
-    }
-
-
-    private IEnumerator AutoHide()
-    {
-        Debug.Log("⏳ AutoHide iniciado");
-        yield return new WaitForSeconds(stayTime);
-        StartCoroutine(SlideOut());
-    }
-
-    private void HideByCameraClick()
-    {
-        Debug.Log("📸 Botão da câmera clicado");
-
-        if (imageTransform.gameObject.activeSelf)
-        {
-            if (autoHideRoutine != null)
-                StopCoroutine(autoHideRoutine);
-
-            StartCoroutine(SlideOut());
-        }
-    }
-
-
-    private string GetSuffixByArea(string areaName)
-    {
-        switch (areaName)
-        {
-            
-            case "Serrapilheira":
-                return "da";
-
-
-            case "CursoDagua":
-            case "Dossel":
-            case "Subosque":
-                return "do";
-
-            case "Epifitas":
-                return "das";
-
-            default:
-                Debug.LogWarning("Área desconhecida: " + areaName);
-                return "";
-        }
-    }
-
-
-    private void UpdateText()
-    {
-        NativeCameraExample cameraExample = FindObjectOfType<NativeCameraExample>();
-
-        if (cameraExample == null || string.IsNullOrEmpty(cameraExample.currentArea))
-        {
-            Debug.LogWarning("Área atual não encontrada");
+            Debug.LogError("Prefab precisa ter RectTransform!");
             return;
         }
 
-        string suffix = GetSuffixByArea(cameraExample.currentArea);
-        string areaName = cameraExample.currentArea;
-
-        string areaFormatted = FormatAreaName(cameraExample.currentArea);
-
-        infoText.text =
-            "Agora que você sabe mais sobre esse ambiente, tire uma foto "
-            + suffix + " " + areaFormatted;
-
-
+        targetPosition = rt.anchoredPosition;
+        animCoroutine = StartCoroutine(Animate(rt));
     }
 
-    private string FormatAreaName(string area)
+    private IEnumerator Animate(RectTransform rt)
     {
-        switch (area)
+        rt.gameObject.SetActive(true);
+
+        Vector2 offLeft = targetPosition + Vector2.left * Screen.width;
+        Vector2 offRight = targetPosition + Vector2.right * Screen.width;
+
+        // ENTER
+        float t = 0;
+        rt.anchoredPosition = offLeft;
+        rt.localScale = Vector3.one;
+
+        while (t < enterDuration)
         {
-            case "CursoDagua": return "Curso d’água";
-            case "Serrapilheira": return "Serrapilheira";
-            case "Dossel": return "Dossel";
-            case "Subosque": return "Sub-bosque";
-            case "Epifitas": return "Epífitas";
-            default: return area;
-        }
-    }
-
-
-
-
-
-    IEnumerator FloatImage(Vector2 basePos)
-    {
-        float t = 0f;
-
-        while (true)
-        {
-            t += Time.deltaTime * floatSpeed;
-            float offsetY = Mathf.Sin(t) * floatAmplitude;
-            imageTransform.anchoredPosition = basePos + new Vector2(0, offsetY);
+            t += Time.deltaTime;
+            float p = Mathf.SmoothStep(0, 1, t / enterDuration);
+            rt.anchoredPosition = Vector2.Lerp(offLeft, targetPosition, p);
             yield return null;
         }
+
+        rt.anchoredPosition = targetPosition;
+
+        // STAY + BREATHING
+        float stayTime = 0;
+        Vector3 baseScale = Vector3.one;
+
+        while (stayTime < stayDuration)
+        {
+            stayTime += Time.deltaTime;
+            float pulse = 1f + Mathf.Sin(Time.time * breathingSpeed) * breathingAmplitude;
+            rt.localScale = baseScale * pulse;
+            yield return null;
+        }
+
+        // EXIT
+        // EXIT (centro → esquerda)
+        t = 0;
+        while (t < exitDuration)
+        {
+            t += Time.deltaTime;
+            float p = Mathf.SmoothStep(0, 1, t / exitDuration);
+            rt.anchoredPosition = Vector2.Lerp(targetPosition, offLeft, p);
+            yield return null;
+        }
+
+
+        Destroy(rt.gameObject);
     }
 
 
@@ -240,5 +120,31 @@ public class PostVideoImageController : MonoBehaviour
 
 
 
+    public void ForceHide()
+    {
+        if (animCoroutine != null)
+        {
+            StopCoroutine(animCoroutine);
+            animCoroutine = null;
+        }
+
+        if (currentInstance != null)
+        {
+            Destroy(currentInstance);
+            currentInstance = null;
+        }
+    }
+
+
+    private void Update()
+    {
+        if (nav == null)
+            return;
+
+        if (nav.currentState != NavigationManager.AppState.Exploracao)
+        {
+            ForceHide();
+        }
+    }
 
 }

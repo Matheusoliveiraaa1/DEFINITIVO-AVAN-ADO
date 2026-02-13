@@ -21,11 +21,18 @@ public class LocationServiceManager : MonoBehaviour
     public GameObject cameraButton;
     public Image stickerNotificationImage;
 
+    private string currentAreaName = null;
+
     [Header("Settings")]
     public bool areaTeste = false;
     public float detectionRadius = 7f;
-    public float entryDetectionRadius = 25f; // 👈 SOMENTE entradas
+    public float entryDetectionRadius = 25f;
     public float notificationDuration = 3f;
+
+    [Header("GPS Dynamic Radius")]
+    [Range(0.6f, 1.2f)]
+    public float accuracyMultiplier = 0.8f;
+    public float maxGpsRadius = 50f;
 
     [Header("Points of Interest")]
     public List<AreaPoint> areaPoints = new List<AreaPoint>();
@@ -37,13 +44,19 @@ public class LocationServiceManager : MonoBehaviour
 
     private ParkStartMode currentStartMode = ParkStartMode.None;
     private const string START_MODE_KEY = "ParkStartMode";
+    private const string VISITED_AREAS_KEY = "VisitedAreas";
 
     [Header("Inventory")]
     public InventoryManager inventoryManager;
 
-    // Evento público que notifica quando o conjunto de stickers mudou
     public event Action OnCollectedStickersChanged;
-    public event Action OnUsedStickersChanged; // notifica quando stickers "usados" mudam
+    public event Action OnUsedStickersChanged;
+
+
+
+    [Header("GPS Panel")]
+    public GameObject gpsDisabledPanel;
+
 
     [System.Serializable]
     public class AreaPoint
@@ -52,14 +65,23 @@ public class LocationServiceManager : MonoBehaviour
         public double longitude;
         public string message;
         public string areaName;
+
+        [Header("Detection")]
+        public float detectionRadius = 12f;
     }
 
     [System.Serializable]
     public class ParkEntryPoint
     {
-        public string entryName; // "Entrada1" ou "Entrada2"
+        public string entryName;
         public double latitude;
         public double longitude;
+    }
+
+    [Serializable]
+    private class StringListWrapper
+    {
+        public List<string> list;
     }
 
     public enum ParkStartMode
@@ -84,14 +106,17 @@ public class LocationServiceManager : MonoBehaviour
         public string areaName;
         public int stickerIndex;
         public StickerEntryMode entryMode;
+
+        [Header("Detection")]
+        public float detectionRadius = 20f;
     }
 
     [NonSerialized]
     private Dictionary<string, List<int>> collectedStickers = new Dictionary<string, List<int>>();
-
     [NonSerialized]
-    private Dictionary<string, List<int>> usedStickers = new Dictionary<string, List<int>>(); // NOVO: stickers usados nas fotos confirmadas
+    private Dictionary<string, List<int>> usedStickers = new Dictionary<string, List<int>>();
 
+    private HashSet<string> visitedAreas = new HashSet<string>();
     private List<PointOfInterest> allPoints = new List<PointOfInterest>();
 
     private class PointOfInterest
@@ -104,6 +129,7 @@ public class LocationServiceManager : MonoBehaviour
         public int stickerIndex;
         public bool alreadyTriggered;
         public StickerEntryMode entryMode;
+        public float baseDetectionRadius;
 
         public PointOfInterest(
             double lat,
@@ -111,6 +137,7 @@ public class LocationServiceManager : MonoBehaviour
             string msg,
             bool isSticker,
             string area,
+            float radius,
             int index = -1,
             StickerEntryMode mode = StickerEntryMode.Entry1)
         {
@@ -122,6 +149,7 @@ public class LocationServiceManager : MonoBehaviour
             stickerIndex = index;
             entryMode = mode;
             alreadyTriggered = false;
+            baseDetectionRadius = radius;
         }
     }
 
@@ -144,20 +172,15 @@ public class LocationServiceManager : MonoBehaviour
         public List<AreaStickerData> areas = new List<AreaStickerData>();
     }
 
-    // CARREGA o estado antes de qualquer Start() - evita problema de ordem de execução.
     private void Awake()
     {
-
-        // CUIDADO: Isso apaga TUDO do PlayerPrefs toda vez que o app inicia.
-        // Use apenas para garantir que o celular limpou tudo.
-       
-
         Debug.Log("LocationServiceManager AWAKE: " + GetInstanceID());
 
         if (!Application.isPlaying) return;
         LoadStartMode();
         LoadCollectedStickers();
         LoadUsedStickers();
+        LoadVisitedAreas();
     }
 
     private void Start()
@@ -166,7 +189,7 @@ public class LocationServiceManager : MonoBehaviour
         InitializePoints();
         cameraButton.SetActive(false);
         if (stickerNotificationImage != null) stickerNotificationImage.gameObject.SetActive(false);
-        if (Application.isPlaying) inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
+        inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
         inventoryManager?.UpdateInventoryUI();
         StartCoroutine(StartLocationService());
     }
@@ -185,93 +208,94 @@ public class LocationServiceManager : MonoBehaviour
         currentStartMode = mode;
         PlayerPrefs.SetInt(START_MODE_KEY, (int)mode);
         PlayerPrefs.Save();
-        Debug.Log("🚪 Entrada inicial detectada: " + mode);
     }
 
     private void DetectStartEntry(LocationInfo data)
     {
         if (currentStartMode != ParkStartMode.None) return;
-        double distEntry1 = CalculateDistance(
-            data.latitude,
-            data.longitude,
-            entry1.latitude,
-            entry1.longitude);
-        double distEntry2 = CalculateDistance(
-            data.latitude,
-            data.longitude,
-            entry2.latitude,
-            entry2.longitude);
+        double distEntry1 = CalculateDistance(data.latitude, data.longitude, entry1.latitude, entry1.longitude);
+        double distEntry2 = CalculateDistance(data.latitude, data.longitude, entry2.latitude, entry2.longitude);
 
         if (distEntry1 <= entryDetectionRadius)
-        {
             SetStartMode(ParkStartMode.Entry1);
-        }
         else if (distEntry2 <= entryDetectionRadius)
-        {
             SetStartMode(ParkStartMode.Entry2);
-        }
     }
 
     private void InitializePoints()
     {
         allPoints.Clear();
         foreach (var ap in areaPoints)
-        {
-            allPoints.Add(new PointOfInterest(
-                ap.latitude,
-                ap.longitude,
-                ap.message,
-                false,
-                ap.areaName));
-        }
+            allPoints.Add(new PointOfInterest(ap.latitude, ap.longitude, ap.message, false, ap.areaName, ap.detectionRadius));
+
         foreach (var sp in stickerPoints)
-        {
-            allPoints.Add(new PointOfInterest(
-                sp.latitude,
-                sp.longitude,
-                sp.message,
-                true,
-                sp.areaName,
-                sp.stickerIndex,
-                sp.entryMode
-            ));
-        }
+            allPoints.Add(new PointOfInterest(sp.latitude, sp.longitude, sp.message, true, sp.areaName, sp.detectionRadius, sp.stickerIndex, sp.entryMode));
     }
 
     private IEnumerator StartLocationService()
     {
-        // Adicione esta verificação inicial
+        yield return new WaitForSeconds(1.5f);
+
+        // Aguarda permissões
         while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation) ||
                !Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
         {
+            messageText.text = "Aguardando permissão de localização...";
             yield return new WaitForSeconds(0.5f);
         }
 
-        if (!Input.location.isEnabledByUser)
+        // 🔁 Aguarda o usuário ligar o GPS
+        while (!Input.location.isEnabledByUser)
         {
-            messageText.text = "Localização desativada.";
-            yield break;
+            messageText.text = "Ative o GPS para continuar.";
+            ShowGPSPanel();
+            yield return new WaitForSeconds(1f);
         }
 
+        // GPS ligado → esconde painel
+        HideGPSPanel();
+
+
         Input.location.Start(1f, 0.1f);
+
         int maxWait = 20;
         while (Input.location.status == LocationServiceStatus.Initializing && maxWait > 0)
         {
+            messageText.text = "Inicializando GPS...";
             yield return new WaitForSeconds(1);
             maxWait--;
         }
 
-        if (maxWait <= 0 || Input.location.status == LocationServiceStatus.Failed)
+        if (Input.location.status == LocationServiceStatus.Failed)
         {
-            messageText.text = maxWait <= 0 ? "Tempo limite ao iniciar serviço." : "Falha ao obter localização.";
+            messageText.text = "Falha ao obter localização.";
             yield break;
         }
+
+        messageText.text = "GPS ativo.";
 
         InvokeRepeating(nameof(UpdateLocation), 0f, 0.5f);
     }
 
+
+
     private void UpdateLocation()
     {
+
+        // 🔁 Recupera se o usuário desligar o GPS durante o uso
+        if (!Input.location.isEnabledByUser && Input.location.status == LocationServiceStatus.Running)
+        {
+            messageText.text = "GPS desligado. Aguardando reativação...";
+            ShowGPSPanel();
+
+            Input.location.Stop();
+            CancelInvoke();
+            StopAllCoroutines();
+            StartCoroutine(StartLocationService());
+            return;
+        }
+
+
         if (Input.location.status != LocationServiceStatus.Running)
         {
             messageText.text = "Serviço parado.";
@@ -311,64 +335,51 @@ public class LocationServiceManager : MonoBehaviour
 
     private void CheckNearbyPoints(LocationInfo data)
     {
-        DetectStartEntry(data); // 🔹 NOVO
-        if (currentStartMode == ParkStartMode.None) return; // ainda não entrou no parque
+        DetectStartEntry(data);
+        if (currentStartMode == ParkStartMode.None) return;
 
         bool isInsideAnyArea = false;
         PointOfInterest activeArea = null;
 
-        // Verifica cada ponto de interesse
         foreach (var poi in allPoints)
         {
             double distance = CalculateDistance(data.latitude, data.longitude, poi.latitude, poi.longitude);
-            // Dentro do raio de detecção
-            if (distance <= detectionRadius)
+            float effectiveRadius = GetEffectiveRadius(poi, data);
+
+            if (distance <= effectiveRadius)
             {
                 isInsideAnyArea = true;
                 activeArea = poi;
-                if (poi.isStickerPoint)
-                {
-                    if (!IsStickerAllowedForCurrentMode(poi)) continue;
-                }
+
+                if (poi.isStickerPoint && !IsStickerAllowedForCurrentMode(poi)) continue;
+
                 HandlePointTrigger(poi, ref isInsideAnyArea);
                 break;
             }
         }
 
-        // Se está dentro de uma área
-        if (isInsideAnyArea)
-        {
-            if (activeArea != null && !activeArea.isStickerPoint)
-            {
-                bool allowCamera = !IsAreaCompleted(activeArea.areaName);
-                cameraButton.SetActive(allowCamera);
-            }
-        }
+        if (isInsideAnyArea && activeArea != null && !activeArea.isStickerPoint)
+            cameraButton.SetActive(!IsAreaCompleted(activeArea.areaName));
         else
         {
-            // Fora de qualquer área → desativa câmera e limpa mensagens
-            if (cameraButton.activeSelf) cameraButton.SetActive(false);
+            cameraButton.SetActive(false);
             if (!string.IsNullOrEmpty(messageText.text)) StartCoroutine(HideNotificationAfterDelay(1.5f));
         }
 
-        // -------------------------
-        // 🔁 Reentrada de áreas
-        // -------------------------
-        // Se o jogador se afastar mais do que detectionRadius + 3m,
-        // reseta o estado "alreadyTriggered" para permitir que a área seja ativada de novo
         foreach (var poi in allPoints)
         {
             double distance = CalculateDistance(data.latitude, data.longitude, poi.latitude, poi.longitude);
-            if (distance > detectionRadius + 3f) poi.alreadyTriggered = false;
+            float resetRadius = GetEffectiveRadius(poi, data) + 5f;
+
+            if (distance > resetRadius)
+                poi.alreadyTriggered = false;
         }
     }
 
     private void HandlePointTrigger(PointOfInterest poi, ref bool isInsideAnyArea)
     {
         if (poi.isStickerPoint)
-        {
             HandleStickerPoint(poi);
-        }
         else
         {
             isInsideAnyArea = true;
@@ -385,9 +396,7 @@ public class LocationServiceManager : MonoBehaviour
             ShowStickerNotification(poi);
         }
         else
-        {
             RegisterStickerCollection(poi);
-        }
     }
 
     private void ShowStickerNotification(PointOfInterest poi)
@@ -399,10 +408,7 @@ public class LocationServiceManager : MonoBehaviour
         {
             Sprite stickerSprite = cameraExample.GetStickerSprite(poi.areaName, poi.stickerIndex);
             if (stickerSprite != null)
-            {
-                // Em vez de mostrar imagem pequena -> chama overlay
                 PhotoAreaOverlay.ShowSticker(stickerSprite);
-            }
         }
     }
 
@@ -417,8 +423,7 @@ public class LocationServiceManager : MonoBehaviour
         stickerNotificationImage.transform.localScale = Vector3.one * startScale;
         while (elapsedTime < duration)
         {
-            float scale = Mathf.Lerp(startScale, endScale, elapsedTime / duration);
-            stickerNotificationImage.transform.localScale = Vector3.one * scale;
+            stickerNotificationImage.transform.localScale = Vector3.one * Mathf.Lerp(startScale, endScale, elapsedTime / duration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -441,41 +446,32 @@ public class LocationServiceManager : MonoBehaviour
         if (!poi.alreadyTriggered)
         {
             poi.alreadyTriggered = true;
+
+            if (!visitedAreas.Contains(poi.areaName))
+            {
+                visitedAreas.Add(poi.areaName);
+                SaveVisitedAreas();
+            }
+
             messageText.text = poi.message;
             Handheld.Vibrate();
+
             FindAnyObjectByType<NativeCameraExample>().currentArea = poi.areaName;
-            // Resetar estado de vídeo para nova área
-            // ✅ Resetar estado de vídeo para nova área
-            VideoPlayState.Reset();
-            // ✅ Define qual vídeo deve tocar nesta área
-            VideoPlayState.CurrentVideoFile = GetVideoFileForArea(poi.areaName);
-            // Mostrar overlay
+
+            currentAreaName = poi.areaName; // ← Salva a área atual
+
             PhotoAreaOverlay.Show();
         }
 
-        // Só habilita o botão da câmera se a área NÃO estiver completa
-        bool allowCamera = !IsAreaCompleted(poi.areaName);
-        if (cameraButton != null) cameraButton.SetActive(allowCamera);
+        cameraButton.SetActive(!IsAreaCompleted(poi.areaName));
     }
 
-    public string GetVideoFileForArea(string areaName)
+    // Método público para o overlay acessar a área atual
+    public string GetCurrentAreaName()
     {
-        switch (areaName)
-        {
-            case "CursoDagua": return "TESTE.mp4";
-            case "Serrapilheira": return "TESTE.mp4";
-            case "Epifitas": return "TESTE.mp4";
-            case "Subosque": return "subosque.mp4";
-            case "Dossel": return "dossel.mp4";
-            default:
-                Debug.LogError("❌ Área desconhecida recebida: [" + areaName + "]");
-                return "TESTE.mp4"; // fallback de segurança
-        }
+        return currentAreaName;
     }
 
-    // --------------------------
-    // Persistência e lógica para stickers usados (NOVO)
-    // --------------------------
     private void RegisterUsedSticker(string areaName, int index)
     {
         if (index < 0) return;
@@ -491,50 +487,26 @@ public class LocationServiceManager : MonoBehaviour
     public void MarkStickerAsUsed(string areaName, int index)
     {
         RegisterUsedSticker(areaName, index);
-        // se atingiu 6 então marca área como completa implicitamente (persistência é através de usedStickers)
         if (GetUsedStickerCount(areaName) >= 6)
-        {
-            // nothing else required — IsAreaCompleted consultará usedStickers
-            // mas podemos acionar evento pra atualizar UI
             OnUsedStickersChanged?.Invoke();
-        }
     }
 
-    public bool IsStickerUsed(string areaName, int index)
-    {
-        return usedStickers.ContainsKey(areaName) && usedStickers[areaName].Contains(index);
-    }
-
-    public int GetUsedStickerCount(string areaName)
-    {
-        if (usedStickers.ContainsKey(areaName)) return usedStickers[areaName].Count;
-        return 0;
-    }
-
-    public bool IsAreaCompleted(string areaName)
-    {
-        return GetUsedStickerCount(areaName) >= 6;
-    }
+    public bool IsStickerUsed(string areaName, int index) => usedStickers.ContainsKey(areaName) && usedStickers[areaName].Contains(index);
+    public int GetUsedStickerCount(string areaName) => usedStickers.ContainsKey(areaName) ? usedStickers[areaName].Count : 0;
+    public bool IsAreaCompleted(string areaName) => GetUsedStickerCount(areaName) >= 6;
 
     private void SaveUsedStickers()
     {
         UsedStickerSaveData data = new UsedStickerSaveData();
         foreach (var kvp in usedStickers)
-        {
-            data.areas.Add(new AreaStickerData
-            {
-                areaName = kvp.Key,
-                stickerIndices = kvp.Value
-            });
-        }
-        string json = JsonUtility.ToJson(data);
-        PlayerPrefs.SetString(GetUsedKey(), json);
+            data.areas.Add(new AreaStickerData { areaName = kvp.Key, stickerIndices = kvp.Value });
+
+        PlayerPrefs.SetString(GetUsedKey(), JsonUtility.ToJson(data));
         PlayerPrefs.Save();
     }
 
     private void LoadUsedStickers()
     {
-        usedStickers.Clear();
         usedStickers.Clear();
         string key = GetUsedKey();
         if (PlayerPrefs.HasKey(key))
@@ -544,111 +516,74 @@ public class LocationServiceManager : MonoBehaviour
             {
                 UsedStickerSaveData data = JsonUtility.FromJson<UsedStickerSaveData>(json);
                 if (data != null)
-                {
                     foreach (var area in data.areas)
-                    {
                         usedStickers[area.areaName] = new List<int>(area.stickerIndices);
-                    }
-                }
             }
         }
     }
 
-    // --------------------------
-    // Fim persistência usados
-    // --------------------------
-
     private void RegisterStickerCollection(PointOfInterest poi)
     {
         if (!collectedStickers.ContainsKey(poi.areaName))
-        {
             collectedStickers[poi.areaName] = new List<int>();
-        }
+
         if (!collectedStickers[poi.areaName].Contains(poi.stickerIndex))
         {
             collectedStickers[poi.areaName].Add(poi.stickerIndex);
             SaveCollectedStickers();
             OnCollectedStickersChanged?.Invoke();
 
-            // NOVO: Notificar o StickerCatalogUI para adicionar o sprite
             NotifyStickerCatalog(poi.areaName, poi.stickerIndex);
 
-            // atualiza UI se referência estiver setada
-            if (inventoryManager != null)
-            {
-                inventoryManager.UpdateInventoryUI();
-            }
-            else
-            {
-                if (Application.isPlaying) inventoryManager = FindObjectOfType<InventoryManager>();
-                inventoryManager?.UpdateInventoryUI();
-            }
+            inventoryManager = inventoryManager ?? FindObjectOfType<InventoryManager>();
+            inventoryManager?.UpdateInventoryUI();
         }
     }
 
-    // NOVO: Notifica o StickerCatalogUI sobre o novo sticker
     private void NotifyStickerCatalog(string areaName, int stickerIndex)
     {
         StickerCatalogUI catalog = FindObjectOfType<StickerCatalogUI>();
         if (catalog != null)
-        {
             catalog.AddUnlockedSticker(areaName, stickerIndex);
-        }
     }
 
-    public bool IsStickerCollected(string areaName, int index)
-    {
-        return collectedStickers.ContainsKey(areaName) && collectedStickers[areaName].Contains(index);
-    }
+    public bool IsStickerCollected(string areaName, int index) => collectedStickers.ContainsKey(areaName) && collectedStickers[areaName].Contains(index);
 
     private double CalculateDistance(double lat1, double lon1, double lat2, double lon2)
     {
         const double R = 6371000;
         double dLat = DegToRad(lat2 - lat1);
         double dLon = DegToRad(lon2 - lon1);
-        double a = System.Math.Sin(dLat / 2) * System.Math.Sin(dLat / 2) +
-                   System.Math.Cos(DegToRad(lat1)) * System.Math.Cos(DegToRad(lat2)) *
-                   System.Math.Sin(dLon / 2) * System.Math.Sin(dLon / 2);
-        double c = 2 * System.Math.Atan2(System.Math.Sqrt(a), System.Math.Sqrt(1 - a));
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Cos(DegToRad(lat1)) * Math.Cos(DegToRad(lat2)) *
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
         return R * c;
     }
 
-    private double DegToRad(double deg) => deg * (System.Math.PI / 180);
+    private double DegToRad(double deg) => deg * (Math.PI / 180);
 
     public int GetCollectedStickerCount(string areaName)
     {
-        if (collectedStickers.ContainsKey(areaName))
-        {
-            int count = 0;
-            foreach (int index in collectedStickers[areaName])
-            {
-                if (index >= 3 && index <= 5) count++;
-            }
-            return count;
-        }
-        return 0;
+        if (!collectedStickers.ContainsKey(areaName)) return 0;
+        int count = 0;
+        foreach (int index in collectedStickers[areaName])
+            if (index >= 3 && index <= 5) count++;
+        return count;
     }
 
     private void SaveCollectedStickers()
     {
         StickerSaveData data = new StickerSaveData();
         foreach (var kvp in collectedStickers)
-        {
-            data.areas.Add(new AreaStickerData
-            {
-                areaName = kvp.Key,
-                stickerIndices = kvp.Value
-            });
-        }
-        string json = JsonUtility.ToJson(data);
-        PlayerPrefs.SetString(GetCollectedKey(), json);
+            data.areas.Add(new AreaStickerData { areaName = kvp.Key, stickerIndices = kvp.Value });
+
+        PlayerPrefs.SetString(GetCollectedKey(), JsonUtility.ToJson(data));
         PlayerPrefs.Save();
-        //Debug.Log("[LocationServiceManager] Saved stickers: " + json);
     }
 
     private void LoadCollectedStickers()
     {
-        collectedStickers.Clear();
         collectedStickers.Clear();
         string key = GetCollectedKey();
         if (PlayerPrefs.HasKey(key))
@@ -658,30 +593,25 @@ public class LocationServiceManager : MonoBehaviour
             {
                 StickerSaveData data = JsonUtility.FromJson<StickerSaveData>(json);
                 if (data != null)
-                {
                     foreach (var area in data.areas)
-                    {
                         collectedStickers[area.areaName] = new List<int>(area.stickerIndices);
-                    }
-                }
             }
-            //Debug.Log("[LocationServiceManager] Loaded stickers: " + json);
         }
     }
 
     private void OnApplicationPause(bool pause)
     {
-        if (pause)
-        {
-            SaveCollectedStickers();
-            SaveUsedStickers();
-        }
+        if (!pause) return;
+        SaveCollectedStickers();
+        SaveUsedStickers();
+        SaveVisitedAreas();
     }
 
     private void OnApplicationQuit()
     {
         SaveCollectedStickers();
         SaveUsedStickers();
+        SaveVisitedAreas();
     }
 
     private void OnDisable()
@@ -690,13 +620,64 @@ public class LocationServiceManager : MonoBehaviour
         CancelInvoke();
     }
 
-    private string GetCollectedKey()
+    private string GetCollectedKey() => "CollectedStickers_" + currentStartMode;
+    private string GetUsedKey() => "UsedStickers_" + currentStartMode;
+
+    private float GetEffectiveRadius(PointOfInterest poi, LocationInfo data)
     {
-        return "CollectedStickers_" + currentStartMode;
+        if (data.horizontalAccuracy <= 0)
+            return poi.baseDetectionRadius;
+
+        float gpsRadius = Mathf.Min(data.horizontalAccuracy * accuracyMultiplier, maxGpsRadius);
+        return Mathf.Max(poi.baseDetectionRadius, gpsRadius);
     }
 
-    private string GetUsedKey()
+    private bool CanActivateCursoDagua()
     {
-        return "UsedStickers_" + currentStartMode;
+        return visitedAreas.Contains("Serrapilheira") || visitedAreas.Contains("Epifitas") || visitedAreas.Contains("Subosque");
     }
+
+    private void SaveVisitedAreas()
+    {
+        StringListWrapper data = new StringListWrapper { list = visitedAreas.ToList() };
+        PlayerPrefs.SetString(VISITED_AREAS_KEY, JsonUtility.ToJson(data));
+        PlayerPrefs.Save();
+    }
+
+    private void LoadVisitedAreas()
+    {
+        visitedAreas.Clear();
+        if (!PlayerPrefs.HasKey(VISITED_AREAS_KEY)) return;
+        string json = PlayerPrefs.GetString(VISITED_AREAS_KEY);
+        if (string.IsNullOrEmpty(json)) return;
+        StringListWrapper data = JsonUtility.FromJson<StringListWrapper>(json);
+        if (data?.list == null) return;
+        foreach (string area in data.list)
+            visitedAreas.Add(area);
+    }
+
+    private void ShowGPSPanel()
+    {
+        if (gpsDisabledPanel != null && !gpsDisabledPanel.activeSelf)
+            gpsDisabledPanel.SetActive(true);
+    }
+
+    private void HideGPSPanel()
+    {
+        if (gpsDisabledPanel != null && gpsDisabledPanel.activeSelf)
+            gpsDisabledPanel.SetActive(false);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

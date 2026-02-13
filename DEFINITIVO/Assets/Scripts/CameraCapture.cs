@@ -97,6 +97,11 @@ public class NativeCameraExample : MonoBehaviour
     [NonSerialized]
     private Dictionary<string, int> spawnedStickersCount = new Dictionary<string, int>();
 
+    private Coroutine confirmSlideCoroutine;
+
+    private Vector2 confirmSlidingFinalPos;
+
+
 
     public enum StickerState
     {
@@ -117,6 +122,10 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (!Application.isPlaying)
             return;
+
+        if (confirmSlidingImage != null)
+            confirmSlidingFinalPos = confirmSlidingImage.anchoredPosition;
+
         stickerMenuScrollView?.SetActive(false);
         closeButton?.SetActive(false);
         locationManager ??= FindAnyObjectByType<LocationServiceManager>();
@@ -180,22 +189,21 @@ public class NativeCameraExample : MonoBehaviour
 
         confirmSlidingImage.gameObject.SetActive(true);
 
-        Vector2 finalPos = confirmSlidingImage.anchoredPosition;
+        // 🔥 posição final (definida no editor)
+        Vector2 finalPos = confirmSlidingFinalPos;
 
+
+        // 🔥 posição inicial fora da tela (esquerda)
         Vector2 offScreenLeft = new Vector2(
             finalPos.x - Screen.width,
             finalPos.y
         );
 
-        Vector2 offScreenRight = new Vector2(
-            finalPos.x + Screen.width,
-            finalPos.y
-        );
-
-        // COMEÇA FORA DA TELA (ESQUERDA)
+        // 🔄 RESET GARANTIDO
         confirmSlidingImage.anchoredPosition = offScreenLeft;
+        confirmSlidingImage.localScale = Vector3.one;
 
-        // ===== ENTRADA (esquerda → centro) =====
+        // ===== ENTRADA =====
         float t = 0f;
         while (t < confirmSlideDuration)
         {
@@ -209,7 +217,7 @@ public class NativeCameraExample : MonoBehaviour
         // ===== PERMANECE =====
         yield return new WaitForSeconds(confirmSlideStayTime);
 
-        // ===== SAÍDA (centro → esquerda) =====
+        // ===== SAÍDA =====
         t = 0f;
         while (t < confirmSlideDuration)
         {
@@ -221,7 +229,41 @@ public class NativeCameraExample : MonoBehaviour
         }
 
         confirmSlidingImage.gameObject.SetActive(false);
+
+        // 🔓 libera referência
+        confirmSlideCoroutine = null;
     }
+
+
+    private void ShowConfirmSlidingImage()
+    {
+        if (confirmSlidingImage == null)
+            return;
+
+        // 🔥 cancela animação anterior
+        if (confirmSlideCoroutine != null)
+        {
+            StopCoroutine(confirmSlideCoroutine);
+            confirmSlideCoroutine = null;
+        }
+
+        // 🔄 reset visual
+        confirmSlidingImage.gameObject.SetActive(false);
+        confirmSlidingImage.localScale = Vector3.one;
+
+        // ▶️ inicia novamente
+        confirmSlideCoroutine = StartCoroutine(PlayConfirmSlidingImage());
+    }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -243,12 +285,18 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (messageImage != null && messageText != null)
         {
+            // 🔥 GARANTE QUE FICA NA FRENTE DE TUDO
+            messageImage.transform.SetAsLastSibling();
+
             messageText.text = message;
             messageImage.gameObject.SetActive(true);
+
             yield return new WaitForSeconds(duration);
+
             messageImage.gameObject.SetActive(false);
         }
     }
+
 
     public void ShowStickerLimitMessage() => StartCoroutine(ShowMessageCoroutine(stickerLimitMessage, 3f));
     public void ShowErrorMessage() => StartCoroutine(ShowMessageCoroutine(errorMessage, 3f));
@@ -283,6 +331,11 @@ public class NativeCameraExample : MonoBehaviour
 
     public void OpenCamera()
     {
+        // 🔥 ESCONDE IMEDIATAMENTE QUALQUER PREFAB / IMAGEM ANIMADA
+        PostVideoImageManager post = FindObjectOfType<PostVideoImageManager>();
+        if (post != null)
+            post.ForceHide();
+
         if (string.IsNullOrEmpty(currentArea))
         {
             Debug.LogWarning("Nenhuma área válida detectada.");
@@ -291,6 +344,7 @@ public class NativeCameraExample : MonoBehaviour
 
         StartCoroutine(OptimizeMemoryAndCapture());
     }
+
 
     private IEnumerator OptimizeMemoryAndCapture()
     {
@@ -816,7 +870,8 @@ public class NativeCameraExample : MonoBehaviour
         GC.Collect();
 
         ClosePhotoView();
-        StartCoroutine(PlayConfirmSlidingImage());
+        ShowConfirmSlidingImage();
+
         UpdateAllCountersFromLocationManager();
 
         // 🔴 AVISA O MAPA QUE A ÁREA FOI CONCLUÍDA
@@ -925,7 +980,7 @@ public class NativeCameraExample : MonoBehaviour
             slidingFinalPos.x - Screen.width,
             slidingFinalPos.y
         );
-
+       
         // começa fora da tela
         slidingImage.anchoredPosition = offScreenLeft;
 

@@ -13,47 +13,63 @@ public class MapVideoPlayer : MonoBehaviour
     [Header("Video")]
     public VideoPlayer videoPlayer;
 
-    private string currentArea;
-
-    void Awake()
+    private void Awake()
     {
         overlayRoot.SetActive(false);
 
         closeButton.onClick.RemoveAllListeners();
         closeButton.onClick.AddListener(Close);
 
-        // 🔥 GARANTE que o callback está sempre registrado
-        videoPlayer.loopPointReached -= OnVideoFinished;
         videoPlayer.loopPointReached += OnVideoFinished;
     }
 
-    public void Play(string areaName, string videoFile)
+    public void Play(string areaName)
     {
-        currentArea = areaName;
+        // 🔒 segurança extra (opcional, mas recomendado)
+        if (!VideoUnlockManager.IsUnlocked(areaName))
+        {
+            Debug.Log("🔒 Vídeo ainda não desbloqueado: " + areaName);
+            return;
+        }
+
+        string videoFile = GetVideoFileForArea(areaName);
+        if (string.IsNullOrEmpty(videoFile))
+            return;
 
         string path = Path.Combine(Application.streamingAssetsPath, videoFile);
+
+        videoPlayer.Stop();
         videoPlayer.url = path;
 
         overlayRoot.SetActive(true);
+        videoRawImage.gameObject.SetActive(true);
+
         videoPlayer.Play();
     }
 
     void OnVideoFinished(VideoPlayer vp)
     {
-        Debug.Log("🎬 Vídeo do mapa terminou");
-
-        // 🔓 desbloqueia a área
-        VideoUnlockManager.Unlock(currentArea);
-
-        // ❌ some com o overlay AUTOMATICAMENTE
         Close();
     }
 
     void Close()
     {
-        if (videoPlayer.isPlaying)
-            videoPlayer.Stop();
-
+        videoPlayer.Stop();
         overlayRoot.SetActive(false);
+    }
+
+    string GetVideoFileForArea(string areaName)
+    {
+        switch (areaName)
+        {
+            case "CursoDagua": return "CursoDagua.mp4";
+            case "Subosque": return "Subosque.mp4";
+            case "Dossel": return "Dossel.mp4";
+            case "Epifitas": return "Epifitas.mp4";
+            case "Serrapilheira": return "TESTE2.mp4";
+            default:
+                Debug.LogError("❌ Área desconhecida: " + areaName);
+                return null;
+        }
     }
 }

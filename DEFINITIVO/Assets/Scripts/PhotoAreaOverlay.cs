@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
@@ -9,10 +10,7 @@ public class PhotoAreaOverlay : MonoBehaviour
 {
     public static PhotoAreaOverlay Instance;
 
-
     public TMP_Text stickerMessageText;
-
-
 
     [Header("Shared")]
     public GameObject overlayPanel;
@@ -59,17 +57,12 @@ public class PhotoAreaOverlay : MonoBehaviour
     [Tooltip("Posição vertical do sticker (valores positivos sobem)")]
     public float stickerVerticalOffset = 150f;
 
-
-
-
-
     private bool showingSticker = false;
     private Vector3 stickerOriginalScale;
     private Vector3 stickerGlowOriginalScale;
     private Coroutine wobbleCoroutine;
     private bool isAnimatingToBackpack = false;
 
-    // --- NOVO: Controle da animação da photo1 ---
     private Coroutine photo1AnimationCoroutine;
     private Vector3 photo1OriginalScale;
 
@@ -94,15 +87,20 @@ public class PhotoAreaOverlay : MonoBehaviour
     {
         if (showingSticker && !isAnimatingToBackpack)
         {
-            if (stickerExtra1 != null)
-                stickerExtra1.gameObject.SetActive(false);
-            if (stickerExtra2 != null)
-                stickerExtra2.gameObject.SetActive(false);
+            if (stickerExtra1 != null) stickerExtra1.gameObject.SetActive(false);
+            if (stickerExtra2 != null) stickerExtra2.gameObject.SetActive(false);
             StartCoroutine(AnimateStickerToBackpack());
         }
         else
         {
             Hide();
+        }
+
+        // ✅ AVISO AO VIDEO MANAGER
+        string currentArea = FindObjectOfType<LocationServiceManager>().GetCurrentAreaName();
+        if (!VideoManager.Instance.FoiVistoNaSessao(currentArea))
+        {
+            VideoManager.Instance.PrepareVideo(currentArea);
         }
     }
 
@@ -119,7 +117,7 @@ public class PhotoAreaOverlay : MonoBehaviour
         RectTransform stickerRT = stickerMain.rectTransform;
         Vector3 originalScale = stickerRT.localScale;
 
-        // Fase 1: Encolher o sticker
+        // Encolher o sticker
         float shrinkTime = 0f;
         while (shrinkTime < shrinkDuration)
         {
@@ -136,7 +134,7 @@ public class PhotoAreaOverlay : MonoBehaviour
             yield return null;
         }
 
-        // Fase 2: Voar até a mochila (mantém tamanho reduzido)
+        // Voar até a mochila
         Vector3 startPosition = stickerRT.position;
         Vector3 targetPosition = backpackIconTarget.position;
         float flyTime = 0f;
@@ -146,26 +144,23 @@ public class PhotoAreaOverlay : MonoBehaviour
             flyTime += Time.deltaTime;
             float progress = Mathf.SmoothStep(0f, 1f, flyTime / flyDuration);
             stickerRT.position = Vector3.Lerp(startPosition, targetPosition, progress);
-            stickerRT.localScale = originalScale * minScale; // mantém fixo
+            stickerRT.localScale = originalScale * minScale;
 
             if (stickerGlow != null)
             {
                 stickerGlow.rectTransform.position = stickerRT.position;
                 stickerGlow.rectTransform.localScale = originalScale * minScale * stickerGlowScaleMultiplier;
                 Color c = stickerGlow.color;
-                c.a = Mathf.Lerp(stickerGlowAlpha, 0f, progress); // fade out
+                c.a = Mathf.Lerp(stickerGlowAlpha, 0f, progress);
                 stickerGlow.color = c;
             }
             yield return null;
         }
 
-        // Some no final
         stickerRT.position = targetPosition;
         stickerRT.localScale = Vector3.zero;
         if (stickerGlow != null)
-        {
             stickerGlow.gameObject.SetActive(false);
-        }
 
         overlayPanel.SetActive(false);
         stickerMain.gameObject.SetActive(false);
@@ -201,11 +196,8 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.wobbleCoroutine = null;
         }
 
-        // --- ANIMAÇÃO DA PROFESSORINHA ---
         if (Instance.photo1AnimationCoroutine != null)
-        {
             Instance.StopCoroutine(Instance.photo1AnimationCoroutine);
-        }
 
         Instance.photo1OriginalScale = Instance.photo1.rectTransform.localScale;
         Instance.photo1.rectTransform.localScale = Vector3.zero;
@@ -219,30 +211,13 @@ public class PhotoAreaOverlay : MonoBehaviour
             Instance.photo3.sprite = img3;
     }
 
-
     private static string FormatStickerName(string rawName)
     {
-        // Remove extensão, exemplo: AraraAzul -> araraazul
         rawName = Path.GetFileNameWithoutExtension(rawName);
-
-        // Insere espaços antes de letras maiúsculas
         var result = Regex.Replace(rawName, "([A-Z])", " $1").Trim();
-
-        // Primeira letra maiúscula
         return char.ToUpper(result[0]) + result.Substring(1);
     }
 
-
-
-
-
-
-
-
-
-
-
-    // --- MODO STICKER ---
     // --- MODO STICKER ---
     public static void ShowSticker(Sprite mainSprite, Sprite overrideExtra1 = null, Sprite overrideExtra2 = null)
     {
@@ -253,7 +228,6 @@ public class PhotoAreaOverlay : MonoBehaviour
         Instance.overlayPanel.SetActive(true);
         Instance.isAnimatingToBackpack = false;
 
-        // Esconde as fotos da área
         Instance.photo1.gameObject.SetActive(false);
         Instance.photo2.gameObject.SetActive(false);
         Instance.photo3.gameObject.SetActive(false);
@@ -262,42 +236,28 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             Instance.stickerMain.sprite = mainSprite;
 
-            // === GERAR TEXTO AUTOMÁTICO DO BALÃO ===
             string prettyName = FormatStickerName(mainSprite.name);
             Instance.stickerMessageText.text =
                 $"Parece que você encontrou a espécie: <b>{prettyName}</b>!";
 
-
-
             Instance.stickerMain.gameObject.SetActive(true);
             Instance.stickerMain.rectTransform.localScale = Instance.stickerOriginalScale;
             Instance.stickerMain.rectTransform.localRotation = Quaternion.identity;
-
-            // ========== MUDANÇA AQUI ==========
-            // Antes: Instance.stickerMain.rectTransform.anchoredPosition = Vector2.zero;
-            // Agora: Usa o offset vertical configurável
             Instance.stickerMain.rectTransform.anchoredPosition = new Vector2(0, Instance.stickerVerticalOffset);
-            // ==================================
 
             if (Instance.wobbleCoroutine != null)
                 Instance.StopCoroutine(Instance.wobbleCoroutine);
 
-            // Setup do glow
             if (Instance.stickerGlow != null)
             {
                 if (Instance.stickerGlow.sprite == null)
-                {
-                    // fallback: usa o próprio sprite do sticker se não houver um glow separado
                     Instance.stickerGlow.sprite = mainSprite;
-                }
+
                 Instance.stickerGlow.gameObject.SetActive(true);
                 Instance.stickerGlow.color = new Color(1f, 0.95f, 0.6f, Instance.stickerGlowAlpha);
-
-                // O glow também recebe o mesmo offset vertical
                 Instance.stickerGlow.rectTransform.anchoredPosition = new Vector2(0, Instance.stickerVerticalOffset);
                 Instance.stickerGlow.rectTransform.localScale = Instance.stickerOriginalScale * Instance.stickerGlowScaleMultiplier;
 
-                // Garantir que o glow esteja por trás
                 int stickerIndex = Instance.stickerMain.transform.GetSiblingIndex();
                 int glowIndex = Mathf.Max(0, stickerIndex - 1);
                 Instance.stickerGlow.transform.SetSiblingIndex(glowIndex);
@@ -310,16 +270,14 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             if (overrideExtra1 != null)
                 Instance.stickerExtra1.sprite = overrideExtra1;
-            bool hasSprite = Instance.stickerExtra1.sprite != null;
-            Instance.stickerExtra1.gameObject.SetActive(hasSprite);
+            Instance.stickerExtra1.gameObject.SetActive(Instance.stickerExtra1.sprite != null);
         }
 
         if (Instance.stickerExtra2 != null)
         {
             if (overrideExtra2 != null)
                 Instance.stickerExtra2.sprite = overrideExtra2;
-            bool hasSprite = Instance.stickerExtra2.sprite != null;
-            Instance.stickerExtra2.gameObject.SetActive(hasSprite);
+            Instance.stickerExtra2.gameObject.SetActive(Instance.stickerExtra2.sprite != null);
         }
     }
 
@@ -392,26 +350,18 @@ public class PhotoAreaOverlay : MonoBehaviour
         rt.localRotation = Quaternion.identity;
         rt.localScale = stickerOriginalScale;
         if (stickerGlow != null)
-        {
             stickerGlow.rectTransform.localScale = stickerOriginalScale * stickerGlowScaleMultiplier;
-        }
     }
 
-    // --- NOVO: Animação da professorinha (photo1) ---
     private IEnumerator AnimatePhoto1()
     {
         RectTransform rt = photo1.rectTransform;
-
-        // Guarda posição e escala originais
         Vector3 targetPos = rt.anchoredPosition;
-        Vector3 offScreenStart = targetPos + new Vector3(-Screen.width * 0.6f, 0f, 0f); // começa fora da tela à esquerda
+        Vector3 offScreenStart = targetPos + new Vector3(-Screen.width * 0.6f, 0f, 0f);
         rt.anchoredPosition = offScreenStart;
-
-        // Começa um pouco inclinada e menor
         rt.localScale = photo1OriginalScale * 0.95f;
-        rt.localRotation = Quaternion.Euler(0, 0, 10f); // inclinada pra direita
+        rt.localRotation = Quaternion.Euler(0, 0, 10f);
 
-        // --- Entrada suave com curva e leve "bounce" natural ---
         float duration = 1.2f;
         float t = 0f;
 
@@ -419,29 +369,20 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             t += Time.deltaTime;
             float progress = Mathf.Clamp01(t / duration);
-            // Suavização (easeOutCubic)
             float eased = 1f - Mathf.Pow(1f - progress, 3f);
 
-            // Movimento lateral fluido
             rt.anchoredPosition = Vector3.Lerp(offScreenStart, targetPos, eased);
-
-            // Escala com leve overshoot, mas suavizando no final
             float scale = Mathf.Lerp(0.95f, 1.0f + Mathf.Sin(progress * Mathf.PI) * 0.02f, eased);
             rt.localScale = photo1OriginalScale * scale;
-
-            // Rotação vai suavizando até ficar reta
             float rotation = Mathf.Lerp(10f, 0f, eased);
             rt.localRotation = Quaternion.Euler(0, 0, rotation);
-
             yield return null;
         }
 
-        // Garante estado final exato
         rt.anchoredPosition = targetPos;
         rt.localScale = photo1OriginalScale;
         rt.localRotation = Quaternion.identity;
 
-        // --- Transição suave para o loop contínuo ---
         float transitionTime = 0.2f;
         float startScale = rt.localScale.x;
         float endScale = 1f;
@@ -455,19 +396,14 @@ public class PhotoAreaOverlay : MonoBehaviour
             yield return null;
         }
 
-        // --- Loop contínuo de balanço e pulso suaves ---
         float time = 0f;
         while (overlayPanel.activeSelf && !showingSticker)
         {
             time += Time.deltaTime;
-
-            // Balanço natural
             float angle = Mathf.Sin(time * 1.5f) * 3f;
-            float pulse = 1f + Mathf.Sin(time * 2f) * 0.015f; // pulso mais sutil (antes era 0.02f)
-
+            float pulse = 1f + Mathf.Sin(time * 2f) * 0.015f;
             rt.localRotation = Quaternion.Euler(0, 0, angle);
             rt.localScale = photo1OriginalScale * pulse;
-
             yield return null;
         }
 
@@ -497,16 +433,6 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             stickerGlow.gameObject.SetActive(false);
             stickerGlow.rectTransform.localScale = stickerGlowOriginalScale;
-        }
-
-        if (!showingSticker && playVideo)
-        {
-            VideoPlayState.IsAuthorized = true;
-            var nav = FindObjectOfType<NavigationManager>();
-            if (nav != null && nav.currentState == NavigationManager.AppState.Exploracao)
-            {
-                nav.TryPlayExploracaoVideo();
-            }
         }
 
         showingSticker = false;

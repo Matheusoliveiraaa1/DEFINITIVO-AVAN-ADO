@@ -13,9 +13,13 @@ public class NavBarController : MonoBehaviour
     public GameObject botao1;      // Arraste o primeiro botão aqui
     public GameObject botao2;      // Arraste o segundo botão aqui
 
+    [HideInInspector]
+    public bool ignoreWhileVideoPlaying = false; // flag para ignorar Update
+
     void Update()
     {
-        // Se a RawImage estiver ativa, desativa NavBar + Imagens Extras + Botões
+        if (ignoreWhileVideoPlaying) return;
+
         if (rawImage != null && rawImage.gameObject.activeSelf)
         {
             if (navBar != null) navBar.SetActive(false);
@@ -24,7 +28,7 @@ public class NavBarController : MonoBehaviour
             if (botao1 != null) botao1.SetActive(false);
             if (botao2 != null) botao2.SetActive(false);
         }
-        else // Se a RawImage estiver inativa, reativa tudo
+        else
         {
             if (navBar != null) navBar.SetActive(true);
             if (imagemExtra1 != null) imagemExtra1.gameObject.SetActive(true);
