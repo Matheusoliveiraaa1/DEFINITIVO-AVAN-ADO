@@ -348,14 +348,26 @@ public class LocationServiceManager : MonoBehaviour
 
             if (distance <= effectiveRadius)
             {
+                if (poi.isStickerPoint && !IsStickerAllowedForCurrentMode(poi))
+                    continue;
+
+                // 🔒 BLOQUEIO CursoDagua
+                if (!poi.isStickerPoint && poi.areaName == "CursoDagua" && !CanActivateCursoDagua())
+                {
+                    messageText.text = "Visite Serrapilheira, Subosque ou Dossel antes de acessar o Curso D'Água.";
+                    cameraButton.SetActive(false);
+                    return; // SAI completamente do método
+                }
+
+                // ✅ Só agora considera que está dentro
                 isInsideAnyArea = true;
                 activeArea = poi;
-
-                if (poi.isStickerPoint && !IsStickerAllowedForCurrentMode(poi)) continue;
 
                 HandlePointTrigger(poi, ref isInsideAnyArea);
                 break;
             }
+
+
         }
 
         if (isInsideAnyArea && activeArea != null && !activeArea.isStickerPoint)
@@ -634,8 +646,11 @@ public class LocationServiceManager : MonoBehaviour
 
     private bool CanActivateCursoDagua()
     {
-        return visitedAreas.Contains("Serrapilheira") || visitedAreas.Contains("Epifitas") || visitedAreas.Contains("Subosque");
+        return visitedAreas.Contains("Serrapilheira") ||
+               visitedAreas.Contains("Subosque") ||
+               visitedAreas.Contains("Dossel");
     }
+
 
     private void SaveVisitedAreas()
     {
