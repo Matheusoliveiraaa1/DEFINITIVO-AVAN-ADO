@@ -1341,8 +1341,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 354.36, y: 396}
-  m_SizeDelta: {x: 371.27, y: 357.98}
+  m_AnchoredPosition: {x: -11, y: -559}
+  m_SizeDelta: {x: 439.6889, y: 411}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &197444067
 MonoBehaviour:
@@ -2416,7 +2416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 148.72644, y: 622.8131}
+  m_AnchoredPosition: {x: 123, y: 659}
   m_SizeDelta: {x: 878.59, y: 852.8846}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &288568211
@@ -5609,7 +5609,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 57.639, y: -64.688}
+  m_AnchoredPosition: {x: 57.638916, y: -64.68799}
   m_SizeDelta: {x: -502.9, y: 606.63}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &612590129
@@ -6523,6 +6523,81 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 693262099}
+  m_CullTransparentMesh: 1
+--- !u!1 &694225393
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 694225394}
+  - component: {fileID: 694225396}
+  - component: {fileID: 694225395}
+  m_Layer: 5
+  m_Name: PedroCarvalhoImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &694225394
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694225393}
+  m_LocalRotation: {x: -0, y: -0, z: -0.006501199, w: 0.99997884}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1321318702}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.745}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 454, y: -184}
+  m_SizeDelta: {x: 863.7815, y: 1342.8293}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &694225395
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694225393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 1a245ddd469fab34da464301e6be7fb6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &694225396
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 694225393}
   m_CullTransparentMesh: 1
 --- !u!1 &709472837
 GameObject:
@@ -10016,7 +10091,7 @@ MonoBehaviour:
   dosselStickers:
   - {fileID: 1652102910857222158, guid: f05898dbdd445524c8b800b01888d487, type: 3}
   - {fileID: 997361853740005891, guid: 0c84dbee6b2e31d4da946182241c27fe, type: 3}
-  - {fileID: 716919775942253321, guid: edecedfce84818f40a9c99919dec6282, type: 3}
+  - {fileID: 3191690627969302062, guid: 0673b063c3b7385458b408dabcded06e, type: 3}
   - {fileID: 8205815776363827919, guid: dfb260132ca48564590cdc4c385ab9a9, type: 3}
   - {fileID: 7934090030627619050, guid: 2614210dec8c36c429599f67aacc76a3, type: 3}
   epifitasStickers:
@@ -10107,16 +10182,16 @@ MonoBehaviour:
     message: 
     areaName: Epifitas
     detectionRadius: 12
-  - latitude: -26.90567
-    longitude: -49.07912
+  - latitude: 1
+    longitude: 2
     message: 
     areaName: Serrapilheira
     detectionRadius: 12
-  - latitude: -26.90551
-    longitude: -49.07995
+  - latitude: -26.9055
+    longitude: -49.07986
     message: 
     areaName: CursoDagua
-    detectionRadius: 25
+    detectionRadius: 12
   stickerPoints:
   - latitude: -26.90591
     longitude: -49.07959
@@ -10227,6 +10302,8 @@ MonoBehaviour:
   stickerGlow: {fileID: 1668427604}
   stickerGlowScaleMultiplier: 1.35
   stickerGlowAlpha: 0.5
+  rawImage1: {fileID: 2037489350}
+  rawImage2: {fileID: 1631988501}
   stickerPopDuration: 0.3
   stickerPopScale: 1.2
   stickerWobbleAngle: 5
@@ -10333,28 +10410,28 @@ MonoBehaviour:
   tutorialClip: {fileID: 8300000, guid: ea3d930ecb98ef74885b70cd08b135d9, type: 3}
   pins:
   - pinName: CursoDagua
-    position: {x: -250, y: -282}
+    position: {x: -225.3, y: -450}
     description: "Riachos, nascentes e \xE1reas \xFAmidas s\xE3o essenciais para
       o equil\xEDbrio da floresta. Al\xE9m de fornecer \xE1gua, regulam o microclima,
       favorecem a biodiversidade influenciando a distribui\xE7\xE3o de plantas e
       animais."
   - pinName: Subosque
-    position: {x: -143, y: 11}
+    position: {x: 0, y: 65.7}
     description: "Camada intermedi\xE1ria da floresta, com luz filtrada pelas copas
       das \xE1rvores. Abriga esp\xE9cies adaptadas \xE0 sombra, local onde crescem
       as mudas que garantem a regenera\xE7\xE3o natural da floresta."
   - pinName: Dossel
-    position: {x: 45, y: 498}
+    position: {x: 59, y: 478}
     description: "Parte mais alta da floresta, formada pelas copas das \xE1rvores.
       \xC9 onde ocorre a maior capta\xE7\xE3o de luz solar, sustentando a produ\xE7\xE3o
       de energia do ecossistema e a vida de muitas esp\xE9cies."
   - pinName: Epifitas
-    position: {x: 275, y: 430}
+    position: {x: -154, y: -18}
     description: "Plantas que crescem apoiadas sobre troncos e galhos, usando outras
       \xE1rvores apenas como suporte. N\xE3o s\xE3o parasitas e contribuem para a
       biodiversidade, criando micro-habitats e ajudando a reter \xE1gua no ambiente."
   - pinName: Serrapilheira
-    position: {x: 66, y: 159}
+    position: {x: -263, y: -258}
     description: "Camada de folhas, galhos, frutos, sementes e toda mat\xE9ria em
       decomposi\xE7\xE3o que cobre o solo da floresta. Ela protege o solo, mant\xE9m
       a umidade e devolve nutrientes ao ecossistema, sustentando a vida de \xEDnumeras
@@ -10375,7 +10452,7 @@ MonoBehaviour:
   dosselStickers:
   - {fileID: 21300000, guid: bb4dba59b6181f4478ed055e6020ceb4, type: 3}
   - {fileID: 21300000, guid: e10c79eb4ebc0c2459ee7202c6b93836, type: 3}
-  - {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
+  - {fileID: 21300000, guid: e3f9379be0717d2439fb8a68313c51f3, type: 3}
   - {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
   - {fileID: 21300000, guid: c7e5297a1f8818947aa9538fe372838c, type: 3}
   epifitasStickers:
@@ -10551,13 +10628,13 @@ MonoBehaviour:
     stickerSprite: {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
     description: "Serpente esguia e verde, camuflada entre os galhos. Ca\xE7a anf\xEDbios
       e pequenos animais, controlando suas popula\xE7\xF5es na copa das \xE1rvores. "
-  - commonName: Fruto do cedro
-    scientificName: Cedrela fissilis
-    realPhoto: {fileID: 21300000, guid: e2d2412dbe7af904d9beb793b697e584, type: 3}
-    stickerSprite: {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
-    description: "Libera sementes aladas que voam com o vento. D\xE1 origem a \xE1rvores
-      de grande porte (emergentes), importantes para o equil\xEDbrio e a manuten\xE7\xE3o
-      da floresta."
+  - commonName: Macaco-Prego
+    scientificName: Sapajus apella
+    realPhoto: {fileID: 21300000, guid: 35bcfde66ba11ec45867520587118d9d, type: 3}
+    stickerSprite: {fileID: 21300000, guid: e3f9379be0717d2439fb8a68313c51f3, type: 3}
+    description: "Macaco \xE1gil e muito inteligente. Vive em grupos e \xE9 conhecido
+      por usar pedras para quebrar alimentos, ajudando tamb\xE9m na dispers\xE3o
+      de sementes na floresta."
   - commonName: "Gavi\xE3o"
     scientificName: Spizaetus tyrannus
     realPhoto: {fileID: 21300000, guid: e0084057524a8564d86f406c723cf792, type: 3}
@@ -10634,7 +10711,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 3977d264d7261ca41962ae28e3be892b, type: 3}
   - {fileID: 21300000, guid: 138c800e490e9d041bf758a02a876370, type: 3}
   - {fileID: 21300000, guid: c20167e9d59c5594387f2b5943766f6c, type: 3}
-  - {fileID: 21300000, guid: 518ac904d04787d4d8cc589fcd6c772b, type: 3}
+  - {fileID: 21300000, guid: e3f9379be0717d2439fb8a68313c51f3, type: 3}
   - {fileID: 21300000, guid: c7e5297a1f8818947aa9538fe372838c, type: 3}
   - {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
   - {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
@@ -12447,6 +12524,7 @@ RectTransform:
   - {fileID: 288568210}
   - {fileID: 197444066}
   - {fileID: 1780923018}
+  - {fileID: 694225394}
   m_Father: {fileID: 822219749}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -12560,6 +12638,11 @@ MonoBehaviour:
   extraIdleAmount: 5
   extraIdleSpeed: 1.3
   extraIdleRotation: 1.5
+  firstSlideImage: {fileID: 694225395}
+  firstSlideEnterDuration: 1
+  firstSlideIdleAmount: 6
+  firstSlideIdleSpeed: 1.5
+  firstSlideIdleRotation: 2
   typingSpeed: 0.05
 --- !u!1 &1323261247
 GameObject:
@@ -17804,7 +17887,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00012207031, y: -11.4470215}
+  m_AnchoredPosition: {x: 0, y: -11.4470215}
   m_SizeDelta: {x: 122.1013, y: 175.521}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1725178818
@@ -18965,7 +19048,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: ba0ee7812c1ed7142a11126c62e13347, type: 3}
+  m_Texture: {fileID: 2800000, guid: 136c8b5c928750642a6e68b7ec8c27f7, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

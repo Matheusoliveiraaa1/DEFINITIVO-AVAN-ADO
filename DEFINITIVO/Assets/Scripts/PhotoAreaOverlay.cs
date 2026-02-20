@@ -1,5 +1,4 @@
-﻿
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
@@ -32,6 +31,18 @@ public class PhotoAreaOverlay : MonoBehaviour
     public float stickerGlowScaleMultiplier = 1.35f;
     [Tooltip("Alpha base do glow (0..1)")]
     public float stickerGlowAlpha = 0.5f;
+
+
+
+    [Header("Bloqueio por RawImage")]
+    public RawImage rawImage1;
+    public RawImage rawImage2;
+
+
+
+
+
+
 
     [Header("Animation")]
     [Tooltip("Tempo da animação de crescimento em segundos")]
@@ -190,6 +201,9 @@ public class PhotoAreaOverlay : MonoBehaviour
         if (Instance == null)
             return;
 
+        if (Instance.IsAnyRawImageActive())
+            return;
+
         Instance.showingSticker = false;
         Instance.overlayPanel.SetActive(true);
 
@@ -251,6 +265,10 @@ public class PhotoAreaOverlay : MonoBehaviour
     public static void ShowSticker(Sprite mainSprite, Sprite overrideExtra1 = null, Sprite overrideExtra2 = null)
     {
         if (Instance == null)
+            return;
+
+        // 🔒 BLOQUEIO SE RAW IMAGE ATIVA
+        if (Instance.IsAnyRawImageActive())
             return;
 
         Instance.showingSticker = true;
@@ -477,4 +495,34 @@ public class PhotoAreaOverlay : MonoBehaviour
 
         showingSticker = false;
     }
+
+
+    private bool IsAnyRawImageActive()
+    {
+        if (rawImage1 != null && rawImage1.gameObject.activeInHierarchy)
+            return true;
+
+        if (rawImage2 != null && rawImage2.gameObject.activeInHierarchy)
+            return true;
+
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -46,6 +46,18 @@ public class TutorialManager : MonoBehaviour
 
 
 
+    [Header("Imagem Especial Primeiro Slide")]
+    public Image firstSlideImage;
+
+    public float firstSlideEnterDuration = 1f;
+    public float firstSlideIdleAmount = 6f;
+    public float firstSlideIdleSpeed = 1.5f;
+    public float firstSlideIdleRotation = 2f;
+
+
+
+
+
 
 
     [Header("Configurações de Digitação")]
@@ -58,6 +70,13 @@ public class TutorialManager : MonoBehaviour
     private bool isTyping = false;
     private string currentMessage;
     private bool hasPlayedEntrance = false;
+
+
+
+    private Vector3 firstSlideOriginalPos;
+    private Vector3 firstSlideOffScreenRight;
+    private bool firstSlideAlreadyShown = false;
+    private Coroutine firstSlideIdleCoroutine;
 
     void Awake()
     {
@@ -75,6 +94,11 @@ public class TutorialManager : MonoBehaviour
 
     void Start()
     {
+
+        firstSlideOriginalPos = firstSlideImage.rectTransform.anchoredPosition;
+        firstSlideOffScreenRight = firstSlideOriginalPos + Vector3.right * 1200f;
+
+        firstSlideImage.gameObject.SetActive(false);
         originalImagePosition = professoraImage.rectTransform.anchoredPosition;
         offScreenPosition = originalImagePosition + Vector3.left * 1000f;
 
@@ -92,6 +116,13 @@ public class TutorialManager : MonoBehaviour
 
         // Carrega informações do slide atual
         var slide = slides[index];
+        // ===== IMAGEM ESPECIAL PRIMEIRO SLIDE =====
+        if (index == 0 && !firstSlideAlreadyShown)
+        {
+            firstSlideAlreadyShown = true;
+            firstSlideImage.gameObject.SetActive(true);
+            StartCoroutine(FirstSlideEnter());
+        }
         // 🔊 Controla áudio
         if (audioSource.isPlaying)
             audioSource.Stop();
@@ -180,10 +211,100 @@ public class TutorialManager : MonoBehaviour
             // ❌ NÃO parar o áudio aqui
             return;
         }
-
+        // Se estamos saindo do primeiro slide
+        if (currentSlide == 0 && firstSlideImage.gameObject.activeSelf)
+        {
+            StartCoroutine(FirstSlideExit());
+        }
         currentSlide++;
         ShowSlide(currentSlide);
     }
+
+
+    IEnumerator FirstSlideEnter()
+    {
+        RectTransform rect = firstSlideImage.rectTransform;
+        rect.anchoredPosition = firstSlideOffScreenRight;
+
+        float elapsed = 0f;
+
+        while (elapsed < firstSlideEnterDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0, 1, elapsed / firstSlideEnterDuration);
+            rect.anchoredPosition = Vector3.Lerp(firstSlideOffScreenRight, firstSlideOriginalPos, t);
+            yield return null;
+        }
+
+        rect.anchoredPosition = firstSlideOriginalPos;
+
+        firstSlideIdleCoroutine = StartCoroutine(FirstSlideIdle());
+    }
+
+    IEnumerator FirstSlideIdle()
+    {
+        RectTransform rect = firstSlideImage.rectTransform;
+
+        while (true)
+        {
+            float time = Time.time * firstSlideIdleSpeed;
+
+            float offsetX = Mathf.Sin(time * 1.2f) * firstSlideIdleAmount;
+            float offsetY = Mathf.Cos(time * 0.8f) * (firstSlideIdleAmount * 0.4f);
+
+            rect.anchoredPosition = firstSlideOriginalPos + new Vector3(offsetX, offsetY, 0);
+
+            float rot = Mathf.Sin(time * 1.5f) * firstSlideIdleRotation;
+            rect.localRotation = Quaternion.Euler(0, 0, rot);
+
+            yield return null;
+        }
+    }
+
+
+
+
+
+
+    IEnumerator FirstSlideExit()
+    {
+        if (firstSlideIdleCoroutine != null)
+            StopCoroutine(firstSlideIdleCoroutine);
+
+        RectTransform rect = firstSlideImage.rectTransform;
+
+        Vector3 startPos = rect.anchoredPosition;
+        Vector3 targetPos = firstSlideOriginalPos + Vector3.right * 1200f;
+
+        float elapsed = 0f;
+
+        while (elapsed < firstSlideEnterDuration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.SmoothStep(0, 1, elapsed / firstSlideEnterDuration);
+            rect.anchoredPosition = Vector3.Lerp(startPos, targetPos, t);
+            yield return null;
+        }
+
+        firstSlideImage.gameObject.SetActive(false);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
