@@ -41,6 +41,20 @@ public class NativeCameraExample : MonoBehaviour
     public float confirmSlideStayTime = 5f;
 
 
+    [Header("Message Sounds")]
+    public AudioSource messageAudioSource;
+
+    public AudioClip stickerLimitSound;
+    public AudioClip errorSound;
+    public AudioClip warningSound;
+
+    [Tooltip("Tempo mínimo entre cada som de mensagem")]
+    public float messageSoundCooldown = 2f;
+
+    private float lastMessageSoundTime = -999f;
+
+
+
 
 
     [Header("Imagem Deslizante")]
@@ -59,6 +73,9 @@ public class NativeCameraExample : MonoBehaviour
     [HideInInspector] private int currentPageIndex = 0;
 
 
+    [Header("Áudio Sliding Image")]
+    public AudioSource audioSource;
+    public AudioClip slidingImageClip;
 
 
 
@@ -298,9 +315,24 @@ public class NativeCameraExample : MonoBehaviour
     }
 
 
-    public void ShowStickerLimitMessage() => StartCoroutine(ShowMessageCoroutine(stickerLimitMessage, 3f));
-    public void ShowErrorMessage() => StartCoroutine(ShowMessageCoroutine(errorMessage, 3f));
-    public void ShowWarningMessage() => StartCoroutine(ShowMessageCoroutine(warningMessage, 3f));
+    public void ShowStickerLimitMessage()
+    {
+        PlayMessageSound(stickerLimitSound);
+        StartCoroutine(ShowMessageCoroutine(stickerLimitMessage, 3f));
+    }
+
+    public void ShowErrorMessage()
+    {
+        PlayMessageSound(errorSound);
+        StartCoroutine(ShowMessageCoroutine(errorMessage, 3f));
+    }
+
+    public void ShowWarningMessage()
+    {
+        PlayMessageSound(warningSound);
+        StartCoroutine(ShowMessageCoroutine(warningMessage, 3f));
+    }
+
 
     public Sprite GetStickerSprite(string areaName, int index)
     {
@@ -972,6 +1004,12 @@ public class NativeCameraExample : MonoBehaviour
         // garante que a imagem está ativa
         slidingImage.gameObject.SetActive(true);
 
+        if (audioSource != null && slidingImageClip != null)
+        {
+            audioSource.PlayOneShot(slidingImageClip);
+        }
+
+
         // posição final = onde você deixou no Unity
         slidingFinalPos = slidingImage.anchoredPosition;
 
@@ -1011,6 +1049,20 @@ public class NativeCameraExample : MonoBehaviour
         slidingImage.gameObject.SetActive(false);
     }
 
+
+
+    private void PlayMessageSound(AudioClip clip)
+    {
+        if (clip == null || messageAudioSource == null)
+            return;
+
+        // ⛔ Bloqueia spam
+        if (Time.time < lastMessageSoundTime + messageSoundCooldown)
+            return;
+
+        messageAudioSource.PlayOneShot(clip);
+        lastMessageSoundTime = Time.time;
+    }
 
 
 

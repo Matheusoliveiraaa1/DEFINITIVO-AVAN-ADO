@@ -6,11 +6,14 @@ using System.Collections.Generic;
 public class PostVideoImageManager : MonoBehaviour
 {
     [System.Serializable]
+    
     public class AreaPostPrefab
     {
         public string areaName;
-        public GameObject prefab; // ← PREFAB, não Sprite
+        public GameObject prefab;
+        public AudioClip audioClip; // 🔊 NOVO
     }
+
 
     public List<AreaPostPrefab> areaPrefabs;
 
@@ -21,10 +24,16 @@ public class PostVideoImageManager : MonoBehaviour
     public float breathingAmplitude = 0.02f;
     public float breathingSpeed = 1.5f;
 
+    [Header("Audio")]
+    public AudioSource audioSource;
+
+
     private Dictionary<string, GameObject> prefabByArea;
     private GameObject currentInstance;
     private Vector2 targetPosition;
     private Coroutine animCoroutine;
+    private Dictionary<string, AudioClip> audioByArea;
+
 
     private NavigationManager nav;
 
@@ -32,13 +41,20 @@ public class PostVideoImageManager : MonoBehaviour
     private void Awake()
     {
         prefabByArea = new Dictionary<string, GameObject>();
+        audioByArea = new Dictionary<string, AudioClip>();
+
         foreach (var a in areaPrefabs)
         {
             if (!prefabByArea.ContainsKey(a.areaName) && a.prefab != null)
                 prefabByArea.Add(a.areaName, a.prefab);
+
+            if (!audioByArea.ContainsKey(a.areaName) && a.audioClip != null)
+                audioByArea.Add(a.areaName, a.audioClip);
         }
+
         nav = FindObjectOfType<NavigationManager>();
     }
+
 
     public void ShowForArea(string areaName)
     {
@@ -52,6 +68,12 @@ public class PostVideoImageManager : MonoBehaviour
             Destroy(currentInstance);
 
         currentInstance = Instantiate(prefabByArea[areaName], transform);
+        // 🔊 TOCAR ÁUDIO DA ÁREA
+        if (audioSource != null && audioByArea.ContainsKey(areaName))
+        {
+            audioSource.PlayOneShot(audioByArea[areaName]);
+        }
+
         RectTransform rt = currentInstance.GetComponent<RectTransform>();
 
         if (rt == null)

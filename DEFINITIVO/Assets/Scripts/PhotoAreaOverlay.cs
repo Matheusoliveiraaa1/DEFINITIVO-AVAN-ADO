@@ -57,6 +57,22 @@ public class PhotoAreaOverlay : MonoBehaviour
     [Tooltip("Posição vertical do sticker (valores positivos sobem)")]
     public float stickerVerticalOffset = 150f;
 
+    [Header("Area Audio")]
+    public AudioSource areaAudioSource;
+    public AudioClip areaEnterClip;
+    public float areaAudioCooldown = 30f;
+
+    [Header("Sticker Audio")]
+    public AudioSource stickerAudioSource;
+    public AudioClip stickerEnterClip;
+    public float stickerAudioCooldown = 30f;
+
+    private float lastStickerAudioTime = -999f;
+
+
+    private float lastAreaAudioTime = -999f;
+
+
     private bool showingSticker = false;
     private Vector3 stickerOriginalScale;
     private Vector3 stickerGlowOriginalScale;
@@ -177,6 +193,19 @@ public class PhotoAreaOverlay : MonoBehaviour
         Instance.showingSticker = false;
         Instance.overlayPanel.SetActive(true);
 
+        // 🔊 TOCAR ÁUDIO COM COOLDOWN
+        if (Instance.areaAudioSource != null && Instance.areaEnterClip != null)
+        {
+            if (Time.time - Instance.lastAreaAudioTime >= Instance.areaAudioCooldown)
+            {
+                Instance.areaAudioSource.PlayOneShot(Instance.areaEnterClip);
+                Instance.lastAreaAudioTime = Time.time;
+            }
+        }
+
+
+
+
         Instance.photo1.gameObject.SetActive(true);
         Instance.photo2.gameObject.SetActive(true);
         Instance.photo3.gameObject.SetActive(true);
@@ -226,6 +255,17 @@ public class PhotoAreaOverlay : MonoBehaviour
 
         Instance.showingSticker = true;
         Instance.overlayPanel.SetActive(true);
+        // 🔊 TOCAR ÁUDIO DO STICKER COM COOLDOWN
+        if (Instance.stickerAudioSource != null && Instance.stickerEnterClip != null)
+        {
+            if (Time.time - Instance.lastStickerAudioTime >= Instance.stickerAudioCooldown)
+            {
+                Instance.stickerAudioSource.PlayOneShot(Instance.stickerEnterClip);
+                Instance.lastStickerAudioTime = Time.time;
+            }
+        }
+
+
         Instance.isAnimatingToBackpack = false;
 
         Instance.photo1.gameObject.SetActive(false);

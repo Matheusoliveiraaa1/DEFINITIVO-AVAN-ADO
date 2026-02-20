@@ -4,12 +4,16 @@ using TMPro;
 using System.Collections;
 
 [System.Serializable]
+
 public class TutorialSlide
 {
-    public string message;            // Texto da fala
-    public Sprite professoraSprite;   // Sprite da professora
-    public Sprite extraImage;         // NOVO → sprite extra por fala
+    public string message;
+    public Sprite professoraSprite;
+    public Sprite extraImage;
+
+    public AudioClip voiceAudio; // 🔥 NOVO
 }
+
 
 public class TutorialManager : MonoBehaviour
 {
@@ -22,6 +26,10 @@ public class TutorialManager : MonoBehaviour
 
     [Header("Conteúdo do Tutorial")]
     public TutorialSlide[] slides; // NOVO → tudo em um lugar só!
+
+    [Header("Áudio")]
+    public AudioSource audioSource;
+
 
     [Header("Configurações de Animação")]
     public float slideInDuration = 1.5f;
@@ -84,6 +92,16 @@ public class TutorialManager : MonoBehaviour
 
         // Carrega informações do slide atual
         var slide = slides[index];
+        // 🔊 Controla áudio
+        if (audioSource.isPlaying)
+            audioSource.Stop();
+
+        if (slide.voiceAudio != null)
+        {
+            audioSource.clip = slide.voiceAudio;
+            audioSource.Play();
+        }
+
 
         professoraImage.sprite = slide.professoraSprite;
 
@@ -158,12 +176,16 @@ public class TutorialManager : MonoBehaviour
 
             tutorialText.text = currentMessage;
             isTyping = false;
+
+            // ❌ NÃO parar o áudio aqui
             return;
         }
 
         currentSlide++;
         ShowSlide(currentSlide);
     }
+
+
 
     IEnumerator AnimateProfessoraEntrance()
     {
@@ -247,6 +269,9 @@ public class TutorialManager : MonoBehaviour
 
     void EndTutorial()
     {
+        if (audioSource.isPlaying)
+            audioSource.Stop();
+
         StopAllCoroutines();
         PlayerPrefs.SetInt("TutorialVisto", 1);
         PlayerPrefs.Save();

@@ -14,6 +14,14 @@ public class LockedStickerHintController : MonoBehaviour
     public float floatAmplitude = 10f;
     public float floatSpeed = 1.5f;
 
+    [Header("Áudio")]
+    public AudioSource audioSource;
+    public AudioClip lockedStickerClip;
+    public float audioCooldown = 3f; // tempo mínimo entre toques
+
+    private float lastAudioTime = -999f;
+
+
     private Vector2 offRight;
     private Vector2 offLeft;
     private Vector2 center;
@@ -67,7 +75,19 @@ public class LockedStickerHintController : MonoBehaviour
     {
         Debug.Log("[LockedStickerHint] ShowOrExtend chamado");
 
-        remainingTime += baseStayTime;
+
+        // 🔊 Controle de cooldown do áudio
+        if (audioSource != null && lockedStickerClip != null)
+        {
+            if (Time.time - lastAudioTime >= audioCooldown)
+            {
+                audioSource.PlayOneShot(lockedStickerClip);
+                lastAudioTime = Time.time;
+            }
+        }
+
+        remainingTime = baseStayTime;
+
         Debug.Log("[LockedStickerHint] RemainingTime: " + remainingTime);
 
         if (!isVisible || isExiting)

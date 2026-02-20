@@ -109,6 +109,11 @@ public class MapPinsController : MonoBehaviour
     public float skipButtonPulseScale = 1.1f;
     public float skipButtonPulseSpeed = 1.5f;
 
+    [Header("Tutorial Audio")]
+    public AudioSource tutorialAudioSource;
+    public AudioClip tutorialClip;
+
+
     private Coroutine skipButtonPulseCoroutine;
 
     private Coroutine tutorialCoroutine;
@@ -665,6 +670,11 @@ public class MapPinsController : MonoBehaviour
 
         tutorialImage.anchoredPosition = startPos;
         tutorialImage.gameObject.SetActive(true);
+        if (tutorialAudioSource != null && tutorialClip != null)
+        {
+            tutorialAudioSource.PlayOneShot(tutorialClip);
+        }
+
 
         // Mostra botão pular
         skipTutorialButton.onClick.RemoveAllListeners();

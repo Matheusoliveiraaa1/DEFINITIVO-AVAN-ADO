@@ -20,12 +20,15 @@ public class MapVideoPlayer : MonoBehaviour
         closeButton.onClick.RemoveAllListeners();
         closeButton.onClick.AddListener(Close);
 
+        // Evento chamado quando o vídeo termina
         videoPlayer.loopPointReached += OnVideoFinished;
+
+        // NOVO: Evento chamado quando o vídeo está preparado e pronto para dar o primeiro frame
+        videoPlayer.prepareCompleted += OnVideoPrepared;
     }
 
     public void Play(string areaName)
     {
-        // 🔒 segurança extra (opcional, mas recomendado)
         if (!VideoUnlockManager.IsUnlocked(areaName))
         {
             Debug.Log("🔒 Vídeo ainda não desbloqueado: " + areaName);
@@ -38,13 +41,26 @@ public class MapVideoPlayer : MonoBehaviour
 
         string path = Path.Combine(Application.streamingAssetsPath, videoFile);
 
+        // 1. Para o vídeo atual
         videoPlayer.Stop();
+
+        // 2. ESCONDE a RawImage para não mostrar o frame antigo (o "fantasma")
+        videoRawImage.enabled = false;
+
+        // 3. Configura o novo caminho
         videoPlayer.url = path;
 
+        // 4. Prepara o vídeo (carrega em background) em vez de dar Play direto
         overlayRoot.SetActive(true);
-        videoRawImage.gameObject.SetActive(true);
+        videoPlayer.Prepare();
+    }
 
-        videoPlayer.Play();
+    // Chamado automaticamente quando o VideoPlayer terminar de carregar o vídeo novo
+    void OnVideoPrepared(VideoPlayer vp)
+    {
+        // 5. Agora que o vídeo está pronto, mostramos a imagem e damos o Play
+        videoRawImage.enabled = true;
+        vp.Play();
     }
 
     void OnVideoFinished(VideoPlayer vp)
@@ -55,21 +71,21 @@ public class MapVideoPlayer : MonoBehaviour
     void Close()
     {
         videoPlayer.Stop();
+        // Garantimos que a imagem suma ao fechar para não brilhar o frame antigo na próxima abertura
+        videoRawImage.enabled = false;
         overlayRoot.SetActive(false);
     }
 
     string GetVideoFileForArea(string areaName)
     {
-        switch (areaName)
+        return areaName switch
         {
-            case "CursoDagua": return "CursoDagua.mp4";
-            case "Subosque": return "Subosque.mp4";
-            case "Dossel": return "Dossel.mp4";
-            case "Epifitas": return "Epifitas.mp4";
-            case "Serrapilheira": return "TESTE2.mp4";
-            default:
-                Debug.LogError("❌ Área desconhecida: " + areaName);
-                return null;
-        }
+            "CursoDagua" => "curso_dagua.mp4",
+            "Subosque" => "subosque.mp4",
+            "Dossel" => "dossel.mp4",
+            "Epifitas" => "epifitas.mp4",
+            "Serrapilheira" => "serrapilheira.mp4",
+            _ => null
+        };
     }
 }
