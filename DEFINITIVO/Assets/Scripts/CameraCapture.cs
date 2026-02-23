@@ -40,6 +40,9 @@ public class NativeCameraExample : MonoBehaviour
     public float confirmSlideDuration = 0.5f;
     public float confirmSlideStayTime = 5f;
 
+    [Header("Áudio Confirm Sliding")]
+    public AudioClip confirmSlidingClip;
+
 
     [Header("Message Sounds")]
     public AudioSource messageAudioSource;
@@ -205,6 +208,11 @@ public class NativeCameraExample : MonoBehaviour
             yield break;
 
         confirmSlidingImage.gameObject.SetActive(true);
+
+        if (audioSource != null && confirmSlidingClip != null)
+        {
+            audioSource.PlayOneShot(confirmSlidingClip);
+        }
 
         // 🔥 posição final (definida no editor)
         Vector2 finalPos = confirmSlidingFinalPos;

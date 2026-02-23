@@ -225,7 +225,7 @@ GameObject:
   - component: {fileID: 3499324160528799636}
   m_Layer: 5
   m_Name: PostVideoSerrapilheira
-  m_TagString: Untagged
+  m_TagString: Popup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
