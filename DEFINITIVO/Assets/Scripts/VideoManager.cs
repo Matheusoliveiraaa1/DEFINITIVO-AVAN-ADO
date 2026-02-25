@@ -14,6 +14,10 @@ public class VideoManager : MonoBehaviour
     public RawImage rawImage;
     public NavBarController navController;
 
+
+    [Header("Ativar somente durante vídeo")]
+    public GameObject[] activeWhileVideoPlaying;
+
     private string pendingVideoArea = null;
     private bool isVideoPlaying = false;
     public PostVideoImageManager postVideoImageManager;
@@ -26,6 +30,13 @@ public class VideoManager : MonoBehaviour
 
     private void Awake()
     {
+
+        if (activeWhileVideoPlaying != null)
+        {
+            foreach (var obj in activeWhileVideoPlaying)
+                if (obj != null)
+                    obj.SetActive(false);
+        }
         if (Instance != null && Instance != this)
             Destroy(this.gameObject);
         else
@@ -101,6 +112,13 @@ public class VideoManager : MonoBehaviour
         videoPlayer.renderMode = VideoRenderMode.RenderTexture;
         videoPlayer.Play();
         isVideoPlaying = true;
+
+        if (activeWhileVideoPlaying != null)
+        {
+            foreach (var obj in activeWhileVideoPlaying)
+                if (obj != null)
+                    obj.SetActive(true);
+        }
         videoPlayer.loopPointReached += OnVideoEnd;
         pendingVideoArea = null;
     }
@@ -121,6 +139,13 @@ public class VideoManager : MonoBehaviour
     private void OnVideoEnd(VideoPlayer vp)
     {
         isVideoPlaying = false;
+
+        if (activeWhileVideoPlaying != null)
+        {
+            foreach (var obj in activeWhileVideoPlaying)
+                if (obj != null)
+                    obj.SetActive(false);
+        }
 
         // Reativa UI
         if (upBar != null)

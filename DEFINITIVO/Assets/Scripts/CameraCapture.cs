@@ -13,7 +13,7 @@ public class NativeCameraExample : MonoBehaviour
     [Header("Photo Display")]
     public RawImage imageDisplay;
     public GameObject closeButton;
-    [HideInInspector]  public string currentArea;
+    [HideInInspector] public string currentArea;
 
     [Header("Sticker Settings")]
     public Transform stickerMenuContent;
@@ -1026,7 +1026,7 @@ public class NativeCameraExample : MonoBehaviour
             slidingFinalPos.x - Screen.width,
             slidingFinalPos.y
         );
-       
+
         // começa fora da tela
         slidingImage.anchoredPosition = offScreenLeft;
 
@@ -1077,4 +1077,3 @@ public class NativeCameraExample : MonoBehaviour
 
 
 }
-

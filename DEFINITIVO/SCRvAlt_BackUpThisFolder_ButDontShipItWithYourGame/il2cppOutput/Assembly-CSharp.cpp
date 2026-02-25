@@ -415,6 +415,7 @@ IL2CPP_EXTERN_C String_t* _stringLiteral2C3A8B5419F8A43AC895EAC122ADD1A9DCA18BB0
 IL2CPP_EXTERN_C String_t* _stringLiteral2CD400BA7CE57BD4A59326B5CB9184C2D39660D8;
 IL2CPP_EXTERN_C String_t* _stringLiteral2D33E6A878653A464DC185BA1422BA57F28899DE;
 IL2CPP_EXTERN_C String_t* _stringLiteral2F7FF529BCB52EBAE5939F6418B3B03C2E23C245;
+IL2CPP_EXTERN_C String_t* _stringLiteral31813077EA99A7CC8BF3F0E0083BD769CDBC8AB7;
 IL2CPP_EXTERN_C String_t* _stringLiteral3217437D09016EA45A2544FF6A304E82515B4382;
 IL2CPP_EXTERN_C String_t* _stringLiteral32B71C4CD20DA20F77A7FEB04948B48AF7B49240;
 IL2CPP_EXTERN_C String_t* _stringLiteral3424A40F5F902ADDC8173BCECD5344B4B4740B0A;
@@ -476,6 +477,7 @@ IL2CPP_EXTERN_C String_t* _stringLiteral9AA19FA11729D14DDFFF88AB940E187C47936812
 IL2CPP_EXTERN_C String_t* _stringLiteral9B168C5E20AE9EAB083368CD498FB270191202BA;
 IL2CPP_EXTERN_C String_t* _stringLiteral9C4D7F750D85E216FB5C20DA77EA443DE38A2413;
 IL2CPP_EXTERN_C String_t* _stringLiteral9D709459A29A60D978EE567ABE2639DB8C524904;
+IL2CPP_EXTERN_C String_t* _stringLiteralA2975678E1C61F8E5B2DA99695D48BBA2E89B73C;
 IL2CPP_EXTERN_C String_t* _stringLiteralA304F124518A9E73DB93D7457F865C0935E7F866;
 IL2CPP_EXTERN_C String_t* _stringLiteralA31F3B97A0C37D77AB84BBF53224C60E024D58C7;
 IL2CPP_EXTERN_C String_t* _stringLiteralA3A9D2C519D198B24CED30B30B4504F51F5154B3;
@@ -3010,6 +3012,7 @@ struct VideoManager_tD52415921BDBDAFDF573E5FAA3CCFD7F996CD991  : public MonoBeha
 	VideoPlayer_t48EA4A8117B822BC59590150DED9AD46C62F65D3* ___videoPlayer;
 	RawImage_tFF12F7DB574FBDC1863CF607C7A12A5D9F8D6179* ___rawImage;
 	NavBarController_tD366730A6234CB8698A23DD7C3E8F027889B02A7* ___navController;
+	GameObjectU5BU5D_tFF67550DFCE87096D7A3734EA15B75896B2722CF* ___activeWhileVideoPlaying;
 	String_t* ___pendingVideoArea;
 	bool ___isVideoPlaying;
 	PostVideoImageManager_t67C73326FB18C57EC86F84360AB34561BA0C767A* ___postVideoImageManager;
@@ -4737,6 +4740,7 @@ inline NativeCameraExample_t882A28E67745BDDEE49867BDCEE5B949D18798A8* Object_Fin
 {
 	return ((  NativeCameraExample_t882A28E67745BDDEE49867BDCEE5B949D18798A8* (*) (const RuntimeMethod*))Object_FindAnyObjectByType_TisRuntimeObject_mE7A79400E013891ADB85E4C6A5CF95B447D374BA_gshared)(method);
 }
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void LocationServiceManager_UnlockAllStickersInArea_m6297A0F764950A6A71FAEEBC910D9AC5E2F75973 (LocationServiceManager_t9758BDB83B94A5381D56882D43897C3711C24758* __this, String_t* ___0_areaName, const RuntimeMethod* method) ;
 IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void PhotoAreaOverlay_Show_mF9CAFDC2B59ABB405F1D72197D7E6F7B24B9CC13 (Sprite_tAFF74BC83CD68037494CB0B4F28CBDF8971CAB99* ___0_img1, Sprite_tAFF74BC83CD68037494CB0B4F28CBDF8971CAB99* ___1_img2, Sprite_tAFF74BC83CD68037494CB0B4F28CBDF8971CAB99* ___2_img3, const RuntimeMethod* method) ;
 inline bool Dictionary_2_ContainsKey_m3C0C051440EBD98903EBFC6C134BDC5FCECA823C (Dictionary_2_t6FFAD029BB474A5257D9A441504B633831AF5341* __this, String_t* ___0_key, const RuntimeMethod* method)
 {
@@ -16510,27 +16514,43 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void LocationServiceManager_HandleStickerPoin
 	{
 		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_0 = ___0_poi;
 		NullCheck(L_0);
-		bool L_1 = L_0->___alreadyTriggered;
-		if (L_1)
+		String_t* L_1 = L_0->___areaName;
+		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_2 = ___0_poi;
+		NullCheck(L_2);
+		int32_t L_3 = L_2->___stickerIndex;
+		bool L_4;
+		L_4 = LocationServiceManager_IsStickerCollected_m40B003876F600AE8F87AFB2FD1C38C7806DF0086(__this, L_1, L_3, NULL);
+		if (!L_4)
 		{
-			goto IL_001e;
+			goto IL_0015;
 		}
 	}
 	{
-		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_2 = ___0_poi;
-		NullCheck(L_2);
-		L_2->___alreadyTriggered = (bool)1;
-		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_3 = ___0_poi;
-		LocationServiceManager_RegisterStickerCollection_m926013C07496ADAF8AABAF1F8221157407F2C57A(__this, L_3, NULL);
-		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_4 = ___0_poi;
-		LocationServiceManager_ShowStickerNotification_m146D38511F76CAF11C1B604F4CE47DFEFEAAA3D3(__this, L_4, NULL);
 		return;
 	}
 
-IL_001e:
+IL_0015:
 	{
 		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_5 = ___0_poi;
-		LocationServiceManager_RegisterStickerCollection_m926013C07496ADAF8AABAF1F8221157407F2C57A(__this, L_5, NULL);
+		NullCheck(L_5);
+		bool L_6 = L_5->___alreadyTriggered;
+		if (L_6)
+		{
+			goto IL_0032;
+		}
+	}
+	{
+		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_7 = ___0_poi;
+		NullCheck(L_7);
+		L_7->___alreadyTriggered = (bool)1;
+		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_8 = ___0_poi;
+		LocationServiceManager_RegisterStickerCollection_m926013C07496ADAF8AABAF1F8221157407F2C57A(__this, L_8, NULL);
+		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_9 = ___0_poi;
+		LocationServiceManager_ShowStickerNotification_m146D38511F76CAF11C1B604F4CE47DFEFEAAA3D3(__this, L_9, NULL);
+	}
+
+IL_0032:
+	{
 		return;
 	}
 }
@@ -16657,7 +16677,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void LocationServiceManager_HandleAreaPoint_m
 		bool L_1 = L_0->___alreadyTriggered;
 		if (L_1)
 		{
-			goto IL_0074;
+			goto IL_0080;
 		}
 	}
 	{
@@ -16710,19 +16730,23 @@ IL_003a:
 		String_t* L_18 = L_17->___areaName;
 		__this->___currentAreaName = L_18;
 		Il2CppCodeGenWriteBarrier((void**)(&__this->___currentAreaName), (void*)L_18);
+		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_19 = ___0_poi;
+		NullCheck(L_19);
+		String_t* L_20 = L_19->___areaName;
+		LocationServiceManager_UnlockAllStickersInArea_m6297A0F764950A6A71FAEEBC910D9AC5E2F75973(__this, L_20, NULL);
 		PhotoAreaOverlay_Show_mF9CAFDC2B59ABB405F1D72197D7E6F7B24B9CC13((Sprite_tAFF74BC83CD68037494CB0B4F28CBDF8971CAB99*)NULL, (Sprite_tAFF74BC83CD68037494CB0B4F28CBDF8971CAB99*)NULL, (Sprite_tAFF74BC83CD68037494CB0B4F28CBDF8971CAB99*)NULL, NULL);
 	}
 
-IL_0074:
+IL_0080:
 	{
-		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_19 = __this->___cameraButton;
-		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_20 = ___0_poi;
-		NullCheck(L_20);
-		String_t* L_21 = L_20->___areaName;
-		bool L_22;
-		L_22 = LocationServiceManager_IsAreaCompleted_m71AA10B33CB0226CDA803755662217DB12D338A8(__this, L_21, NULL);
-		NullCheck(L_19);
-		GameObject_SetActive_m638E92E1E75E519E5B24CF150B08CA8E0CDFAB92(L_19, (bool)((((int32_t)L_22) == ((int32_t)0))? 1 : 0), NULL);
+		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_21 = __this->___cameraButton;
+		PointOfInterest_tBDB872EE328C1BF052AAD2C81695D1B9C716C9D3* L_22 = ___0_poi;
+		NullCheck(L_22);
+		String_t* L_23 = L_22->___areaName;
+		bool L_24;
+		L_24 = LocationServiceManager_IsAreaCompleted_m71AA10B33CB0226CDA803755662217DB12D338A8(__this, L_23, NULL);
+		NullCheck(L_21);
+		GameObject_SetActive_m638E92E1E75E519E5B24CF150B08CA8E0CDFAB92(L_21, (bool)((((int32_t)L_24) == ((int32_t)0))? 1 : 0), NULL);
 		return;
 	}
 }
@@ -18246,6 +18270,167 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void LocationServiceManager_HideGPSPanel_m0D6
 
 IL_0027:
 	{
+		return;
+	}
+}
+IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void LocationServiceManager_UnlockAllStickersInArea_m6297A0F764950A6A71FAEEBC910D9AC5E2F75973 (LocationServiceManager_t9758BDB83B94A5381D56882D43897C3711C24758* __this, String_t* ___0_areaName, const RuntimeMethod* method) 
+{
+	static bool s_Il2CppMethodInitialized;
+	if (!s_Il2CppMethodInitialized)
+	{
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Debug_t8394C7EEAECA3689C2C9B9DE9C7166D73596276F_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Dictionary_2_ContainsKey_m3C0C051440EBD98903EBFC6C134BDC5FCECA823C_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Dictionary_2_get_Item_mF3557625D2D5FEA5AB7F3786DF5DC1144808ECFC_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Dictionary_2_set_Item_m529105CC1CF8E638D570A195BF4D8BA4984EB3E8_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Enumerator_Dispose_m3532DD37EBD91F44C319937FB784672271D48AD3_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Enumerator_MoveNext_m14FDCEB75C555373AF0E10A5572B475DC56A1674_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&Enumerator_get_Current_m78FBE91E34FA4238D1B53E182AB56717371D17C4_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&List_1_Add_m0248A96C5334E9A93E6994B7780478BCD994EA3D_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&List_1_GetEnumerator_m5C840F7EC617C141426871316ABA8437900A07EC_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&List_1__ctor_m17F501B5A5C289ECE1B4F3D6EBF05DFA421433F8_RuntimeMethod_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&List_1_t05915E9237850A58106982B7FE4BC5DA4E872E73_il2cpp_TypeInfo_var);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&_stringLiteral31813077EA99A7CC8BF3F0E0083BD769CDBC8AB7);
+		il2cpp_codegen_initialize_runtime_metadata((uintptr_t*)&_stringLiteralA2975678E1C61F8E5B2DA99695D48BBA2E89B73C);
+		s_Il2CppMethodInitialized = true;
+	}
+	Enumerator_t8346D2F83276857CA8BC3C2FA4CE0B2BDC657B86 V_0;
+	memset((&V_0), 0, sizeof(V_0));
+	StickerPoint_tA92318C5817AC7630F0FE04F932EDA0D2E7B2630* V_1 = NULL;
+	Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* G_B12_0 = NULL;
+	Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* G_B11_0 = NULL;
+	{
+		List_1_t72C8542020B760170E7894FC9784B8BF81BD5DBE* L_0 = __this->___stickerPoints;
+		NullCheck(L_0);
+		Enumerator_t8346D2F83276857CA8BC3C2FA4CE0B2BDC657B86 L_1;
+		L_1 = List_1_GetEnumerator_m5C840F7EC617C141426871316ABA8437900A07EC(L_0, List_1_GetEnumerator_m5C840F7EC617C141426871316ABA8437900A07EC_RuntimeMethod_var);
+		V_0 = L_1;
+	}
+	{
+		auto __finallyBlock = il2cpp::utils::Finally([&]
+		{
+
+FINALLY_0074:
+			{
+				Enumerator_Dispose_m3532DD37EBD91F44C319937FB784672271D48AD3((&V_0), Enumerator_Dispose_m3532DD37EBD91F44C319937FB784672271D48AD3_RuntimeMethod_var);
+				return;
+			}
+		});
+		try
+		{
+			{
+				goto IL_0069_1;
+			}
+
+IL_000e_1:
+			{
+				StickerPoint_tA92318C5817AC7630F0FE04F932EDA0D2E7B2630* L_2;
+				L_2 = Enumerator_get_Current_m78FBE91E34FA4238D1B53E182AB56717371D17C4_inline((&V_0), Enumerator_get_Current_m78FBE91E34FA4238D1B53E182AB56717371D17C4_RuntimeMethod_var);
+				V_1 = L_2;
+				StickerPoint_tA92318C5817AC7630F0FE04F932EDA0D2E7B2630* L_3 = V_1;
+				NullCheck(L_3);
+				String_t* L_4 = L_3->___areaName;
+				String_t* L_5 = ___0_areaName;
+				bool L_6;
+				L_6 = String_op_Equality_m030E1B219352228970A076136E455C4E568C02C1(L_4, L_5, NULL);
+				if (!L_6)
+				{
+					goto IL_0069_1;
+				}
+			}
+			{
+				String_t* L_7 = ___0_areaName;
+				StickerPoint_tA92318C5817AC7630F0FE04F932EDA0D2E7B2630* L_8 = V_1;
+				NullCheck(L_8);
+				int32_t L_9 = L_8->___stickerIndex;
+				bool L_10;
+				L_10 = LocationServiceManager_IsStickerCollected_m40B003876F600AE8F87AFB2FD1C38C7806DF0086(__this, L_7, L_9, NULL);
+				if (L_10)
+				{
+					goto IL_0069_1;
+				}
+			}
+			{
+				Dictionary_2_t6FFAD029BB474A5257D9A441504B633831AF5341* L_11 = __this->___collectedStickers;
+				String_t* L_12 = ___0_areaName;
+				NullCheck(L_11);
+				bool L_13;
+				L_13 = Dictionary_2_ContainsKey_m3C0C051440EBD98903EBFC6C134BDC5FCECA823C(L_11, L_12, Dictionary_2_ContainsKey_m3C0C051440EBD98903EBFC6C134BDC5FCECA823C_RuntimeMethod_var);
+				if (L_13)
+				{
+					goto IL_0052_1;
+				}
+			}
+			{
+				Dictionary_2_t6FFAD029BB474A5257D9A441504B633831AF5341* L_14 = __this->___collectedStickers;
+				String_t* L_15 = ___0_areaName;
+				List_1_t05915E9237850A58106982B7FE4BC5DA4E872E73* L_16 = (List_1_t05915E9237850A58106982B7FE4BC5DA4E872E73*)il2cpp_codegen_object_new(List_1_t05915E9237850A58106982B7FE4BC5DA4E872E73_il2cpp_TypeInfo_var);
+				List_1__ctor_m17F501B5A5C289ECE1B4F3D6EBF05DFA421433F8(L_16, List_1__ctor_m17F501B5A5C289ECE1B4F3D6EBF05DFA421433F8_RuntimeMethod_var);
+				NullCheck(L_14);
+				Dictionary_2_set_Item_m529105CC1CF8E638D570A195BF4D8BA4984EB3E8(L_14, L_15, L_16, Dictionary_2_set_Item_m529105CC1CF8E638D570A195BF4D8BA4984EB3E8_RuntimeMethod_var);
+			}
+
+IL_0052_1:
+			{
+				Dictionary_2_t6FFAD029BB474A5257D9A441504B633831AF5341* L_17 = __this->___collectedStickers;
+				String_t* L_18 = ___0_areaName;
+				NullCheck(L_17);
+				List_1_t05915E9237850A58106982B7FE4BC5DA4E872E73* L_19;
+				L_19 = Dictionary_2_get_Item_mF3557625D2D5FEA5AB7F3786DF5DC1144808ECFC(L_17, L_18, Dictionary_2_get_Item_mF3557625D2D5FEA5AB7F3786DF5DC1144808ECFC_RuntimeMethod_var);
+				StickerPoint_tA92318C5817AC7630F0FE04F932EDA0D2E7B2630* L_20 = V_1;
+				NullCheck(L_20);
+				int32_t L_21 = L_20->___stickerIndex;
+				NullCheck(L_19);
+				List_1_Add_m0248A96C5334E9A93E6994B7780478BCD994EA3D_inline(L_19, L_21, List_1_Add_m0248A96C5334E9A93E6994B7780478BCD994EA3D_RuntimeMethod_var);
+			}
+
+IL_0069_1:
+			{
+				bool L_22;
+				L_22 = Enumerator_MoveNext_m14FDCEB75C555373AF0E10A5572B475DC56A1674((&V_0), Enumerator_MoveNext_m14FDCEB75C555373AF0E10A5572B475DC56A1674_RuntimeMethod_var);
+				if (L_22)
+				{
+					goto IL_000e_1;
+				}
+			}
+			{
+				goto IL_0082;
+			}
+		}
+		catch(Il2CppExceptionWrapper& e)
+		{
+			__finallyBlock.StoreException(e.ex);
+		}
+	}
+
+IL_0082:
+	{
+		LocationServiceManager_SaveCollectedStickers_m06F7AB1A6F6A4D66A7296A3851C05F52895D6956(__this, NULL);
+		Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* L_23 = __this->___OnCollectedStickersChanged;
+		Action_tD00B0A84D7945E50C2DFFC28EFEE6ED44ED2AD07* L_24 = L_23;
+		if (L_24)
+		{
+			G_B12_0 = L_24;
+			goto IL_0094;
+		}
+		G_B11_0 = L_24;
+	}
+	{
+		goto IL_0099;
+	}
+
+IL_0094:
+	{
+		NullCheck(G_B12_0);
+		Action_Invoke_m7126A54DACA72B845424072887B5F3A51FC3808E_inline(G_B12_0, NULL);
+	}
+
+IL_0099:
+	{
+		String_t* L_25 = ___0_areaName;
+		String_t* L_26;
+		L_26 = String_Concat_m8855A6DE10F84DA7F4EC113CADDB59873A25573B(_stringLiteral31813077EA99A7CC8BF3F0E0083BD769CDBC8AB7, L_25, _stringLiteralA2975678E1C61F8E5B2DA99695D48BBA2E89B73C, NULL);
+		il2cpp_codegen_runtime_class_init_inline(Debug_t8394C7EEAECA3689C2C9B9DE9C7166D73596276F_il2cpp_TypeInfo_var);
+		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(L_26, NULL);
 		return;
 	}
 }

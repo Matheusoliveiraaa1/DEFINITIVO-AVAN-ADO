@@ -401,14 +401,17 @@ public class LocationServiceManager : MonoBehaviour
 
     private void HandleStickerPoint(PointOfInterest poi)
     {
+        // 🔒 Se já foi coletado, NÃO mostra overlay novamente
+        if (IsStickerCollected(poi.areaName, poi.stickerIndex))
+            return;
+
         if (!poi.alreadyTriggered)
         {
             poi.alreadyTriggered = true;
+
             RegisterStickerCollection(poi);
             ShowStickerNotification(poi);
         }
-        else
-            RegisterStickerCollection(poi);
     }
 
     private void ShowStickerNotification(PointOfInterest poi)
@@ -471,6 +474,7 @@ public class LocationServiceManager : MonoBehaviour
             FindAnyObjectByType<NativeCameraExample>().currentArea = poi.areaName;
 
             currentAreaName = poi.areaName; // ← Salva a área atual
+            UnlockAllStickersInArea(poi.areaName);
 
             PhotoAreaOverlay.Show();
         }
@@ -505,7 +509,7 @@ public class LocationServiceManager : MonoBehaviour
 
     public bool IsStickerUsed(string areaName, int index) => usedStickers.ContainsKey(areaName) && usedStickers[areaName].Contains(index);
     public int GetUsedStickerCount(string areaName) => usedStickers.ContainsKey(areaName) ? usedStickers[areaName].Count : 0;
-    public bool IsAreaCompleted(string areaName) => GetUsedStickerCount(areaName) >= 6;
+    public bool IsAreaCompleted(string areaName) => GetUsedStickerCount(areaName) >= 5;
 
     private void SaveUsedStickers()
     {
@@ -686,7 +690,28 @@ public class LocationServiceManager : MonoBehaviour
 
 
 
+    private void UnlockAllStickersInArea(string areaName)
+    {
+        foreach (var sp in stickerPoints)
+        {
+            if (sp.areaName == areaName)
+            {
+                // Se ainda não foi coletado
+                if (!IsStickerCollected(areaName, sp.stickerIndex))
+                {
+                    if (!collectedStickers.ContainsKey(areaName))
+                        collectedStickers[areaName] = new List<int>();
 
+                    collectedStickers[areaName].Add(sp.stickerIndex);
+                }
+            }
+        }
+
+        SaveCollectedStickers();
+        OnCollectedStickersChanged?.Invoke();
+
+        Debug.Log($"TODOS OS STICKERS DA ÁREA {areaName} FORAM DESBLOQUEADOS");
+    }
 
 
 

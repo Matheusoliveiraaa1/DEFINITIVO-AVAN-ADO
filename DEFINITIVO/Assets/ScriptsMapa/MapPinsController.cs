@@ -114,6 +114,10 @@ public class MapPinsController : MonoBehaviour
     public AudioClip tutorialClip;
 
 
+    [Header("Scroll da Area Info")]
+    public ScrollRect areaScrollRect;
+
+
     private Coroutine skipButtonPulseCoroutine;
 
     private Coroutine tutorialCoroutine;
@@ -291,6 +295,8 @@ public class MapPinsController : MonoBehaviour
         // Histórico de navegação
         panelHistory.Push(areaInfoPanel);
         areaInfoPanel.SetActive(true);
+
+        ResetAreaScroll();
 
         // Título e descrição
         areaTitleText.text = GetDisplayName(pinData.pinName);
@@ -934,6 +940,17 @@ public class MapPinsController : MonoBehaviour
     {
         areaImageOverlay.SetActive(false);
     }
+
+    void ResetAreaScroll()
+    {
+        if (areaScrollRect == null) return;
+
+        Canvas.ForceUpdateCanvases(); // força recalcular layout
+        areaScrollRect.verticalNormalizedPosition = 1f; // volta para o topo
+    }
+
+
+
 
 
 }

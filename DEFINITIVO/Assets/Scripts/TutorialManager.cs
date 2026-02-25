@@ -80,31 +80,44 @@ public class TutorialManager : MonoBehaviour
 
     void Awake()
     {
-        /*
-     if (PlayerPrefs.GetInt("TutorialVisto", 0) == 1)
-     {
-         tutorialPanel.SetActive(false);
-         enabled = false;
-         return;
-     }
-     */
+        if (PlayerPrefs.GetInt("TutorialVisto", 0) == 1)
+        {
+            tutorialPanel.SetActive(false);
+            enabled = false; // desativa o script
+            return;
+        }
 
-        tutorialPanel.SetActive(true);
+        tutorialPanel.SetActive(false);
     }
 
     void Start()
     {
+        StartCoroutine(StartTutorialWithDelay());
+    }
+
+    IEnumerator StartTutorialWithDelay()
+    {
+        yield return new WaitForSeconds(1f); // ⏳ espera 2 segundos
+
+        tutorialPanel.SetActive(true);
 
         firstSlideOriginalPos = firstSlideImage.rectTransform.anchoredPosition;
         firstSlideOffScreenRight = firstSlideOriginalPos + Vector3.right * 1200f;
 
         firstSlideImage.gameObject.SetActive(false);
+
         originalImagePosition = professoraImage.rectTransform.anchoredPosition;
         offScreenPosition = originalImagePosition + Vector3.left * 1000f;
 
         nextButton.onClick.AddListener(NextSlide);
+
         ShowSlide(0);
     }
+
+
+
+
+
 
     void ShowSlide(int index)
     {
