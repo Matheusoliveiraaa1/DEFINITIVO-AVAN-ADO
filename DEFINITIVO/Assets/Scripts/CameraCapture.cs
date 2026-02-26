@@ -209,9 +209,12 @@ public class NativeCameraExample : MonoBehaviour
 
         confirmSlidingImage.gameObject.SetActive(true);
 
+        float clipDuration = 0f;
+
         if (audioSource != null && confirmSlidingClip != null)
         {
             audioSource.PlayOneShot(confirmSlidingClip);
+            clipDuration = confirmSlidingClip.length;
         }
 
         // 🔥 posição final (definida no editor)
@@ -257,6 +260,21 @@ public class NativeCameraExample : MonoBehaviour
 
         // 🔓 libera referência
         confirmSlideCoroutine = null;
+
+        // 🔥 Só executa se for Dossel
+        if (currentArea == "Dossel")
+        {
+            // espera o áudio terminar
+            if (clipDuration > 0f)
+                yield return new WaitForSeconds(clipDuration);
+
+            // toca o vídeo
+            if (GlobalVideoPlayer.Instance != null)
+            {
+                string path = System.IO.Path.Combine(Application.streamingAssetsPath, "Teste.mp4");
+                GlobalVideoPlayer.Instance.PlayVideo(path);
+            }
+        }
     }
 
 

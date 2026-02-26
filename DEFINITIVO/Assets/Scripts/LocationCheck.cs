@@ -58,6 +58,18 @@ public class LocationServiceManager : MonoBehaviour
     public GameObject gpsDisabledPanel;
 
 
+    // ================= VIDEO POINT =================
+
+    [Header("Single Video Point")]
+    public double videoLatitude;
+    public double videoLongitude;
+    public float videoDetectionRadius = 20f;
+    public string videoFileName = "Teste.mp4";
+
+    private bool videoAlreadyPlayed = false;
+    private const string VIDEO_PLAYED_KEY = "SingleVideoPlayed";
+
+
     [System.Serializable]
     public class AreaPoint
     {
@@ -100,6 +112,7 @@ public class LocationServiceManager : MonoBehaviour
     [System.Serializable]
     public class StickerPoint
     {
+        public string ID; // ← NOVO
         public double latitude;
         public double longitude;
         public string message;
@@ -121,6 +134,9 @@ public class LocationServiceManager : MonoBehaviour
 
     private class PointOfInterest
     {
+
+        public string ID; // ← NOVO
+
         public double latitude;
         public double longitude;
         public string message;
@@ -132,6 +148,7 @@ public class LocationServiceManager : MonoBehaviour
         public float baseDetectionRadius;
 
         public PointOfInterest(
+               string id, // ← NOVO
             double lat,
             double lon,
             string msg,
@@ -141,6 +158,7 @@ public class LocationServiceManager : MonoBehaviour
             int index = -1,
             StickerEntryMode mode = StickerEntryMode.Entry1)
         {
+            ID = id; // ← NOVO
             latitude = lat;
             longitude = lon;
             message = msg;
@@ -174,9 +192,13 @@ public class LocationServiceManager : MonoBehaviour
 
     private void Awake()
     {
+
+
         Debug.Log("LocationServiceManager AWAKE: " + GetInstanceID());
 
         if (!Application.isPlaying) return;
+
+        videoAlreadyPlayed = PlayerPrefs.GetInt(VIDEO_PLAYED_KEY, 0) == 1;
         LoadStartMode();
         LoadCollectedStickers();
         LoadUsedStickers();
@@ -225,11 +247,28 @@ public class LocationServiceManager : MonoBehaviour
     private void InitializePoints()
     {
         allPoints.Clear();
+
         foreach (var ap in areaPoints)
-            allPoints.Add(new PointOfInterest(ap.latitude, ap.longitude, ap.message, false, ap.areaName, ap.detectionRadius));
+            allPoints.Add(new PointOfInterest(
+                null, // áreas não têm ID (ou pode criar depois se quiser)
+                ap.latitude,
+                ap.longitude,
+                ap.message,
+                false,
+                ap.areaName,
+                ap.detectionRadius));
 
         foreach (var sp in stickerPoints)
-            allPoints.Add(new PointOfInterest(sp.latitude, sp.longitude, sp.message, true, sp.areaName, sp.detectionRadius, sp.stickerIndex, sp.entryMode));
+            allPoints.Add(new PointOfInterest(
+                sp.ID, // ✅ AQUI ESTÁ A CORREÇÃO
+                sp.latitude,
+                sp.longitude,
+                sp.message,
+                true,
+                sp.areaName,
+                sp.detectionRadius,
+                sp.stickerIndex,
+                sp.entryMode));
     }
 
     private IEnumerator StartLocationService()
@@ -310,6 +349,8 @@ public class LocationServiceManager : MonoBehaviour
 
         var data = Input.location.lastData;
         UpdateLocationUI(data);
+
+        CheckSingleVideoPoint(data);
         CheckNearbyPoints(data);
     }
 
@@ -423,7 +464,7 @@ public class LocationServiceManager : MonoBehaviour
         {
             Sprite stickerSprite = cameraExample.GetStickerSprite(poi.areaName, poi.stickerIndex);
             if (stickerSprite != null)
-                PhotoAreaOverlay.ShowSticker(stickerSprite);
+                PhotoAreaOverlay.ShowSticker(poi.ID, stickerSprite);
         }
     }
 
@@ -715,7 +756,38 @@ public class LocationServiceManager : MonoBehaviour
 
 
 
+    private void CheckSingleVideoPoint(LocationInfo data)
+    {
+        if (videoAlreadyPlayed)
+            return;
 
+        double distance = CalculateDistance(
+            data.latitude,
+            data.longitude,
+            videoLatitude,
+            videoLongitude);
+
+        float effectiveRadius = Mathf.Max(
+            videoDetectionRadius,
+            Mathf.Min(data.horizontalAccuracy * accuracyMultiplier, maxGpsRadius));
+
+        if (distance <= effectiveRadius)
+        {
+            videoAlreadyPlayed = true;
+
+            PlayerPrefs.SetInt(VIDEO_PLAYED_KEY, 1);
+            PlayerPrefs.Save();
+
+            string path = System.IO.Path.Combine(
+                Application.streamingAssetsPath,
+                videoFileName);
+
+            if (GlobalVideoPlayer.Instance != null)
+            {
+                GlobalVideoPlayer.Instance.PlayVideo(path);
+            }
+        }
+    }
 
 
 

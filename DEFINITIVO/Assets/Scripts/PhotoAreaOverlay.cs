@@ -7,7 +7,17 @@ using System.Text.RegularExpressions;
 
 public class PhotoAreaOverlay : MonoBehaviour
 {
+
+    [Header("DEBUG")]
+    public TMP_Text debugText;
+
+
+
+
+
     public static PhotoAreaOverlay Instance;
+
+    private string currentStickerID;
 
     public TMP_Text stickerMessageText;
 
@@ -193,10 +203,35 @@ public class PhotoAreaOverlay : MonoBehaviour
         stickerMain.gameObject.SetActive(false);
         Hide(false);
         isAnimatingToBackpack = false;
+
+
+        DebugLog("Animação terminou.");
+        DebugLog("StickerID atual: " + currentStickerID);
+        // 🔥 TOCAR VÍDEO SE FOR O STICKER Coleta1
+        if (currentStickerID == "Coleta1")
+        {
+            DebugLog("ID é Coleta1 ✅");
+
+            string path = Application.streamingAssetsPath + "/Teste.mp4";
+            DebugLog("Caminho: " + path);
+
+            if (GlobalVideoPlayer.Instance == null)
+            {
+                DebugLog("GlobalVideoPlayer INSTANCE NULL ❌");
+                yield break;
+            }
+
+            DebugLog("Chamando PlayVideo...");
+            GlobalVideoPlayer.Instance.PlayVideo(path);
+        }
+        else
+        {
+            DebugLog("ID NÃO é Coleta1 ❌");
+        }
     }
 
-    // --- MODO ÁREA ---
-    public static void Show(Sprite img1 = null, Sprite img2 = null, Sprite img3 = null)
+        // --- MODO ÁREA ---
+        public static void Show(Sprite img1 = null, Sprite img2 = null, Sprite img3 = null)
     {
         if (Instance == null)
             return;
@@ -262,8 +297,10 @@ public class PhotoAreaOverlay : MonoBehaviour
     }
 
     // --- MODO STICKER ---
-    public static void ShowSticker(Sprite mainSprite, Sprite overrideExtra1 = null, Sprite overrideExtra2 = null)
+    public static void ShowSticker(string stickerID, Sprite mainSprite, Sprite overrideExtra1 = null, Sprite overrideExtra2 = null)
     {
+
+        Instance.currentStickerID = stickerID;
         if (Instance == null)
             return;
 
@@ -514,7 +551,13 @@ public class PhotoAreaOverlay : MonoBehaviour
 
 
 
-
+    private void DebugLog(string msg)
+    {
+        if (debugText != null)
+        {
+            debugText.text += "\n" + msg;
+        }
+    }
 
 
 

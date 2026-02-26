@@ -8265,6 +8265,8 @@ RectTransform:
   - {fileID: 1349737914}
   - {fileID: 1280815540}
   - {fileID: 538965534}
+  - {fileID: 1529340967}
+  - {fileID: 1433655219}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -9631,7 +9633,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -59.500244, y: 27.833008}
+  m_AnchoredPosition: {x: -59.5, y: 27.833008}
   m_SizeDelta: {x: 506.60632, y: -207.66565}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &995349411
@@ -10921,15 +10923,15 @@ MonoBehaviour:
   accuracyMultiplier: 0.8
   maxGpsRadius: 30
   areaPoints:
-  - latitude: -26.90551
-    longitude: -49.07994
+  - latitude: -26.90555
+    longitude: -49.07985
     message: 
     areaName: CursoDagua
-    detectionRadius: 30
+    detectionRadius: 25
   - latitude: -26.90567
     longitude: -49.07912
     message: 
-    areaName: Serrapilheira
+    areaName: Dossel
     detectionRadius: 12
   - latitude: -26.90566
     longitude: -49.07943
@@ -10937,70 +10939,80 @@ MonoBehaviour:
     areaName: Epifitas
     detectionRadius: 12
   stickerPoints:
-  - latitude: -26.90591
+  - ID: Coleta1
+    latitude: -26.90591
     longitude: -49.07959
-    message: coleta1
+    message: Coleta1
     areaName: Serrapilheira
     stickerIndex: 3
     entryMode: 0
     detectionRadius: 12
-  - latitude: -26.90597
+  - ID: 
+    latitude: -26.90597
     longitude: -49.07934
     message: coleta2
     areaName: Epifitas
     stickerIndex: 3
     entryMode: 0
     detectionRadius: 12
-  - latitude: -26.921339
+  - ID: 
+    latitude: -26.921339
     longitude: -49.073961
     message: coleta3
     areaName: Dossel
     stickerIndex: 3
     entryMode: 0
     detectionRadius: 15
-  - latitude: -26.921347
+  - ID: 
+    latitude: -26.921347
     longitude: -49.074342
     message: coleta4
     areaName: Dossel
     stickerIndex: 4
     entryMode: 0
     detectionRadius: 15
-  - latitude: -26.920503
+  - ID: 
+    latitude: -26.920503
     longitude: -49.075869
     message: coleta5
     areaName: Subosque
     stickerIndex: 3
     entryMode: 0
     detectionRadius: 15
-  - latitude: -26.920925
+  - ID: 
+    latitude: -26.920925
     longitude: -49.074908
     message: coleta6
     areaName: Subosque
     stickerIndex: 4
     entryMode: 0
     detectionRadius: 15
-  - latitude: -26.921083
+  - ID: 
+    latitude: -26.921083
     longitude: -49.073208
     message: coleta7
     areaName: CursoDagua
     stickerIndex: 3
     entryMode: 0
     detectionRadius: 15
-  - latitude: -26.921039
+  - ID: 
+    latitude: -26.921039
     longitude: -49.072347
     message: coleta8
     areaName: CursoDagua
     stickerIndex: 4
     entryMode: 0
     detectionRadius: 15
-  - latitude: 1
+  - ID: 
+    latitude: 1
     longitude: 2
     message: coleta8
     areaName: Serrapilheira
     stickerIndex: 4
     entryMode: 0
     detectionRadius: 15
-  - latitude: 1
+  - ID: 
+    latitude: 1
     longitude: 2
     message: coleta8
     areaName: Epifitas
@@ -11017,6 +11029,10 @@ MonoBehaviour:
     longitude: 0
   inventoryManager: {fileID: 0}
   gpsDisabledPanel: {fileID: 1725178816}
+  videoLatitude: -26.90553
+  videoLongitude: -49.07999
+  videoDetectionRadius: 40
+  videoFileName: Teste.mp4
 --- !u!224 &1103364858
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11048,6 +11064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79131087cf58ff7428d1ff309f3325ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debugText: {fileID: 0}
   stickerMessageText: {fileID: 1472469443}
   overlayPanel: {fileID: 895717595}
   okButton: {fileID: 863431977}
@@ -12998,8 +13015,8 @@ MonoBehaviour:
     radius: 22
     type: 1
   - name: Coleta8
-    latitude: -26.90589
-    longitude: -49.0795
+    latitude: 1
+    longitude: 1
     radius: 30
     type: 0
 --- !u!114 &1302004161
@@ -15440,6 +15457,82 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1430229694}
   m_CullTransparentMesh: 1
+--- !u!1 &1433655218
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1433655219}
+  - component: {fileID: 1433655221}
+  - component: {fileID: 1433655220}
+  m_Layer: 5
+  m_Name: WarninglVideoPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &1433655219
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433655218}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1869973533}
+  m_Father: {fileID: 822219749}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1433655220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433655218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.87058824}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1433655221
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1433655218}
+  m_CullTransparentMesh: 1
 --- !u!1 &1440194474
 GameObject:
   m_ObjectHideFlags: 0
@@ -17120,6 +17213,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1524953445}
   m_CullTransparentMesh: 1
+--- !u!1 &1529340966
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1529340967}
+  - component: {fileID: 1529340968}
+  - component: {fileID: 1529340969}
+  m_Layer: 5
+  m_Name: WarningVideosManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1529340967
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529340966}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 822219749}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1529340968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529340966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8282d9a1d69fb3343876f32621c2a44f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  debugText: {fileID: 0}
+  videoPanel: {fileID: 1433655218}
+  videoRawImage: {fileID: 1869973534}
+  videoPlayer: {fileID: 1529340969}
+--- !u!328 &1529340969
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529340966}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 0
+  m_SkipOnDrop: 1
+  m_Looping: 0
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1 &1535160085
 GameObject:
   m_ObjectHideFlags: 0
@@ -18941,7 +19123,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.9490196}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.972549}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -19669,6 +19851,78 @@ RectTransform:
   m_AnchoredPosition: {x: 476.18, y: -552}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1869973532
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1869973533}
+  - component: {fileID: 1869973535}
+  - component: {fileID: 1869973534}
+  m_Layer: 5
+  m_Name: RawImage
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1869973533
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869973532}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1433655219}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1080, y: 1920}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1869973534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869973532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+--- !u!222 &1869973535
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1869973532}
+  m_CullTransparentMesh: 1
 --- !u!1 &1884149035
 GameObject:
   m_ObjectHideFlags: 0
