@@ -71,7 +71,7 @@ public class PostVideoImageManager : MonoBehaviour
         // 🔊 TOCAR ÁUDIO DA ÁREA
         if (audioSource != null && audioByArea.ContainsKey(areaName))
         {
-            audioSource.PlayOneShot(audioByArea[areaName]);
+            StartCoroutine(PlayPrefabAudio(audioByArea[areaName]));
         }
 
         RectTransform rt = currentInstance.GetComponent<RectTransform>();
@@ -168,5 +168,36 @@ public class PostVideoImageManager : MonoBehaviour
             ForceHide();
         }
     }
+
+
+
+
+    // 🔹 Adicione dentro da classe PostVideoImageManager
+    public IEnumerator PlayPrefabAudio(AudioClip clip)
+    {
+        if (clip == null || audioSource == null)
+            yield break;
+
+        // espera enquanto o AudioSource estiver tocando outro áudio
+        while (audioSource.isPlaying)
+            yield return null;
+
+        audioSource.clip = clip;
+        audioSource.Play();
+
+        // espera o áudio terminar
+        while (audioSource.isPlaying)
+            yield return null;
+    }
+
+
+
+
+
+
+
+
+
+
 
 }

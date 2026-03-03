@@ -10,6 +10,18 @@ public class NativeCameraExample : MonoBehaviour
 
 
 
+
+    [Header("Painel Pós CursoDagua")]
+    public GameObject cursoDaguaPanel; // o painel inteiro
+    public TextMeshProUGUI cursoDaguaPanelText; // texto dentro do painel
+    public Image cursoDaguaPanelImage; // imagem que vai ter leve movimento
+    public Button cursoDaguaPanelCloseButton; // botão para fechar
+    public float textoLetterDelay = 0.05f; // delay entre cada letra
+    public float imagemMoveAmplitude = 5f; // pixels de deslocamento
+    public float imagemMoveSpeed = 1f; // velocidade do movimento
+
+
+
     [Header("Photo Display")]
     public RawImage imageDisplay;
     public GameObject closeButton;
@@ -271,10 +283,19 @@ public class NativeCameraExample : MonoBehaviour
             // toca o vídeo
             if (GlobalVideoPlayer.Instance != null)
             {
-                string path = System.IO.Path.Combine(Application.streamingAssetsPath, "Teste.mp4");
+                string path = System.IO.Path.Combine(Application.streamingAssetsPath, "PosDossel.mp4");
                 GlobalVideoPlayer.Instance.PlayVideo(path);
             }
         }
+
+        if (currentArea == "CursoDagua")
+        {
+            // aguarda 6 segundos após o sliding
+            yield return new WaitForSeconds(6f);
+            ShowCursoDaguaPanel();
+        }
+
+
     }
 
 
@@ -1089,6 +1110,66 @@ public class NativeCameraExample : MonoBehaviour
         messageAudioSource.PlayOneShot(clip);
         lastMessageSoundTime = Time.time;
     }
+
+
+    private IEnumerator WriteTextLetterByLetter(string fullText, TextMeshProUGUI textComponent)
+    {
+        textComponent.text = "";
+        foreach (char c in fullText)
+        {
+            textComponent.text += c;
+            yield return new WaitForSeconds(textoLetterDelay);
+        }
+    }
+
+    private IEnumerator MoveImageMaisVivo(Image img)
+    {
+        Vector3 startPos = img.rectTransform.localPosition;
+        float timer = 0f;
+
+        // Amplitude maior e movimentos em X e Y
+        float amplitudeX = imagemMoveAmplitude * 0.5f; // deslocamento horizontal menor
+        float amplitudeY = imagemMoveAmplitude * 1.5f; // deslocamento vertical maior
+        float speedMultiplier = imagemMoveSpeed * 2f;  // aumenta velocidade do movimento
+
+        while (img.gameObject.activeSelf)
+        {
+            timer += Time.deltaTime * speedMultiplier;
+
+            float offsetY = Mathf.Sin(timer * 1.5f) * amplitudeY;  // frequência maior para vertical
+            float offsetX = Mathf.Sin(timer) * amplitudeX;        // leve oscilação horizontal
+
+            img.rectTransform.localPosition = startPos + new Vector3(offsetX, offsetY, 0);
+
+            yield return null;
+        }
+
+        // reset da posição original
+        img.rectTransform.localPosition = startPos;
+    }
+
+    private void ShowCursoDaguaPanel()
+    {
+        if (cursoDaguaPanel == null) return;
+
+        cursoDaguaPanel.SetActive(true);
+
+        // inicia texto e animação da imagem
+        StartCoroutine(WriteTextLetterByLetter("Parabéns, você concluiu todas as áreas! Volte novamente ao parque para jogar mais vezes.", cursoDaguaPanelText));
+        StartCoroutine(MoveImageMaisVivo(cursoDaguaPanelImage));
+
+        // configurar botão de fechar
+        cursoDaguaPanelCloseButton.onClick.RemoveAllListeners();
+        cursoDaguaPanelCloseButton.onClick.AddListener(() =>
+        {
+            cursoDaguaPanel.SetActive(false);
+        });
+    }
+
+
+
+
+
 
 
 

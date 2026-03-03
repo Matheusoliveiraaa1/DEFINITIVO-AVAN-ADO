@@ -9,8 +9,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
 import com.unity3d.player.UnityPlayer;
+
+
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 public class UnityLocationService extends Service implements LocationListener {
     private LocationManager locationManager;
@@ -133,21 +137,24 @@ public class UnityLocationService extends Service implements LocationListener {
             float[] results = new float[1];
             Location.distanceBetween(location.getLatitude(), location.getLongitude(), p.lat, p.lon, results);
 
-            if (results[0] <= p.radius) {
-                if (!p.alerted && isAppInBackground()) {
+           if (results[0] <= p.radius) {
+    if (!p.alerted && isAppInBackground()) {
 
-                    if (p.type == 0) {
-                        sendAreaNotification(p.name);
-                    }
-                    else if (p.type == 1) {
-                        sendStickerNotification(p.name);
-                    }
+        if (p.type == 0) {
+            sendAreaNotification(p.name);
+        }
+        else if (p.type == 1) {
+            sendStickerNotification(p.name);
+        }
+        else if (p.type == 2) {
+            sendVideoNotification(p.name); // NOVO
+        }
 
-                    p.alerted = true;
-                }
-            } else if (results[0] > p.radius + 50) {
-                p.alerted = false;
-            }
+        p.alerted = true;
+    }
+} else if (results[0] > p.radius + 50) {
+    p.alerted = false;
+}
         }
     }
 
@@ -203,6 +210,42 @@ public class UnityLocationService extends Service implements LocationListener {
 
         manager.notify(("STICKER_NOTIFICATION").hashCode(), builder.build());
     }
+
+
+private void sendVideoNotification(String locationName) {
+    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+
+    Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+    PendingIntent pending = null;
+    if (intent != null) {
+        int flags = android.os.Build.VERSION.SDK_INT >= 30 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+        pending = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intent, flags);
+    }
+
+    // Padrão de vibração diferente
+    long[] vibrationPattern = {0, 500, 100, 500, 100, 500};
+
+    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_ALERTS)
+            .setContentTitle("Atenção!")
+            .setContentText("Você está próximo de um vídeo de orientação.")
+            .setSmallIcon(android.R.drawable.ic_media_play) // Ícone sugestão
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_EVENT)
+            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            .setVibrate(vibrationPattern)
+            .setAutoCancel(true);
+
+    if (pending != null) builder.setContentIntent(pending);
+
+    manager.notify(("VIDEOP_NOTIFICATION").hashCode(), builder.build());
+}
+
+
+
+
+
+
+
 
     private void createNotificationChannels() {
         if (android.os.Build.VERSION.SDK_INT >= 26) {

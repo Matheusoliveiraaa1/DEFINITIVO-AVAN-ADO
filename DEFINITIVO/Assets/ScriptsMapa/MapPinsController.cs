@@ -10,6 +10,13 @@ public class MapPinsController : MonoBehaviour
 
 {
 
+    [Header("Post Video Manager")]
+    public PostVideoImageManager postVideoImageManager; // arraste no inspector
+
+
+
+
+
     [Header("Bloco de Stickers")]
     public GameObject stickersBlock;
 
@@ -774,18 +781,30 @@ public class MapPinsController : MonoBehaviour
 
     public void OnMapScreenOpened()
     {
-        // se já viu o tutorial alguma vez, não mostra mais
         if (PlayerPrefs.GetInt(TUTORIAL_SEEN_KEY, 0) == 1)
             return;
 
-        // marca como visto ANTES de mostrar
         PlayerPrefs.SetInt(TUTORIAL_SEEN_KEY, 1);
         PlayerPrefs.Save();
 
         StopAllCoroutines();
-        tutorialCoroutine = StartCoroutine(PlayTutorialImage());
+
+        // 🔹 Usa coroutine que espera prefab terminar
+        StartCoroutine(PlayTutorialAfterConfirm());
     }
 
+    private IEnumerator PlayTutorialAfterConfirm()
+    {
+        if (postVideoImageManager != null && postVideoImageManager.audioSource != null)
+        {
+            // espera enquanto o AudioSource estiver tocando algum prefab
+            while (postVideoImageManager.audioSource.isPlaying)
+                yield return null;
+        }
+
+        // agora pode tocar o tutorial
+        tutorialCoroutine = StartCoroutine(PlayTutorialImage());
+    }
 
 
 

@@ -11,9 +11,9 @@ using UnityEngine.Android;
 public enum GeofenceType
 {
     Area = 0,
-    Sticker = 1
+    Sticker = 1,
+    VideoPoint = 2 // NOVO
 }
-
 [System.Serializable]
 public class MyGeofence
 {

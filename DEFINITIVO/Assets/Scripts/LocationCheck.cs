@@ -64,7 +64,7 @@ public class LocationServiceManager : MonoBehaviour
     public double videoLatitude;
     public double videoLongitude;
     public float videoDetectionRadius = 20f;
-    public string videoFileName = "Teste.mp4";
+    public string videoFileName = "PosBambuzal.mp4";
 
     private bool videoAlreadyPlayed = false;
     private const string VIDEO_PLAYED_KEY = "SingleVideoPlayed";

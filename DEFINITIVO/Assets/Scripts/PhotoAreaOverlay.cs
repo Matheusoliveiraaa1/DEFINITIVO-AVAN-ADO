@@ -212,7 +212,7 @@ public class PhotoAreaOverlay : MonoBehaviour
         {
             DebugLog("ID é Coleta1 ✅");
 
-            string path = Application.streamingAssetsPath + "/Teste.mp4";
+            string path = Application.streamingAssetsPath + "/PosColeta1.mp4";
             DebugLog("Caminho: " + path);
 
             if (GlobalVideoPlayer.Instance == null)
