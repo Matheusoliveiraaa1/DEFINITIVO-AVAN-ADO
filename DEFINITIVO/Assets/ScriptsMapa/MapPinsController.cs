@@ -10,6 +10,16 @@ public class MapPinsController : MonoBehaviour
 
 {
 
+
+    [Header("Botão Reset do Jogo")]
+    public GameObject resetGameButton;
+
+    [Header("Animação Botão Reset")]
+    public float resetButtonPulseScale = 1.1f;
+    public float resetButtonPulseSpeed = 1.5f;
+
+    private Coroutine resetPulseCoroutine;
+
     [Header("Post Video Manager")]
     public PostVideoImageManager postVideoImageManager; // arraste no inspector
 
@@ -206,6 +216,10 @@ public class MapPinsController : MonoBehaviour
 
     void Start()
     {
+        if (resetGameButton != null)
+            resetGameButton.SetActive(false);
+
+
         if (largeImage != null)
             largeImage.gameObject.SetActive(false);
 
@@ -631,6 +645,27 @@ public class MapPinsController : MonoBehaviour
 
         if (debugText != null)
             debugText.text += "\nSPRITE ALTERADO E BOTÃO HABILITADO";
+
+        // 🔥 verifica se todos os pins foram visitados
+        if (AreAllPinsVisited())
+        {
+            NativeCameraExample cam = FindObjectOfType<NativeCameraExample>();
+            if (cam != null)
+            {
+                cam.Invoke("ShowCursoDaguaPanel", 6f);
+            }
+
+            // 🔥 libera o botão de reset
+            if (resetGameButton != null)
+            {
+                resetGameButton.SetActive(true);
+
+                if (resetPulseCoroutine != null)
+                    StopCoroutine(resetPulseCoroutine);
+
+                resetPulseCoroutine = StartCoroutine(PulseResetButton());
+            }
+        }
     }
 
 
@@ -968,6 +1003,35 @@ public class MapPinsController : MonoBehaviour
         areaScrollRect.verticalNormalizedPosition = 1f; // volta para o topo
     }
 
+
+    public bool AreAllPinsVisited()
+    {
+        foreach (var pin in pins)
+        {
+            if (PlayerPrefs.GetInt("Visited_" + pin.pinName, 0) == 0)
+                return false;
+        }
+
+        return true;
+    }
+
+
+    IEnumerator PulseResetButton()
+    {
+        RectTransform rt = resetGameButton.GetComponent<RectTransform>();
+
+        float t = 0f;
+
+        while (true)
+        {
+            t += Time.deltaTime * resetButtonPulseSpeed;
+            float scale = 1f + Mathf.Sin(t) * (resetButtonPulseScale - 1f);
+
+            rt.localScale = Vector3.one * scale;
+
+            yield return null;
+        }
+    }
 
 
 

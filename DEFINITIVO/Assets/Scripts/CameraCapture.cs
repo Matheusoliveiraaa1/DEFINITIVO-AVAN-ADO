@@ -101,7 +101,7 @@ public class NativeCameraExample : MonoBehaviour
     [Header("Progresso")]
     public TextMeshProUGUI progressText;
     private int areasVisitadas = 0;
-    private const int TOTAL_AREAS = 6; // Atualizado para incluir Área2
+    private const int TOTAL_AREAS = 5; // Atualizado para incluir Área2
     private List<string> areasContabilizadas = new List<string>();
 
     [Header("Mensagem")]
@@ -288,12 +288,7 @@ public class NativeCameraExample : MonoBehaviour
             }
         }
 
-        if (currentArea == "CursoDagua")
-        {
-            // aguarda 6 segundos após o sliding
-            yield return new WaitForSeconds(6f);
-            ShowCursoDaguaPanel();
-        }
+      
 
 
     }
@@ -1148,7 +1143,7 @@ public class NativeCameraExample : MonoBehaviour
         img.rectTransform.localPosition = startPos;
     }
 
-    private void ShowCursoDaguaPanel()
+    public void ShowCursoDaguaPanel()
     {
         if (cursoDaguaPanel == null) return;
 
