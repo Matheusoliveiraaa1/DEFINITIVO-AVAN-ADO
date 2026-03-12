@@ -29,6 +29,9 @@ public class MapTouchController : MonoBehaviour
     private Vector3 targetPosition;
     private Quaternion targetRotation;
 
+    private Vector2 lastTouchPosition;
+    private bool isDragging = false;
+
     void Start()
     {
         targetScale = mapRectTransform.localScale;
@@ -39,6 +42,7 @@ public class MapTouchController : MonoBehaviour
     void Update()
     {
         HandlePinchGesture();
+        HandleSingleFingerDrag();
         ApplySmoothTransitions();
     }
 
@@ -151,4 +155,63 @@ public class MapTouchController : MonoBehaviour
         areaInfoPanel.SetActive(false);
         mapPanel.SetActive(true);
     }
+
+
+
+
+
+    private void HandleSingleFingerDrag()
+    {
+        if (Input.touchCount == 1 && !isPinching)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            if (touch.phase == TouchPhase.Began)
+            {
+                lastTouchPosition = touch.position;
+                isDragging = true;
+            }
+            else if (touch.phase == TouchPhase.Moved && isDragging)
+            {
+                Vector2 delta = touch.position - lastTouchPosition;
+
+                Vector3 newTargetPosition = targetPosition + new Vector3(delta.x, delta.y, 0);
+
+                // ----- LIMITES DO MAPA -----
+                Vector2 containerSize = containerRectTransform.rect.size;
+                Vector2 mapSize = mapRectTransform.rect.size;
+
+                Vector2 scaledMapSize = new Vector2(
+                    mapSize.x * targetScale.x,
+                    mapSize.y * targetScale.y
+                );
+
+                Vector2 maxOffset = (scaledMapSize - containerSize) / 2f;
+
+                maxOffset.x = Mathf.Max(0, maxOffset.x);
+                maxOffset.y = Mathf.Max(0, maxOffset.y) * 1.5f;
+
+                newTargetPosition.x = Mathf.Clamp(newTargetPosition.x, -maxOffset.x, maxOffset.x);
+                newTargetPosition.y = Mathf.Clamp(newTargetPosition.y, -maxOffset.y, maxOffset.y);
+
+                targetPosition = newTargetPosition;
+
+                lastTouchPosition = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            {
+                isDragging = false;
+            }
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+

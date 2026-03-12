@@ -1150,7 +1150,7 @@ public class NativeCameraExample : MonoBehaviour
         cursoDaguaPanel.SetActive(true);
 
         // inicia texto e animação da imagem
-        StartCoroutine(WriteTextLetterByLetter("Parabéns, você concluiu todas as áreas! Volte novamente ao parque para jogar mais vezes.", cursoDaguaPanelText));
+        StartCoroutine(WriteTextLetterByLetter("Parabéns, você concluiu todas as áreas! Volte novamente ao parque para explorar novamente!.", cursoDaguaPanelText));
         StartCoroutine(MoveImageMaisVivo(cursoDaguaPanelImage));
 
         // configurar botão de fechar
