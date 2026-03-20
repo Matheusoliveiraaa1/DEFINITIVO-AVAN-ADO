@@ -13,6 +13,10 @@ public class NavigationManager : MonoBehaviour
     public GameObject telaExploracao;
     public GameObject telaRegras;
 
+    [Header("Controle de Vídeo")]
+    public GameObject areaInfoPanel;
+    public GameObject videosButton;
+
     [Header("Configurações do Mapa (Reset)")]
     public GameObject mapaBase; // Coloque aqui o conteúdo principal do mapa que SEMPRE deve aparecer
     public GameObject[] mapaSubTelas; // Coloque aqui as subtelas/popups que devem SUMIR ao resetar
@@ -78,4 +82,26 @@ public class NavigationManager : MonoBehaviour
     public void GoToGaleria() => SetState(AppState.Galeria);
     public void GoToExploracao() => SetState(AppState.Exploracao);
     public void GoToRegras() => SetState(AppState.Regras);
+
+
+
+    void Update()
+    {
+        if (areaInfoPanel != null && videosButton != null)
+        {
+            // Se o painel estiver ativo, desativa o botão
+            if (areaInfoPanel.activeSelf)
+            {
+                videosButton.SetActive(false);
+            }
+            else
+            {
+                videosButton.SetActive(true);
+            }
+        }
+    }
+
+
+
+
 }

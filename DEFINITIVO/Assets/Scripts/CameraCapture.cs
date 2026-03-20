@@ -7,7 +7,9 @@ using System; // Necessário para System.GC
 
 public class NativeCameraExample : MonoBehaviour
 {
-
+    [Header("Áudio Curso D'água")]
+    public AudioSource cursoDaguaAudioSource;
+    public AudioClip cursoDaguaClip;
 
 
 
@@ -1149,11 +1151,18 @@ public class NativeCameraExample : MonoBehaviour
 
         cursoDaguaPanel.SetActive(true);
 
-        // inicia texto e animação da imagem
-        StartCoroutine(WriteTextLetterByLetter("Parabéns, você concluiu todas as áreas! Volte novamente ao parque para explorar novamente!.", cursoDaguaPanelText));
+        // 🔊 TOCA O ÁUDIO TODA VEZ QUE O PAINEL ABRE
+        if (cursoDaguaAudioSource != null && cursoDaguaClip != null)
+        {
+            cursoDaguaAudioSource.PlayOneShot(cursoDaguaClip);
+        }
+
+        StartCoroutine(WriteTextLetterByLetter(
+            "Parabéns, você concluiu todas as áreas! Volte novamente ao parque para explorar novamente!",
+            cursoDaguaPanelText));
+
         StartCoroutine(MoveImageMaisVivo(cursoDaguaPanelImage));
 
-        // configurar botão de fechar
         cursoDaguaPanelCloseButton.onClick.RemoveAllListeners();
         cursoDaguaPanelCloseButton.onClick.AddListener(() =>
         {

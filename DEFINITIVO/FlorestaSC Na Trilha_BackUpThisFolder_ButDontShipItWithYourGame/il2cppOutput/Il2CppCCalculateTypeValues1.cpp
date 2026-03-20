@@ -2505,7 +2505,7 @@ struct AreaSlot_t1D009E05DC530C649A2B51EDB260BF5D7A418165  : public RuntimeObjec
 	String_t* ___areaName;
 	RawImage_tFF12F7DB574FBDC1863CF607C7A12A5D9F8D6179* ___slotImage;
 };
-struct U3CTypeTextU3Ed__13_tAAE842505F47A8AFC6099C7FAC3C73694DC9468C  : public RuntimeObject
+struct U3CTypeTextU3Ed__17_tCAE1A9C3D0DCA2FD60AE337643E6B7F4A47BA659  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -2760,20 +2760,20 @@ struct U3CU3Ec__DisplayClass3_0_t59E6A06A89D3DEA62D415B014C69F7D0482874E2  : pub
 	NCPermissionCallbackAndroid_t018A82939BD516F7AC1B1295721A0EDB10B55D91* ___U3CU3E4__this;
 	int32_t ___result;
 };
-struct U3CCaptureAndSaveU3Ed__111_tB1A0DFDBBACF02692A808983F59875AD0FF35073  : public RuntimeObject
+struct U3CCaptureAndSaveU3Ed__113_t7C69888FAA1F7EE27A67C5AA576525F47448F7B6  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
 	NativeCameraExample_t882A28E67745BDDEE49867BDCEE5B949D18798A8* ___U3CU3E4__this;
 };
-struct U3COptimizeMemoryAndCaptureU3Ed__86_t4B5220F4E080BC31BDEB38435AB93537CCB24D16  : public RuntimeObject
+struct U3COptimizeMemoryAndCaptureU3Ed__88_tAB9EE3B3A4D8C39B73D8AC228FE86884BF80EE9F  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
 	NativeCameraExample_t882A28E67745BDDEE49867BDCEE5B949D18798A8* ___U3CU3E4__this;
 	AsyncOperation_tD2789250E4B098DEDA92B366A577E500A92D2D3C* ___U3CunloadOperationU3E5__2;
 };
-struct U3CShowMessageCoroutineU3Ed__80_t21409249E159BFA03EDBA4728152F157CE245CF2  : public RuntimeObject
+struct U3CShowMessageCoroutineU3Ed__82_tE169D1802825383E25F623A99A62679F9C52A0EA  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -2781,7 +2781,7 @@ struct U3CShowMessageCoroutineU3Ed__80_t21409249E159BFA03EDBA4728152F157CE245CF2
 	String_t* ___message;
 	float ___duration;
 };
-struct U3CWriteTextLetterByLetterU3Ed__122_tB1ACFC66ABE8F3C5BF6B478AE5A52F0588A0CF62  : public RuntimeObject
+struct U3CWriteTextLetterByLetterU3Ed__124_t90D34CE36D9F366A1DC7465ED239931B907C33A5  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -15248,7 +15248,7 @@ struct Type_t94B090894A3B9A5C5AEBD91800DB10688CC00F4A
 {
 	int32_t ___value__;
 };
-struct U3CFloatProfessorU3Ed__12_tAE6FC8699B64BBD362408D3B4046370D11776FFE  : public RuntimeObject
+struct U3CFloatProfessorU3Ed__16_tD7E71A8A47278F84A1617ED2030FAC558DAD0433  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -15408,7 +15408,7 @@ struct PreferredCamera_t4F13D40BC6F684E77EDD06E39DD959349FD239DF
 {
 	int32_t ___value__;
 };
-struct U3CMoveImageMaisVivoU3Ed__123_t8B066A6163CF93AE66BDBB631F309C2476FD6FCA  : public RuntimeObject
+struct U3CMoveImageMaisVivoU3Ed__125_t1D8E79CF6D11148EF7F8CDF63BE877F2E1B983FA  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -15420,7 +15420,7 @@ struct U3CMoveImageMaisVivoU3Ed__123_t8B066A6163CF93AE66BDBB631F309C2476FD6FCA  
 	float ___U3CamplitudeYU3E5__5;
 	float ___U3CspeedMultiplierU3E5__6;
 };
-struct U3CPlayConfirmSlidingImageU3Ed__75_tD95C5633B312C708D92E4A2BF065C70ED8EF6482  : public RuntimeObject
+struct U3CPlayConfirmSlidingImageU3Ed__77_t7E78B9BD5F7EDD409DB65F9A054113DADD8AEAB4  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -15430,7 +15430,7 @@ struct U3CPlayConfirmSlidingImageU3Ed__75_tD95C5633B312C708D92E4A2BF065C70ED8EF6
 	Vector2_t1FD6F485C871E832B347AB2DC8CBA08B739D8DF7 ___U3CoffScreenLeftU3E5__4;
 	float ___U3CtU3E5__5;
 };
-struct U3CPlaySlidingImageU3Ed__120_t5F5B8555554F2FB3EFEA3862E864153BA67FE94B  : public RuntimeObject
+struct U3CPlaySlidingImageU3Ed__122_t1396791CA5085857B8B216E0EFDE4F8E7062E1FB  : public RuntimeObject
 {
 	int32_t ___U3CU3E1__state;
 	RuntimeObject* ___U3CU3E2__current;
@@ -23356,6 +23356,10 @@ struct GameResetController_t0EC71434AA61C7C6EA89BBDEFDAA5BD9309D014A  : public M
 	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___messageText;
 	String_t* ___fullMessage;
 	float ___typingSpeed;
+	AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* ___audioSource;
+	AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* ___openPanelSound;
+	float ___audioCooldown;
+	float ___lastTimePlayed;
 	Coroutine_t85EA685566A254C23F3FD77AB5BDFFFF8799596B* ___floatCoroutine;
 	Coroutine_t85EA685566A254C23F3FD77AB5BDFFFF8799596B* ___typingCoroutine;
 };
@@ -23369,6 +23373,10 @@ struct GifAnimator_tFCE9C3CF750F5F97C3F3954CDB86F3FED0705C62  : public MonoBehav
 };
 struct GlobalVideoPlayer_t25C23F104E358593E6A38F262E205641C375D818  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___videoMenuPanel;
+	String_t* ___videoMenu1;
+	String_t* ___videoMenu2;
+	String_t* ___videoMenu3;
 	TMP_Text_tE8D677872D43AD4B2AAF0D6101692A17D0B251A9* ___debugText;
 	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___videoPanel;
 	RawImage_tFF12F7DB574FBDC1863CF607C7A12A5D9F8D6179* ___videoRawImage;
@@ -23608,6 +23616,8 @@ struct NCCallbackHelper_tBA518C908F8A8D4DD1D896CC9C11AE23888F67CA  : public Mono
 };
 struct NativeCameraExample_t882A28E67745BDDEE49867BDCEE5B949D18798A8  : public MonoBehaviour_t532A11E69716D348D8AA7F854AFCBFCB8AD17F71
 {
+	AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* ___cursoDaguaAudioSource;
+	AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* ___cursoDaguaClip;
 	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___cursoDaguaPanel;
 	TextMeshProUGUI_t101091AF4B578BB534C92E9D1EEAF0611636D957* ___cursoDaguaPanelText;
 	Image_tBC1D03F63BF71132E9A5E472B8742F172A011E7E* ___cursoDaguaPanelImage;
@@ -23701,6 +23711,8 @@ struct NavigationManager_t86675C94A2600BAE011D2655AF6737F1800FB637  : public Mon
 	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___telaGaleria;
 	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___telaExploracao;
 	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___telaRegras;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___areaInfoPanel;
+	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___videosButton;
 	GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* ___mapaBase;
 	GameObjectU5BU5D_tFF67550DFCE87096D7A3734EA15B75896B2722CF* ___mapaSubTelas;
 };
@@ -29740,19 +29752,19 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize6614 = { sizeof(DraggablePan
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6615;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6615 = { sizeof(int32_t)+ sizeof(RuntimeObject), sizeof(int32_t), 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6616;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6616 = { sizeof(U3CCaptureAndSaveU3Ed__111_tB1A0DFDBBACF02692A808983F59875AD0FF35073), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6616 = { sizeof(U3CCaptureAndSaveU3Ed__113_t7C69888FAA1F7EE27A67C5AA576525F47448F7B6), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6617;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6617 = { sizeof(U3CMoveImageMaisVivoU3Ed__123_t8B066A6163CF93AE66BDBB631F309C2476FD6FCA), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6617 = { sizeof(U3CMoveImageMaisVivoU3Ed__125_t1D8E79CF6D11148EF7F8CDF63BE877F2E1B983FA), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6618;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6618 = { sizeof(U3COptimizeMemoryAndCaptureU3Ed__86_t4B5220F4E080BC31BDEB38435AB93537CCB24D16), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6618 = { sizeof(U3COptimizeMemoryAndCaptureU3Ed__88_tAB9EE3B3A4D8C39B73D8AC228FE86884BF80EE9F), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6619;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6619 = { sizeof(U3CPlayConfirmSlidingImageU3Ed__75_tD95C5633B312C708D92E4A2BF065C70ED8EF6482), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6619 = { sizeof(U3CPlayConfirmSlidingImageU3Ed__77_t7E78B9BD5F7EDD409DB65F9A054113DADD8AEAB4), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6620;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6620 = { sizeof(U3CPlaySlidingImageU3Ed__120_t5F5B8555554F2FB3EFEA3862E864153BA67FE94B), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6620 = { sizeof(U3CPlaySlidingImageU3Ed__122_t1396791CA5085857B8B216E0EFDE4F8E7062E1FB), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6621;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6621 = { sizeof(U3CShowMessageCoroutineU3Ed__80_t21409249E159BFA03EDBA4728152F157CE245CF2), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6621 = { sizeof(U3CShowMessageCoroutineU3Ed__82_tE169D1802825383E25F623A99A62679F9C52A0EA), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6622;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6622 = { sizeof(U3CWriteTextLetterByLetterU3Ed__122_tB1ACFC66ABE8F3C5BF6B478AE5A52F0588A0CF62), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6622 = { sizeof(U3CWriteTextLetterByLetterU3Ed__124_t90D34CE36D9F366A1DC7465ED239931B907C33A5), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6623;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6623 = { sizeof(NativeCameraExample_t882A28E67745BDDEE49867BDCEE5B949D18798A8), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6624;
@@ -29762,9 +29774,9 @@ const Il2CppTypeDefinitionSizes g_typeDefinitionSize6625 = { sizeof(U3CU3Ec__Dis
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6626;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6626 = { sizeof(GalleryManager_tF13FC0690FF430840F33633178127E7F17FC537E), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6627;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6627 = { sizeof(U3CFloatProfessorU3Ed__12_tAE6FC8699B64BBD362408D3B4046370D11776FFE), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6627 = { sizeof(U3CFloatProfessorU3Ed__16_tD7E71A8A47278F84A1617ED2030FAC558DAD0433), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6628;
-const Il2CppTypeDefinitionSizes g_typeDefinitionSize6628 = { sizeof(U3CTypeTextU3Ed__13_tAAE842505F47A8AFC6099C7FAC3C73694DC9468C), -1, 0, 0 };
+const Il2CppTypeDefinitionSizes g_typeDefinitionSize6628 = { sizeof(U3CTypeTextU3Ed__17_tCAE1A9C3D0DCA2FD60AE337643E6B7F4A47BA659), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6629;
 const Il2CppTypeDefinitionSizes g_typeDefinitionSize6629 = { sizeof(GameResetController_t0EC71434AA61C7C6EA89BBDEFDAA5BD9309D014A), -1, 0, 0 };
 extern const Il2CppTypeDefinitionSizes g_typeDefinitionSize6630;

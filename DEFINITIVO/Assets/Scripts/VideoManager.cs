@@ -97,15 +97,19 @@ public class VideoManager : MonoBehaviour
         if (rawImage != null)
         {
             rawImage.gameObject.SetActive(true);
-            if (videoPlayer.targetTexture == null)
+
+            // 🔥 SEMPRE recria a textura (evita bug após reset)
+            if (videoPlayer.targetTexture != null)
             {
-                int width = (int)rawImage.rectTransform.rect.width;
-                int height = (int)rawImage.rectTransform.rect.height;
-                RenderTexture rt = new RenderTexture(width, height, 0);
-                rt.Create();
-                videoPlayer.targetTexture = rt;
-                rawImage.texture = rt;
+                videoPlayer.targetTexture.Release();
             }
+
+            // 🔥 Usa tamanho fixo (evita textura branca)
+            RenderTexture rt = new RenderTexture(1920, 1080, 0);
+            rt.Create();
+
+            videoPlayer.targetTexture = rt;
+            rawImage.texture = rt;
         }
 
         videoPlayer.url = videoPath;

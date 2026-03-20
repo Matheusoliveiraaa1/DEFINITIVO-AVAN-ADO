@@ -9,6 +9,38 @@ public class GlobalVideoPlayer : MonoBehaviour
     public static GlobalVideoPlayer Instance;
 
 
+
+
+    [Header("VIDEOS DO MENU")]
+
+    public GameObject videoMenuPanel;
+    public string videoMenu1 = "video1.mp4";
+    public string videoMenu2 = "video2.mp4";
+    public string videoMenu3 = "video3.mp4";
+
+    public void PlayMenuVideo1()
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, videoMenu1);
+        PlayVideo(path);
+    }
+
+    public void PlayMenuVideo2()
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, videoMenu2);
+        PlayVideo(path);
+    }
+
+    public void PlayMenuVideo3()
+    {
+        string path = Path.Combine(Application.streamingAssetsPath, videoMenu3);
+        PlayVideo(path);
+    }
+
+
+
+
+
+
     [Header("DEBUG")]
     public TMP_Text debugText;
 
@@ -142,6 +174,22 @@ public class GlobalVideoPlayer : MonoBehaviour
             debugText.text += "\n[Video] " + msg;
         }
     }
+
+
+    public void OpenVideoMenu()
+    {
+        if (videoMenuPanel != null)
+            videoMenuPanel.SetActive(true);
+    }
+
+    public void CloseVideoMenu()
+    {
+        if (videoMenuPanel != null)
+            videoMenuPanel.SetActive(false);
+    }
+
+
+
 
 
 }

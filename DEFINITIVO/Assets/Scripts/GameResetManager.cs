@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using System.Collections;
@@ -18,6 +18,18 @@ public class GameResetController : MonoBehaviour
     [TextArea] public string fullMessage;
     public float typingSpeed = 0.03f;
 
+
+    [Header("Audio")]
+    public AudioSource audioSource;
+    public AudioClip openPanelSound;
+
+    [Header("Delay do áudio")]
+    public float audioCooldown = 5f;
+
+    private float lastTimePlayed = -999f;
+
+
+
     private Coroutine floatCoroutine;
     private Coroutine typingCoroutine;
 
@@ -25,13 +37,20 @@ public class GameResetController : MonoBehaviour
     {
         confirmPanel.SetActive(true);
 
-        // inicia anima��o da imagem
+        // 🔊 Tocar áudio com delay
+        if (!audioSource.isPlaying && Time.time >= lastTimePlayed + audioCooldown)
+        {
+            audioSource.PlayOneShot(openPanelSound);
+            lastTimePlayed = Time.time;
+        }
+
+        // animação
         if (floatCoroutine != null)
             StopCoroutine(floatCoroutine);
 
         floatCoroutine = StartCoroutine(FloatProfessor());
 
-        // inicia texto typewriter
+        // texto
         if (typingCoroutine != null)
             StopCoroutine(typingCoroutine);
 

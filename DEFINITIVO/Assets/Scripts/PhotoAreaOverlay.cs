@@ -333,7 +333,7 @@ public class PhotoAreaOverlay : MonoBehaviour
 
             string prettyName = FormatStickerName(mainSprite.name);
             Instance.stickerMessageText.text =
-                $"Parece que você encontrou a espécie: <b>{prettyName}</b>!";
+                $"Você encontrou a espécie: <b>{prettyName}</b>! Observe se ela aparece ao longo da trilha.";
 
             Instance.stickerMain.gameObject.SetActive(true);
             Instance.stickerMain.rectTransform.localScale = Instance.stickerOriginalScale;
