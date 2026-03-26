@@ -135,7 +135,15 @@ public class MapPinsController : MonoBehaviour
     public ScrollRect areaScrollRect;
 
 
+
+
+    public NativeCameraExample cameraExample;
+
+
+
     private Coroutine skipButtonPulseCoroutine;
+
+    private Coroutine resetButtonCoroutine;
 
     private Coroutine tutorialCoroutine;
     private bool tutorialExiting = false;
@@ -656,15 +664,10 @@ public class MapPinsController : MonoBehaviour
             }
 
             // 🔥 libera o botão de reset
-            if (resetGameButton != null)
-            {
-                resetGameButton.SetActive(true);
+            if (resetButtonCoroutine != null)
+                StopCoroutine(resetButtonCoroutine);
 
-                if (resetPulseCoroutine != null)
-                    StopCoroutine(resetPulseCoroutine);
-
-                resetPulseCoroutine = StartCoroutine(PulseResetButton());
-            }
+            resetButtonCoroutine = StartCoroutine(ShowResetButtonWithDelay());
         }
     }
 
@@ -830,17 +833,25 @@ public class MapPinsController : MonoBehaviour
 
     private IEnumerator PlayTutorialAfterConfirm()
     {
-        if (postVideoImageManager != null && postVideoImageManager.audioSource != null)
+        // pequena espera pra garantir que o áudio iniciou
+        yield return new WaitForSeconds(0.1f);
+
+        // espera prefab
+        if (postVideoImageManager != null && postVideoImageManager.prefabAudioSource != null)
         {
-            // espera enquanto o AudioSource estiver tocando algum prefab
-            while (postVideoImageManager.audioSource.isPlaying)
+            while (postVideoImageManager.prefabAudioSource.isPlaying)
                 yield return null;
         }
 
-        // agora pode tocar o tutorial
+        // espera confirm
+        if (cameraExample != null && cameraExample.audioSource != null)
+        {
+            while (cameraExample.audioSource.isPlaying)
+                yield return null;
+        }
+
         tutorialCoroutine = StartCoroutine(PlayTutorialImage());
     }
-
 
 
 
@@ -1032,6 +1043,23 @@ public class MapPinsController : MonoBehaviour
             yield return null;
         }
     }
+
+    IEnumerator ShowResetButtonWithDelay()
+    {
+        yield return new WaitForSeconds(4f);
+
+        if (resetGameButton != null)
+        {
+            resetGameButton.SetActive(true);
+
+            if (resetPulseCoroutine != null)
+                StopCoroutine(resetPulseCoroutine);
+
+            resetPulseCoroutine = StartCoroutine(PulseResetButton());
+        }
+    }
+
+
 
 
 

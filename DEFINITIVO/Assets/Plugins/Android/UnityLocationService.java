@@ -9,20 +9,19 @@ import android.os.Bundle;
 import android.os.IBinder;
 import androidx.core.app.NotificationCompat;
 import com.unity3d.player.UnityPlayer;
-
-
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 public class UnityLocationService extends Service implements LocationListener {
     private LocationManager locationManager;
     private static final String CHANNEL_ID_SERVICE = "LocationServiceChannel";
-    // We change the ID to force Android to recreate the channel with the vibration settings enabled
     private static final String CHANNEL_ID_ALERTS = "LocationAlertsChannel_v2";
+    
     private static final String ACTION_STOP = "STOP_SERVICE";
+    private static final String ACTION_START = "START_SERVICE";
+    
     private List<GeofencePoint> points = new ArrayList<>();
+    private String lastRawData = ""; 
 
     private static class GeofencePoint {
         String name;
@@ -32,11 +31,7 @@ public class UnityLocationService extends Service implements LocationListener {
         boolean alerted = false;
 
         GeofencePoint(String n, double la, double lo, float r, int t) {
-            name = n;
-            lat = la;
-            lon = lo;
-            radius = r;
-            type = t;
+            name = n; lat = la; lon = lo; radius = r; type = t;
         }
     }
 
@@ -44,149 +39,99 @@ public class UnityLocationService extends Service implements LocationListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent == null) return START_STICKY;
 
-        // --- BOTÃO PARAR ---
-        if (ACTION_STOP.equals(intent.getAction())) {
-            try { UnityPlayer.UnitySendMessage("LocationManager", "StopTracking", ""); } catch (Exception e) {}
+        String action = intent.getAction();
 
-            // CRITICAL FIX: Stop listening to GPS so the service can actually die
-            if (locationManager != null) {
-                locationManager.removeUpdates(this);
+        if (ACTION_STOP.equals(action)) {
+            pauseLocationUpdates();
+            return START_STICKY;
+        }
+
+        if (ACTION_START.equals(action) || intent.hasExtra("points_data")) {
+            if (intent.hasExtra("points_data")) {
+                lastRawData = intent.getStringExtra("points_data");
+                parsePointsSafe(lastRawData);
             }
-
-            stopForeground(true);
-            stopSelf();
-            return START_NOT_STICKY;
+            resumeLocationUpdates();
         }
-
-        // --- RECEBE DADOS ---
-        if (intent.hasExtra("points_data")) {
-            parsePointsSafe(intent.getStringExtra("points_data"));
-        }
-
-        createNotificationChannels();
-
-        // --- NOTIFICAÇÃO PERSISTENTE (SILENCIOSA) ---
-        Intent openAppIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-        PendingIntent pendingOpenApp = null;
-        int pendingFlags = android.os.Build.VERSION.SDK_INT >= 30 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
-
-        if (openAppIntent != null) {
-            pendingOpenApp = PendingIntent.getActivity(this, 0, openAppIntent, pendingFlags);
-        }
-
-        Intent stopIntent = new Intent(this, UnityLocationService.class);
-        stopIntent.setAction(ACTION_STOP);
-        PendingIntent pendingStop = PendingIntent.getService(this, 0, stopIntent, pendingFlags);
-
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_SERVICE)
-                .setContentTitle("Rastreamento Ativo")
-                .setContentText("Monitorando localização em segundo plano.")
-                .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-                .setOngoing(true)
-                .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Parar Rastreamento", pendingStop)
-                .setPriority(NotificationCompat.PRIORITY_LOW);
-
-        if (pendingOpenApp != null) builder.setContentIntent(pendingOpenApp);
-
-        startForeground(12345, builder.build());
-
-        // --- INICIA GPS ---
-        try {
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
-        } catch (SecurityException | IllegalArgumentException e) { e.printStackTrace(); }
 
         return START_STICKY;
     }
 
-    private void parsePointsSafe(String data) {
-        points.clear();
-        if (data == null || data.isEmpty()) return;
-        String cleanData = data.replaceAll("[^a-zA-Z0-9|;.\\- ]", ""); // Sanitização
+    private void resumeLocationUpdates() {
+        createNotificationChannels();
+        updateForegroundNotification(true);
 
-        String[] entries = cleanData.split(";");
-        for (String entry : entries) {
-            String[] parts = entry.split("\\|");
-            if (parts.length == 5) {
-                try {
-                    String name = parts[0];
-                    double lat = Double.parseDouble(parts[1]);
-                    double lon = Double.parseDouble(parts[2]);
-                    float rad = Float.parseFloat(parts[3]);
-                    int type = Integer.parseInt(parts[4]);
-
-                    if (lat >= -90 && lat <= 90 && lon >= -180 && lon <= 180) {
-                        points.add(new GeofencePoint(name, lat, lon, rad, type));
-                    }
-
-                } catch (Exception e) { }
-            }
-        }
+        try {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
+            
+            // ATENÇÃO: Verifique se o nome aqui é BackgroundManager ou LocationManager conforme o Checkpoint anterior
+            UnityPlayer.UnitySendMessage("BackgroundManager", "OnServiceStatusChanged", "Running");
+        } catch (SecurityException e) { e.printStackTrace(); }
     }
 
-    private boolean isAppInBackground() {
-        ActivityManager.RunningAppProcessInfo myProcess = new ActivityManager.RunningAppProcessInfo();
-        ActivityManager.getMyMemoryState(myProcess);
-        return myProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+    private void pauseLocationUpdates() {
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
+        updateForegroundNotification(false);
+        try { UnityPlayer.UnitySendMessage("BackgroundManager", "OnServiceStatusChanged", "Paused"); } catch (Exception e) {}
     }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location == null) return;
-        for (GeofencePoint p : points) {
-            float[] results = new float[1];
-            Location.distanceBetween(location.getLatitude(), location.getLongitude(), p.lat, p.lon, results);
+    private void updateForegroundNotification(boolean isRunning) {
+        int pendingFlags = android.os.Build.VERSION.SDK_INT >= 30 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+        
+        Intent openAppIntent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+        PendingIntent pendingOpenApp = PendingIntent.getActivity(this, 0, openAppIntent, pendingFlags);
 
-           if (results[0] <= p.radius) {
-    if (!p.alerted && isAppInBackground()) {
+        Intent actionIntent = new Intent(this, UnityLocationService.class);
+        actionIntent.setAction(isRunning ? ACTION_STOP : ACTION_START);
+        PendingIntent pendingAction = PendingIntent.getService(this, (int)System.currentTimeMillis(), actionIntent, pendingFlags);
 
-        if (p.type == 0) {
-            sendAreaNotification(p.name);
-        }
-        else if (p.type == 1) {
-            sendStickerNotification(p.name);
-        }
-        else if (p.type == 2) {
-            sendVideoNotification(p.name); // NOVO
-        }
+        String title = isRunning ? "Rastreamento Ativo" : "Rastreamento Pausado";
+        String content = isRunning ? "Monitorando localização..." : "Clique em iniciar para retomar.";
+        int icon = isRunning ? android.R.drawable.ic_menu_mylocation : android.R.drawable.ic_media_play;
+        String buttonText = isRunning ? "Parar" : "Iniciar";
 
-        p.alerted = true;
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_SERVICE)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setSmallIcon(icon)
+                .setOngoing(true)
+                .setContentIntent(pendingOpenApp)
+                .addAction(icon, buttonText, pendingAction)
+                .setPriority(NotificationCompat.PRIORITY_LOW);
+
+        startForeground(12345, builder.build());
     }
-} else if (results[0] > p.radius + 50) {
-    p.alerted = false;
-}
-        }
-    }
+
+    // --- MÉTODOS DE NOTIFICAÇÃO DE ALERTA (RECOLOCADOS AQUI) ---
 
     private void sendAreaNotification(String locationName) {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
         Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         PendingIntent pending = null;
         if (intent != null) {
             int flags = android.os.Build.VERSION.SDK_INT >= 30 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
-            // Using a unique request code to prevent intent caching issues
             pending = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intent, flags);
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_ALERTS)
                 .setContentTitle("Área próxima!")
-                .setContentText("Você está se aproximando de uma área...")
+                .setContentText("Você está se aproximando de uma área de observação!")
                 .setSmallIcon(android.R.drawable.ic_dialog_map)
-                .setPriority(NotificationCompat.PRIORITY_MAX) // Max priority for screen-off bypass
-                .setCategory(NotificationCompat.CATEGORY_EVENT) // Tells OS this is an important event
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Show on lock screen
-                .setDefaults(NotificationCompat.DEFAULT_ALL) // Applies default device vibration and sound
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setCategory(NotificationCompat.CATEGORY_EVENT)
+                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+                .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setAutoCancel(true);
 
         if (pending != null) builder.setContentIntent(pending);
-
-        manager.notify(("AREA_NOTIFICATION").hashCode(), builder.build());
+        manager.notify(("AREA_" + locationName).hashCode(), builder.build());
     }
 
     private void sendStickerNotification(String locationName) {
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
         Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         PendingIntent pending = null;
         if (intent != null) {
@@ -200,72 +145,95 @@ public class UnityLocationService extends Service implements LocationListener {
                 .setContentTitle("Espécie Próxima!")
                 .setContentText("Você está próximo de uma espécie...")
                 .setSmallIcon(android.R.drawable.star_big_on)
-                .setPriority(NotificationCompat.PRIORITY_MAX) // Max priority
-                .setCategory(NotificationCompat.CATEGORY_EVENT) // Important event categorization
-                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC) // Lock screen visibility
+                .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setVibrate(vibrationPattern)
                 .setAutoCancel(true);
 
         if (pending != null) builder.setContentIntent(pending);
-
-        manager.notify(("STICKER_NOTIFICATION").hashCode(), builder.build());
+        manager.notify(("STICKER_" + locationName).hashCode(), builder.build());
     }
 
+    private void sendVideoNotification(String locationName) {
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+        PendingIntent pending = null;
+        if (intent != null) {
+            int flags = android.os.Build.VERSION.SDK_INT >= 30 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+            pending = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intent, flags);
+        }
 
-private void sendVideoNotification(String locationName) {
-    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        long[] vibrationPattern = {0, 500, 100, 500, 100, 500};
 
-    Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
-    PendingIntent pending = null;
-    if (intent != null) {
-        int flags = android.os.Build.VERSION.SDK_INT >= 30 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
-        pending = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intent, flags);
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_ALERTS)
+                .setContentTitle("Vídeo disponível!")
+                .setContentText("Vídeo de orientação próximo.")
+                .setSmallIcon(android.R.drawable.ic_media_play)
+                .setPriority(NotificationCompat.PRIORITY_MAX)
+                .setVibrate(vibrationPattern)
+                .setAutoCancel(true);
+
+        if (pending != null) builder.setContentIntent(pending);
+        manager.notify(("VIDEO_" + locationName).hashCode(), builder.build());
     }
 
-    // Padrão de vibração diferente
-    long[] vibrationPattern = {0, 500, 100, 500, 100, 500};
+    private void parsePointsSafe(String data) {
+        points.clear();
+        if (data == null || data.isEmpty()) return;
+        String cleanData = data.replaceAll("[^a-zA-Z0-9|;.\\- ]", ""); 
 
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID_ALERTS)
-            .setContentTitle("Atenção!")
-            .setContentText("Você está próximo de um vídeo de orientação.")
-            .setSmallIcon(android.R.drawable.ic_media_play) // Ícone sugestão
-            .setPriority(NotificationCompat.PRIORITY_MAX)
-            .setCategory(NotificationCompat.CATEGORY_EVENT)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .setVibrate(vibrationPattern)
-            .setAutoCancel(true);
+        String[] entries = cleanData.split(";");
+        for (String entry : entries) {
+            String[] parts = entry.split("\\|");
+            if (parts.length == 5) {
+                try {
+                    points.add(new GeofencePoint(parts[0], Double.parseDouble(parts[1]), 
+                               Double.parseDouble(parts[2]), Float.parseFloat(parts[3]), Integer.parseInt(parts[4])));
+                } catch (Exception e) { }
+            }
+        }
+    }
 
-    if (pending != null) builder.setContentIntent(pending);
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location == null) return;
+        for (GeofencePoint p : points) {
+            float[] results = new float[1];
+            Location.distanceBetween(location.getLatitude(), location.getLongitude(), p.lat, p.lon, results);
 
-    manager.notify(("VIDEOP_NOTIFICATION").hashCode(), builder.build());
-}
+            if (results[0] <= p.radius) {
+                if (!p.alerted && isAppInBackground()) {
+                    if (p.type == 0) sendAreaNotification(p.name);
+                    else if (p.type == 1) sendStickerNotification(p.name);
+                    else if (p.type == 2) sendVideoNotification(p.name);
+                    p.alerted = true;
+                }
+            } else if (results[0] > p.radius + 50) {
+                p.alerted = false;
+            }
+        }
+    }
 
-
-
-
-
-
-
+    private boolean isAppInBackground() {
+        ActivityManager.RunningAppProcessInfo myProcess = new ActivityManager.RunningAppProcessInfo();
+        ActivityManager.getMyMemoryState(myProcess);
+        return myProcess.importance != ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+    }
 
     private void createNotificationChannels() {
         if (android.os.Build.VERSION.SDK_INT >= 26) {
             NotificationManager manager = getSystemService(NotificationManager.class);
-            NotificationChannel serviceChannel = new NotificationChannel(CHANNEL_ID_SERVICE, "Rastreamento (Silencioso)", NotificationManager.IMPORTANCE_LOW);
-            manager.createNotificationChannel(serviceChannel);
-
-            NotificationChannel alertChannel = new NotificationChannel(CHANNEL_ID_ALERTS, "Alertas de Chegada", NotificationManager.IMPORTANCE_HIGH);
-            alertChannel.enableVibration(true);
-            alertChannel.setVibrationPattern(new long[]{ 0, 800, 200, 800 });
-            manager.createNotificationChannel(alertChannel);
+            if (manager != null) {
+                manager.createNotificationChannel(new NotificationChannel(CHANNEL_ID_SERVICE, "Rastreamento", NotificationManager.IMPORTANCE_LOW));
+                NotificationChannel alertChannel = new NotificationChannel(CHANNEL_ID_ALERTS, "Alertas de Chegada", NotificationManager.IMPORTANCE_HIGH);
+                alertChannel.enableVibration(true);
+                manager.createNotificationChannel(alertChannel);
+            }
         }
     }
 
-    // CRITICAL FIX: Ensure LocationManager is cleared if Android destroys the Service forcefully
     @Override
     public void onDestroy() {
-        if (locationManager != null) {
-            locationManager.removeUpdates(this);
-        }
+        if (locationManager != null) locationManager.removeUpdates(this);
         super.onDestroy();
     }
 

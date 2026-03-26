@@ -12,8 +12,9 @@ public enum GeofenceType
 {
     Area = 0,
     Sticker = 1,
-    VideoPoint = 2 // NOVO
+    VideoPoint = 2
 }
+
 [System.Serializable]
 public class MyGeofence
 {
@@ -36,10 +37,9 @@ public class LocationBackgroundManager : MonoBehaviour
 
     void Start()
     {
-        this.gameObject.name = "LocationManager"; // OBRIGATÓRIO
+        // O nome do GameObject deve ser EXATAMENTE este para o UnitySendMessage funcionar
+        this.gameObject.name = "LocationManager";
         RequestPermissions();
-
-        // --- NOVO: inicia rastreamento automaticamente assim que o app abre ---
         StartTracking();
     }
 
@@ -53,8 +53,23 @@ public class LocationBackgroundManager : MonoBehaviour
         if (!Permission.HasUserAuthorizedPermission("android.permission.VIBRATE"))
             Permission.RequestUserPermission("android.permission.VIBRATE");
 #elif UNITY_IOS
-        Input.location.Start(); Input.location.Stop(); // Força prompt
+        Input.location.Start(); Input.location.Stop();
 #endif
+    }
+
+    // --- NOVO: Recebe o status vindo do clique na Notificação Android ---
+    public void OnServiceStatusChanged(string status)
+    {
+        if (status == "Running")
+        {
+            IsServiceRunning = true;
+            Debug.Log("Serviço está ATIVO e rastreando.");
+        }
+        else if (status == "Paused")
+        {
+            IsServiceRunning = false;
+            Debug.Log("Serviço está PAUSADO (GPS desligado).");
+        }
     }
 
     public void StartTracking()
@@ -87,14 +102,30 @@ public class LocationBackgroundManager : MonoBehaviour
         Input.location.Start();
     }
 
+    // Este método agora apenas envia o comando "STOP_SERVICE", que no nosso novo Java PAUSA o serviço.
     public void StopTracking(string msg = "")
-    { // "msg" exigido pelo UnitySendMessage
+    {
         IsServiceRunning = false;
         Input.location.Stop();
 #if UNITY_ANDROID && !UNITY_EDITOR
         StopAndroid();
 #elif UNITY_IOS && !UNITY_EDITOR
         StopNativeiOS();
+#endif
+    }
+
+    // --- NOVO: Caso você queira realmente FECHAR o app e matar a notificação ---
+    public void KillServiceCompletely()
+    {
+        IsServiceRunning = false;
+        Input.location.Stop();
+#if UNITY_ANDROID && !UNITY_EDITOR
+        using (AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer"))
+        {
+            AndroidJavaObject context = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity").Call<AndroidJavaObject>("getApplicationContext");
+            AndroidJavaObject intent = new AndroidJavaObject("android.content.Intent", context, new AndroidJavaClass("com.unity.location.UnityLocationService"));
+            context.Call<bool>("stopService", intent);
+        }
 #endif
     }
 
