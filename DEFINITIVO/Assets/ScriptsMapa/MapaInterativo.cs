@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 
 public class MapTouchController : MonoBehaviour
@@ -15,7 +15,7 @@ public class MapTouchController : MonoBehaviour
     public RectTransform mapRectTransform;
     public RectTransform containerRectTransform;
     public GameObject mapPanel;          // Painel do mapa principal
-    public GameObject areaInfoPanel;     // Painel de informações da área
+    public GameObject areaInfoPanel;     // Painel de informaÃ§Ãµes da Ã¡rea
     public GameObject stickerPanel;      // Painel dos stickers
 
     private float initialDistance;
@@ -139,17 +139,17 @@ public class MapTouchController : MonoBehaviour
     }
 
     // -----------------------------
-    // FUNÇÕES DOS BOTÕES DE VOLTAR
+    // FUNÃ‡Ã•ES DOS BOTÃ•ES DE VOLTAR
     // -----------------------------
 
-    // Fecha o painel de stickers e volta pro painel da área
+    // Fecha o painel de stickers e volta pro painel da Ã¡rea
     public void BackToAreaInfoPanel()
     {
         stickerPanel.SetActive(false);
         areaInfoPanel.SetActive(true);
     }
 
-    // Fecha o painel da área e volta pro mapa principal
+    // Fecha o painel da Ã¡rea e volta pro mapa principal
     public void BackToMap()
     {
         areaInfoPanel.SetActive(false);
@@ -205,12 +205,6 @@ public class MapTouchController : MonoBehaviour
         }
     }
 }
-
-
-
-
-
-
 
 
 

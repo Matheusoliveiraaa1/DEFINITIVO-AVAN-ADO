@@ -131,11 +131,11 @@ public class VideoManager : MonoBehaviour
     {
         switch (areaName)
         {
-            case "Epifitas": return Application.streamingAssetsPath + "/Teste.mp4";
-            case "Serrapilheira": return Application.streamingAssetsPath + "/Teste.mp4";
-            case "CursoDagua": return Application.streamingAssetsPath + "/Teste.mp4";
-            case "Subosque": return Application.streamingAssetsPath + "/Teste.mp4";
-            case "Dossel": return Application.streamingAssetsPath + "/Teste.mp4";
+            case "Epifitas": return Application.streamingAssetsPath + "/epifitas.mp4";
+            case "Serrapilheira": return Application.streamingAssetsPath + "/serrapilheira.mp4";
+            case "CursoDagua": return Application.streamingAssetsPath + "/curso_dagua.mp4";
+            case "Subosque": return Application.streamingAssetsPath + "/subosque.mp4";
+            case "Dossel": return Application.streamingAssetsPath + "/dossel.mp4";
             default: return null;
         }
     }

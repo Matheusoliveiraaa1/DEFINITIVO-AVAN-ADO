@@ -1,136 +1,82 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
-using System.Collections;
+using UnityEngine.UI;
 
-public class DraggablePanel : MonoBehaviour, IDragHandler, IEndDragHandler
+public class BottomSheetController : MonoBehaviour, IDragHandler
 {
-    [Header("Configurações")]
-    public float animationSpeed = 0.3f; // Velocidade da animação
-    public Vector2 initialPosition;     // Posição recolhida
-    public Vector2 expandedPosition;    // Posição expandida
+    [Header("Referências")]
+    public RectTransform cardRect;           // O RectTransform do próprio card branco
+    public ScrollRect scrollView;            // O Scroll View das informações
+    public RectTransform areaDeArrastoTopo;  // A imagem invisível no topo do card
 
-    [Header("Sensibilidade")]
-    public float dragMultiplier = 1.8f;     // Amplificação do movimento
-    public float velocityThreshold = 800f;  // Swipe rápido
-    public float snapThreshold = 0.25f;     // % para decidir abrir/fechar
+    [Header("Configurações de Posição (Eixo Y)")]
+    public float yMinimizado = -600f; // Ajuste para a altura que o card deve ficar escondido
+    public float yExpandido = 0f;     // Posição quando ocupa a tela toda
 
-    private RectTransform rectTransform;
-    private Coroutine animationCoroutine;
+    [Header("Suavização")]
+    public float velocidadeAnimacao = 12f;
 
-    // velocidade calculada manualmente
-    private float currentVelocity;
+    private Vector2 posicaoAlvo;
+    private bool estaExpandido = false;
 
-    void Awake()
+    void Start()
     {
-        rectTransform = GetComponent<RectTransform>();
-        initialPosition = rectTransform.anchoredPosition;
+        // Define a posição inicial como minimizada
+        posicaoAlvo = new Vector2(cardRect.anchoredPosition.x, yMinimizado);
+
+        // O Scroll View começa desativado para o usuário não rolar a lista enquanto o card tá pequeno
+        scrollView.enabled = false;
+
+        // Adiciona um "espião" para ver quando a lista é rolada
+        scrollView.onValueChanged.AddListener(VerificarOverscroll);
     }
 
-    // ===== DRAG DIRETO NO PAINEL =====
+    void Update()
+    {
+        // Interpolação suave (Lerp) para o movimento do card ficar natural e não seco
+        cardRect.anchoredPosition = Vector2.Lerp(cardRect.anchoredPosition, posicaoAlvo, Time.deltaTime * velocidadeAnimacao);
+    }
+
+    // Essa interface IDragHandler detecta o dedo arrastando na tela
     public void OnDrag(PointerEventData eventData)
     {
-        if (animationCoroutine != null)
-            StopCoroutine(animationCoroutine);
+        if (estaExpandido) return; // Se já está em tela cheia, o Scroll View é quem manda no toque
 
-        float deltaY = eventData.delta.y * dragMultiplier;
-
-        rectTransform.anchoredPosition += new Vector2(0, deltaY);
-
-        currentVelocity = deltaY / Time.deltaTime;
-
-        ClampPosition();
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        DecideFinalPosition(currentVelocity);
-        currentVelocity = 0f;
-    }
-
-    // ===== DRAG VINDO DO SCROLLVIEW =====
-    public void DragFromScroll(float deltaY)
-    {
-        if (animationCoroutine != null)
-            StopCoroutine(animationCoroutine);
-
-        float adjustedDelta = deltaY * dragMultiplier;
-
-        rectTransform.anchoredPosition += new Vector2(0, adjustedDelta);
-
-        currentVelocity = adjustedDelta / Time.deltaTime;
-
-        ClampPosition();
-    }
-
-    public void EndDragFromScroll()
-    {
-        DecideFinalPosition(currentVelocity);
-        currentVelocity = 0f;
-    }
-
-    // ===== DECISÃO FINAL =====
-    private void DecideFinalPosition(float velocity)
-    {
-        float totalHeight = expandedPosition.y - initialPosition.y;
-        float currentOffset = rectTransform.anchoredPosition.y - initialPosition.y;
-        float normalized = currentOffset / totalHeight;
-
-        // Swipe rápido
-        if (Mathf.Abs(velocity) > velocityThreshold)
+        // Verifica se o dedo está tocando especificamente na área do topo do card
+        if (RectTransformUtility.RectangleContainsScreenPoint(areaDeArrastoTopo, eventData.position, eventData.pressEventCamera))
         {
-            if (velocity > 0)
-                Animate(expandedPosition);
-            else
-                Animate(initialPosition);
-
-            return;
+            // Se arrastou pra cima (delta Y positivo), abre o card
+            if (eventData.delta.y > 0)
+            {
+                AbrirCard();
+            }
         }
-
-        // Swipe lento
-        if (normalized > snapThreshold)
-            Animate(expandedPosition);
-        else
-            Animate(initialPosition);
     }
 
-    // ===== UTILIDADES =====
-    private void Animate(Vector2 target)
+    private void VerificarOverscroll(Vector2 pos)
     {
-        animationCoroutine = StartCoroutine(AnimateToPosition(target));
-    }
-
-    private void ClampPosition()
-    {
-        float clampedY = Mathf.Clamp(
-            rectTransform.anchoredPosition.y,
-            initialPosition.y,
-            expandedPosition.y
-        );
-
-        rectTransform.anchoredPosition =
-            new Vector2(rectTransform.anchoredPosition.x, clampedY);
-    }
-
-    private IEnumerator AnimateToPosition(Vector2 targetPosition)
-    {
-        float elapsedTime = 0f;
-        Vector2 startingPos = rectTransform.anchoredPosition;
-
-        while (elapsedTime < animationSpeed)
+        // O segredo: como o ScrollRect é "Elastic", quando o usuário puxa a lista
+        // além do limite do topo, o valor de 'y' passa de 1.0. 
+        // 1.10f é um bom limite para o usuário ter que fazer uma leve força pra fechar.
+        if (estaExpandido && pos.y > 1.10f)
         {
-            rectTransform.anchoredPosition =
-                Vector2.Lerp(startingPos, targetPosition, elapsedTime / animationSpeed);
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            FecharCard();
         }
-
-        rectTransform.anchoredPosition = targetPosition;
-        animationCoroutine = null;
     }
 
-    public bool IsExpanded()
+    public void AbrirCard()
     {
-        return Mathf.Approximately(rectTransform.anchoredPosition.y, expandedPosition.y);
+        estaExpandido = true;
+        posicaoAlvo = new Vector2(cardRect.anchoredPosition.x, yExpandido);
+        scrollView.enabled = true; // Libera o conteúdo para o jogador rolar
+    }
+
+    public void FecharCard()
+    {
+        estaExpandido = false;
+        posicaoAlvo = new Vector2(cardRect.anchoredPosition.x, yMinimizado);
+
+        scrollView.enabled = false; // Trava a lista
+        scrollView.verticalNormalizedPosition = 1f; // Reseta a lista pro topo para a próxima vez que abrir
     }
 }
