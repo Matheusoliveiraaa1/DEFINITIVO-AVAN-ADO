@@ -6354,6 +6354,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1964089031}
+  - {fileID: 852910663}
   - {fileID: 1952518335}
   - {fileID: 2026129372}
   - {fileID: 1313261575}
@@ -9451,6 +9452,81 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!1 &852910662
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 852910663}
+  - component: {fileID: 852910665}
+  - component: {fileID: 852910664}
+  m_Layer: 5
+  m_Name: Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &852910663
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852910662}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 556649114}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 293, y: -623}
+  m_SizeDelta: {x: 422.6498, y: 235.9282}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &852910664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852910662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 697018e838ee4a343bd92bcaaa12b92c, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &852910665
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 852910662}
+  m_CullTransparentMesh: 1
 --- !u!1 &863431975
 GameObject:
   m_ObjectHideFlags: 0
@@ -12325,7 +12401,7 @@ MonoBehaviour:
   - latitude: -26.90554
     longitude: -49.07987
     message: 
-    areaName: CursoDagua
+    areaName: Subosque
     detectionRadius: 25
   - latitude: -26.90591
     longitude: -49.07959
@@ -12608,28 +12684,28 @@ MonoBehaviour:
   cameraExample: {fileID: 1103364854}
   pins:
   - pinName: CursoDagua
-    position: {x: -51, y: -547.1}
+    position: {x: -14.9, y: -411.2}
     description: "Riachos, nascentes e \xE1reas \xFAmidas s\xE3o essenciais para
       o equil\xEDbrio da floresta. Al\xE9m de fornecer \xE1gua, regulam o microclima,
       favorecem a biodiversidade influenciando a distribui\xE7\xE3o de plantas e
       animais."
   - pinName: Subosque
-    position: {x: -31.2, y: -212}
+    position: {x: 0, y: 0}
     description: "Camada intermedi\xE1ria da floresta, com luz filtrada pelas copas
       das \xE1rvores. Abriga esp\xE9cies adaptadas \xE0 sombra, local onde crescem
       as mudas que garantem a regenera\xE7\xE3o natural da floresta."
   - pinName: Dossel
-    position: {x: -76.2, y: -5.3}
+    position: {x: -51.1, y: 350}
     description: "Parte mais alta da floresta, formada pelas copas das \xE1rvores.
       \xC9 onde ocorre a maior capta\xE7\xE3o de luz solar, sustentando a produ\xE7\xE3o
       de energia do ecossistema e a vida de muitas esp\xE9cies."
   - pinName: Epifitas
-    position: {x: -106.5, y: -305}
+    position: {x: -69.8, y: -68.3}
     description: "Plantas que crescem apoiadas sobre troncos e galhos, usando outras
       \xE1rvores apenas como suporte. N\xE3o s\xE3o parasitas e contribuem para a
       biodiversidade, criando micro-habitats e ajudando a reter \xE1gua no ambiente."
   - pinName: Serrapilheira
-    position: {x: -110, y: -451}
+    position: {x: -83.9, y: -295.8}
     description: "Camada de folhas, galhos, frutos, sementes e toda mat\xE9ria em
       decomposi\xE7\xE3o que cobre o solo da floresta. Ela protege o solo, mant\xE9m
       a umidade e devolve nutrientes ao ecossistema, sustentando a vida de \xEDnumeras
@@ -13016,10 +13092,40 @@ MonoBehaviour:
   pinPrefab: {fileID: 8734673716976976795, guid: a35c7390912c584448229ee8a56beea4, type: 3}
   points:
   - pointName: Bambuzal
-    anchoredPosition: {x: 74.2, y: 91.9}
+    anchoredPosition: {x: 414, y: 372}
     buttonSprite: {fileID: 21300000, guid: 10ec4f32c3fb3154babc0c07e6515028, type: 3}
     overlayImage: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
     overlayText: Bambuzal
+  - pointName: "Ra\xEDzes no ch\xE3o"
+    anchoredPosition: {x: 372, y: 140}
+    buttonSprite: {fileID: 21300000, guid: 3c30d4f376834a44ca5373abd4064827, type: 3}
+    overlayImage: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    overlayText: "Ra\xEDzes no ch\xE3o"
+  - pointName: Jabuticabeira
+    anchoredPosition: {x: 307, y: -152}
+    buttonSprite: {fileID: 21300000, guid: 6045b9f12ee2b6e4589f1c815b83be7c, type: 3}
+    overlayImage: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    overlayText: Jabuticabeira
+  - pointName: Ponte de ferro
+    anchoredPosition: {x: 313, y: -336}
+    buttonSprite: {fileID: 21300000, guid: 17efbc115b0f1434ca3fa9d28d962951, type: 3}
+    overlayImage: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    overlayText: Ponte de ferro
+  - pointName: Deck
+    anchoredPosition: {x: -311, y: -330}
+    buttonSprite: {fileID: 21300000, guid: 1258f2f0209fedc44bdd6a0a1111166f, type: 3}
+    overlayImage: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    overlayText: Deck
+  - pointName: Bolachas de madeira
+    anchoredPosition: {x: -270, y: 37}
+    buttonSprite: {fileID: 21300000, guid: fd245a5b9d2b09441b9a71a164d7fab9, type: 3}
+    overlayImage: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    overlayText: Bolachas de madeira
+  - pointName: Ponte
+    anchoredPosition: {x: -319, y: 294}
+    buttonSprite: {fileID: 21300000, guid: adac76667c816774c851ce373213cd1b, type: 3}
+    overlayImage: {fileID: 21300000, guid: 6ffb36e07f2d4ca408e2a944244b94ad, type: 3}
+    overlayText: Ponte
   overlayPanel: {fileID: 899125673}
   overlayRawImage: {fileID: 918703227}
   overlayTextTMP: {fileID: 1031716309}
@@ -20805,7 +20911,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1631988499
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23317,8 +23423,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 34.999}
-  m_SizeDelta: {x: 1005.0493, y: 1415.3433}
+  m_AnchoredPosition: {x: 0.00051117, y: 0.000015259}
+  m_SizeDelta: {x: 1067.3671, y: 1378.6091}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1964089032
 MonoBehaviour:
@@ -23340,7 +23446,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Texture: {fileID: 2800000, guid: acb596bd5f7b2014286753ba9f82851f, type: 3}
+  m_Texture: {fileID: 2800000, guid: 606e734ef0e34a241a3b5bad8552b801, type: 3}
   m_UVRect:
     serializedVersion: 2
     x: 0

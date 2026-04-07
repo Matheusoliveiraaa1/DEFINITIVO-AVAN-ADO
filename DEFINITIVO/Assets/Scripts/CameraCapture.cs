@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System; // Necessário para System.GC
+using System; 
 
 public class NativeCameraExample : MonoBehaviour
 {
@@ -20,7 +20,7 @@ public class NativeCameraExample : MonoBehaviour
     public Button cursoDaguaPanelCloseButton; // botão para fechar
     public float textoLetterDelay = 0.05f; // delay entre cada letra
     public float imagemMoveAmplitude = 5f; // pixels de deslocamento
-    public float imagemMoveSpeed = 1f; // velocidade do movimento
+    public float imagemMoveSpeed = 1f; 
 
 
 
@@ -34,7 +34,7 @@ public class NativeCameraExample : MonoBehaviour
     public GameObject stickerMenuScrollView;
 
     public GameObject[] area1Stickers;
-    public GameObject[] area2Stickers; // NOVA ÁREA
+    public GameObject[] area2Stickers; 
     public GameObject[] cursoDaguaStickers;
     public GameObject[] subosqueStickers;
     public GameObject[] dosselStickers;
@@ -47,7 +47,7 @@ public class NativeCameraExample : MonoBehaviour
     public GalleryManager galleryManager;
     public RectTransform photoAreaToCapture;
     public GameObject okButton;
-    public GameObject backButton; // 🆕 Botão "Voltar"
+    public GameObject backButton;
 
     [Header("Imagem Deslizante Pós Confirmação")]
     public RectTransform confirmSlidingImage;
@@ -75,13 +75,13 @@ public class NativeCameraExample : MonoBehaviour
 
 
     [Header("Imagem Deslizante")]
-    public RectTransform slidingImage;      // arraste a Image aqui no Inspector
-    public float slideDuration = 0.5f;      // tempo do movimento (entrada/saída)
-    public float slideStayTime = 4f;        // tempo parada no centro
+    public RectTransform slidingImage;      
+    public float slideDuration = 0.5f;      
+    public float slideStayTime = 4f;        
 
 
 
-    // Parte do novo sistema de páginas 
+    
     [Header("Sticker Pages")]
     public Button nextPageButton;
     public Button prevPageButton;
@@ -103,7 +103,7 @@ public class NativeCameraExample : MonoBehaviour
     [Header("Progresso")]
     public TextMeshProUGUI progressText;
     private int areasVisitadas = 0;
-    private const int TOTAL_AREAS = 5; // Atualizado para incluir Área2
+    private const int TOTAL_AREAS = 5; 
     private List<string> areasContabilizadas = new List<string>();
 
     [Header("Mensagem")]
@@ -115,7 +115,7 @@ public class NativeCameraExample : MonoBehaviour
 
     [Header("Sticker Count UI")]
     public TextMeshProUGUI area1CountText;
-    public TextMeshProUGUI area2CountText; // NOVO contador
+    public TextMeshProUGUI area2CountText; 
     public TextMeshProUGUI cursoDaguaCountText;
     public TextMeshProUGUI subosqueCountText;
     public TextMeshProUGUI dosselCountText;
@@ -189,7 +189,7 @@ public class NativeCameraExample : MonoBehaviour
         stickerIndexCache.Clear();
 
         CacheAreaStickers("Area1", area1Stickers);
-        CacheAreaStickers("Area2", area2Stickers); // NOVA ÁREA
+        CacheAreaStickers("Area2", area2Stickers); 
         CacheAreaStickers("CursoDagua", cursoDaguaStickers);
         CacheAreaStickers("Subosque", subosqueStickers);
         CacheAreaStickers("Dossel", dosselStickers);
@@ -231,17 +231,17 @@ public class NativeCameraExample : MonoBehaviour
             clipDuration = confirmSlidingClip.length;
         }
 
-        // 🔥 posição final (definida no editor)
+        //  posição final (definida no editor)
         Vector2 finalPos = confirmSlidingFinalPos;
 
 
-        // 🔥 posição inicial fora da tela (esquerda)
+        //  posição inicial fora da tela (esquerda)
         Vector2 offScreenLeft = new Vector2(
             finalPos.x - Screen.width,
             finalPos.y
         );
 
-        // 🔄 RESET GARANTIDO
+        //  RESET GARANTIDO
         confirmSlidingImage.anchoredPosition = offScreenLeft;
         confirmSlidingImage.localScale = Vector3.one;
 
@@ -272,10 +272,10 @@ public class NativeCameraExample : MonoBehaviour
 
         confirmSlidingImage.gameObject.SetActive(false);
 
-        // 🔓 libera referência
+        //  libera referência
         confirmSlideCoroutine = null;
 
-        // 🔥 Só executa se for Dossel
+        //  Só executa se for Dossel
         if (currentArea == "Dossel")
         {
             // espera o áudio terminar
@@ -301,18 +301,18 @@ public class NativeCameraExample : MonoBehaviour
         if (confirmSlidingImage == null)
             return;
 
-        // 🔥 cancela animação anterior
+        //  cancela animação anterior
         if (confirmSlideCoroutine != null)
         {
             StopCoroutine(confirmSlideCoroutine);
             confirmSlideCoroutine = null;
         }
 
-        // 🔄 reset visual
+        // reset visual
         confirmSlidingImage.gameObject.SetActive(false);
         confirmSlidingImage.localScale = Vector3.one;
 
-        // ▶️ inicia novamente
+        //  inicia novamente
         confirmSlideCoroutine = StartCoroutine(PlayConfirmSlidingImage());
     }
 
@@ -346,7 +346,7 @@ public class NativeCameraExample : MonoBehaviour
     {
         if (messageImage != null && messageText != null)
         {
-            // 🔥 GARANTE QUE FICA NA FRENTE DE TUDO
+            
             messageImage.transform.SetAsLastSibling();
 
             messageText.text = message;
@@ -407,7 +407,7 @@ public class NativeCameraExample : MonoBehaviour
 
     public void OpenCamera()
     {
-        // 🔥 ESCONDE IMEDIATAMENTE QUALQUER PREFAB / IMAGEM ANIMADA
+        //  ESCONDE IMEDIATAMENTE QUALQUER PREFAB / IMAGEM ANIMADA
         PostVideoImageManager post = FindObjectOfType<PostVideoImageManager>();
         if (post != null)
             post.ForceHide();
@@ -440,7 +440,7 @@ public class NativeCameraExample : MonoBehaviour
         {
             if (path != null)
             {
-                // ✅ DESTRÓI A FOTO ANTERIOR ANTES DE CARREGAR A NOVA
+                //  DESTRÓI A FOTO ANTERIOR ANTES DE CARREGAR A NOVA
                 if (imageDisplay.texture != null)
                 {
                     Destroy(imageDisplay.texture);
@@ -459,7 +459,7 @@ public class NativeCameraExample : MonoBehaviour
                     ShowStickers();
                     closeButton?.SetActive(true);
                     okButton?.SetActive(true);
-                    backButton?.SetActive(true); // 🆕 Ativa o botão Voltar
+                    backButton?.SetActive(true); //  Ativa o botão Voltar
 
                     StartCoroutine(PlaySlidingImage());
 
@@ -535,7 +535,7 @@ public class NativeCameraExample : MonoBehaviour
             if (i + 1 < stickers.Length)
                 stickerPages.Add(new GameObject[] { stickers[i], stickers[i + 1] });
             else
-                stickerPages.Add(new GameObject[] { stickers[i] }); // última com 1
+                stickerPages.Add(new GameObject[] { stickers[i] }); 
         }
     }
 
@@ -650,7 +650,7 @@ public class NativeCameraExample : MonoBehaviour
         // 2️⃣ Coleta SOMENTE OS FIXOS (0–2) das OUTRAS áreas
         List<GameObject> fixedOthers = GetOnlyFixedStickersFromOtherAreas();
 
-        // ✅ GARANTE QUE SEMPRE EXISTAM 3
+        
         if (fixedOthers.Count < 3)
         {
             Debug.LogError("❌ ERRO: Não existem 3 stickers fixos suficientes nas outras áreas!");
@@ -665,7 +665,7 @@ public class NativeCameraExample : MonoBehaviour
             fixedOthers.RemoveAt(rnd);
         }
 
-        // ✅ ✅ ✅ EMBARALHA TUDO ANTES DE RETORNAR
+        //  EMBARALHA TUDO ANTES DE RETORNAR
         ShuffleList(finalList);
 
         return finalList.ToArray();
@@ -708,7 +708,7 @@ public class NativeCameraExample : MonoBehaviour
             GameObject[] arr = GetStickersArrayByArea(areaName);
             if (arr == null) continue;
 
-            // ✅ Agora ele só adiciona se EXISTIR de verdade
+            
             if (arr.Length > 0 && arr[0] != null) list.Add(arr[0]);
             if (arr.Length > 1 && arr[1] != null) list.Add(arr[1]);
             if (arr.Length > 2 && arr[2] != null) list.Add(arr[2]);
@@ -786,7 +786,7 @@ public class NativeCameraExample : MonoBehaviour
 
     public void ClosePhotoView()
     {
-        // ✅ DESTRÓI A TEXTURA DA FOTO EXIBIDA
+        //  DESTRÓI A TEXTURA DA FOTO EXIBIDA
         if (imageDisplay.texture != null)
         {
             Destroy(imageDisplay.texture);
@@ -940,7 +940,7 @@ public class NativeCameraExample : MonoBehaviour
             galleryManager.AtualizarMiniaturas();
         }
 
-        // ✅ DESTRÓI A TEXTURA DO PRINT
+        //  DESTRÓI A TEXTURA DO PRINT
         Destroy(screenshot);
         Resources.UnloadUnusedAssets();
         GC.Collect();
@@ -950,7 +950,7 @@ public class NativeCameraExample : MonoBehaviour
 
         UpdateAllCountersFromLocationManager();
 
-        // 🔴 AVISA O MAPA QUE A ÁREA FOI CONCLUÍDA
+        //  AVISA O MAPA QUE A ÁREA FOI CONCLUÍDA
         if (!string.IsNullOrEmpty(currentArea) && MapPinsController.Instance != null)
         {
             MapPinsController.Instance.MarkPinVisited(currentArea);
@@ -961,7 +961,7 @@ public class NativeCameraExample : MonoBehaviour
     private void InicializarContadores()
     {
         area1CountText.text = "0/6";
-        area2CountText.text = "0/6"; // NOVO
+        area2CountText.text = "0/6"; 
         cursoDaguaCountText.text = "0/6";
         subosqueCountText.text = "0/6";
         dosselCountText.text = "0/6";
@@ -1100,7 +1100,7 @@ public class NativeCameraExample : MonoBehaviour
         if (clip == null || messageAudioSource == null)
             return;
 
-        // ⛔ Bloqueia spam
+        //  Bloqueia spam
         if (Time.time < lastMessageSoundTime + messageSoundCooldown)
             return;
 
@@ -1151,7 +1151,7 @@ public class NativeCameraExample : MonoBehaviour
 
         cursoDaguaPanel.SetActive(true);
 
-        // 🔊 TOCA O ÁUDIO TODA VEZ QUE O PAINEL ABRE
+        // TOCA O ÁUDIO TODA VEZ QUE O PAINEL ABRE
         if (cursoDaguaAudioSource != null && cursoDaguaClip != null)
         {
             cursoDaguaAudioSource.PlayOneShot(cursoDaguaClip);
