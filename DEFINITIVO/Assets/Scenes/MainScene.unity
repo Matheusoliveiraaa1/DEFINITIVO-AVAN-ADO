@@ -12641,40 +12641,40 @@ MonoBehaviour:
   accuracyMultiplier: 0.8
   maxGpsRadius: 30
   areaPoints:
-  - latitude: -26.90554
-    longitude: -49.07987
+  - latitude: -26.92104
+    longitude: -49.07204
     message: 
     areaName: CursoDagua
-    detectionRadius: 25
-  - latitude: -26.90591
-    longitude: -49.07959
+    detectionRadius: 12
+  - latitude: -26.92128
+    longitude: -49.07336
     message: 
     areaName: Epifitas
-    detectionRadius: 12
-  - latitude: -26.90597
-    longitude: -49.07934
+    detectionRadius: 15
+  - latitude: -26.92136
+    longitude: -49.07263
     message: 
     areaName: Serrapilheira
-    detectionRadius: 12
-  - latitude: -26.90567
-    longitude: -49.07912
+    detectionRadius: 15
+  - latitude: -26.921367
+    longitude: -49.075164
     message: 
     areaName: Dossel
-    detectionRadius: 12
-  - latitude: -26.90566
-    longitude: -49.07943
+    detectionRadius: 15
+  - latitude: -26.921064
+    longitude: -49.07395
     message: 
     areaName: Subosque
-    detectionRadius: 12
+    detectionRadius: 15
   stickerPoints:
   - ID: Coleta1
-    latitude: 0
-    longitude: 0
+    latitude: -26.921272
+    longitude: -49.071814
     message: 
     areaName: Serrapilheira
     stickerIndex: 3
     entryMode: 0
-    detectionRadius: 25
+    detectionRadius: 12
   - ID: Coleta2
     latitude: -26.921447
     longitude: -49.072914
@@ -12747,14 +12747,6 @@ MonoBehaviour:
     stickerIndex: 4
     entryMode: 0
     detectionRadius: 10
-  - ID: Coleta11
-    latitude: 3
-    longitude: 3
-    message: 
-    areaName: CursoDagua
-    stickerIndex: 5
-    entryMode: 0
-    detectionRadius: 10
   entry1:
     entryName: Entrada1
     latitude: -26.921272
@@ -12765,8 +12757,8 @@ MonoBehaviour:
     longitude: 0
   inventoryManager: {fileID: 0}
   gpsDisabledPanel: {fileID: 1725178816}
-  videoLatitude: -26.920278
-  videoLongitude: -49.075833
+  videoLatitude: -26.92052
+  videoLongitude: -49.07589
   videoDetectionRadius: 15
   videoFileName: PosBambuzal.mp4
 --- !u!224 &1103364858
@@ -18693,7 +18685,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1448855984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22759,7 +22751,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1848800779
 MonoBehaviour:
   m_ObjectHideFlags: 0

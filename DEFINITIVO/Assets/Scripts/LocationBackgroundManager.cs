@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Globalization;
 using System.Runtime.InteropServices;
+using System.Collections;
 #if UNITY_ANDROID
 using UnityEngine.Android;
 #endif
@@ -35,11 +36,23 @@ public class LocationBackgroundManager : MonoBehaviour
     [DllImport("__Internal")] private static extern void StopNativeiOS();
 #endif
 
-    void Start()
+    // Substitua o Start antigo por este no LocationBackgroundManager.cs
+    private IEnumerator Start()
     {
-        // O nome do GameObject deve ser EXATAMENTE este para o UnitySendMessage funcionar
         this.gameObject.name = "LocationManager";
+
+        // 1. Pede as permissões
         RequestPermissions();
+
+        // 2. Aguarda até que a permissão de localização seja concedida
+        // Sem isso, o StartTracking() roda antes do clique no "Permitir" e causa o Crash
+        while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
+        {
+            Debug.Log("Aguardando permissão do usuário...");
+            yield return new WaitForSeconds(0.5f);
+        }
+
+        // 3. Agora que temos permissão, inicia o rastreio com segurança
         StartTracking();
     }
 

@@ -224,10 +224,7 @@ public class MapPinsController : MonoBehaviour
 
     void Start()
     {
-        if (resetGameButton != null)
-            resetGameButton.SetActive(false);
-
-
+        // --- INICIALIZAÇÃO GERAL ---
         if (largeImage != null)
             largeImage.gameObject.SetActive(false);
 
@@ -243,16 +240,15 @@ public class MapPinsController : MonoBehaviour
         if (decoratedImageThumb != null)
             placeholderDecoratedThumb = decoratedImageThumb.texture;
 
-
         if (speciesOverlayPanel != null)
             speciesOverlayPanel.SetActive(false);
 
-        // ======= ADICIONA E MARCA OS PINS =========
+        // --- CARREGAMENTO E ATUALIZAÇÃO DOS PINS ---
         foreach (var pin in pins)
         {
             AddPin(pin);
 
-            // Verifica se já foi visitado em sessões anteriores
+            // Verifica se já foi visitado em sessões anteriores (Persistência)
             if (PlayerPrefs.GetInt("Visited_" + pin.pinName, 0) == 1)
             {
                 if (spawnedPins.TryGetValue(pin.pinName, out Button pinButton))
@@ -263,26 +259,47 @@ public class MapPinsController : MonoBehaviour
                         pinImage.sprite = completedPinSprite;
                         pinImage.preserveAspect = true;
 
-                        // 🔥 REABILITA O BOTÃO PARA PINS JÁ VISITADOS
-                        pinButton.interactable = true;  // <--- IMPORTANTE!
+                        // REABILITA O BOTÃO PARA PINS JÁ VISITADOS
+                        pinButton.interactable = true;
                     }
                 }
             }
         }
 
+        // =============================================================
+        // LÓGICA DE PERSISTÊNCIA DO BOTÃO DE RESET (CORREÇÃO)
+        // =============================================================
+        if (resetGameButton != null)
+        {
+            // Se o jogador já completou todas as áreas (mesmo em sessões passadas)
+            if (AreAllPinsVisited())
+            {
+                resetGameButton.SetActive(true);
+
+                // Inicia a animação de pulso para o botão não ficar estático
+                if (resetPulseCoroutine != null) StopCoroutine(resetPulseCoroutine);
+                resetPulseCoroutine = StartCoroutine(PulseResetButton());
+            }
+            else
+            {
+                // Se ainda não completou tudo, ele começa escondido
+                resetGameButton.SetActive(false);
+            }
+        }
+        // =============================================================
+
+        // --- CONFIGURAÇÕES DE UI ---
         if (areaInfoPanel != null)
             areaInfoPanel.SetActive(false);
 
         if (speciesInfoPanel != null)
             speciesInfoPanel.SetActive(false);
 
-        // Overlay da Area Image começa desligado
         if (areaImageOverlay != null)
             areaImageOverlay.SetActive(false);
 
         // Torna a areaImage clicável
         SetupAreaImageClick();
-
     }
 
 

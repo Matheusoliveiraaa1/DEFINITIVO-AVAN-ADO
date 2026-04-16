@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.Android;
 
 public class LocationPermissionManager : MonoBehaviour
@@ -17,4 +17,4 @@ public class LocationPermissionManager : MonoBehaviour
     }
 
 
-}
+}*/
