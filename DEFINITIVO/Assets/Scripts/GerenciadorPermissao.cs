@@ -7,12 +7,25 @@ public class GerenciadorPermissao : MonoBehaviour
 
     void Start()
     {
-        // Verifica se já aceitou antes
+        // Verifica se jï¿½ aceitou antes
         if (PlayerPrefs.GetInt("AceitouTermos", 0) == 1)
+        {
+            StartCoroutine(LoadMainSceneWithDelay());
+        }
+        }
+
+        private System.Collections.IEnumerator LoadMainSceneWithDelay()
+        {
+        yield return new WaitForSeconds(0.5f);
+        if (!string.IsNullOrEmpty(nomeCenaPrincipal))
         {
             SceneManager.LoadScene(nomeCenaPrincipal);
         }
-    }
+        else
+        {
+            SceneManager.LoadScene("MainScene");
+        }
+        }
 
     public void Aceitar()
     {
@@ -29,7 +42,7 @@ public class GerenciadorPermissao : MonoBehaviour
         // Fecha o app
         Application.Quit();
 
-        // Isso aqui é só pra funcionar no Editor (Unity)
+        // Isso aqui ï¿½ sï¿½ pra funcionar no Editor (Unity)
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #endif

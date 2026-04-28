@@ -1,0 +1,19 @@
+# ninja log v5
+30	2241	7991096282001180	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	92939cb0b0ba559
+41	2253	7991096282095570	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	35bd904c447e0338
+82	2621	7991096285773140	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	33cb554094582292
+19	2283	7991096282405007	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	3591d19d9e5e454b
+1	2348	7991096283042153	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	38ca3d140156c5b6
+69	2297	7991096282537234	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	213cd2e058410567
+55	2585	7991096285400005	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	cd1238e899accc60
+11	2711	7991096286648593	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	6b2c229ef76120f8
+2711	2958	7991096289170009	C:/Users/berna/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3v28j2i5/obj/arm64-v8a/libgame.so	42d066bb02b4d01d
+66	3315	7991104406783657	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	92939cb0b0ba559
+48	3327	7991104406896125	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	35bd904c447e0338
+38	3366	7991104407280716	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	3591d19d9e5e454b
+76	3369	7991104407300832	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	213cd2e058410567
+25	3488	7991104408469195	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	38ca3d140156c5b6
+88	3752	7991104411119884	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	cd1238e899accc60
+14	3903	7991104412597770	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	6b2c229ef76120f8
+56	4148	7991104415087979	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	33cb554094582292
+4148	4437	7991104418025703	C:/Users/berna/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/3v28j2i5/obj/arm64-v8a/libgame.so	42d066bb02b4d01d

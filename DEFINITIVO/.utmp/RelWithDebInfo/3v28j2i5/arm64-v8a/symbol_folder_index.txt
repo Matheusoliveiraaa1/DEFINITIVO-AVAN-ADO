@@ -1,0 +1,1 @@
+C:\Users\berna\Documents\GitHub\PROJETO-FLORESTASC-NA-TRILHA\DEFINITIVO\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\3v28j2i5\obj\arm64-v8a

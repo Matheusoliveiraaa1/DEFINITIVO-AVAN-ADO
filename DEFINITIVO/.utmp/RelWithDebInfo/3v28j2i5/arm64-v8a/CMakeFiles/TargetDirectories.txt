@@ -1,0 +1,5 @@
+C:/Users/berna/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/.utmp/RelWithDebInfo/3v28j2i5/arm64-v8a/CMakeFiles/edit_cache.dir
+C:/Users/berna/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/.utmp/RelWithDebInfo/3v28j2i5/arm64-v8a/CMakeFiles/rebuild_cache.dir
+C:/Users/berna/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/.utmp/RelWithDebInfo/3v28j2i5/arm64-v8a/GameActivity/CMakeFiles/game.dir
+C:/Users/berna/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/.utmp/RelWithDebInfo/3v28j2i5/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
+C:/Users/berna/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/.utmp/RelWithDebInfo/3v28j2i5/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir

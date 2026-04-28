@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using TMPro;
 using System.Collections;
 using System.Collections.Generic;
@@ -273,18 +273,29 @@ public class LocationServiceManager : MonoBehaviour
 
     private IEnumerator StartLocationService()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2.0f); // Atraso extra para estabilidade
 
-        // Aguarda permissões
-        while (!Permission.HasUserAuthorizedPermission(Permission.FineLocation) ||
-               !Permission.HasUserAuthorizedPermission(Permission.CoarseLocation))
+        float timeout = 15f;
+        float elapsed = 0f;
+
+        // Aguarda permissões com timeout
+        while ((!Permission.HasUserAuthorizedPermission(Permission.FineLocation) ||
+               !Permission.HasUserAuthorizedPermission(Permission.CoarseLocation)) && elapsed < timeout)
         {
             messageText.text = "Aguardando permissão de localização...";
             yield return new WaitForSeconds(0.5f);
+            elapsed += 0.5f;
+        }
+
+        if (elapsed >= timeout)
+        {
+             messageText.text = "Localização não autorizada.";
+             yield break;
         }
 
         // 🔁 Aguarda o usuário ligar o GPS
         while (!Input.location.isEnabledByUser)
+
         {
             messageText.text = "Ative o GPS para continuar.";
             ShowGPSPanel();
@@ -673,7 +684,7 @@ public class LocationServiceManager : MonoBehaviour
 
     private void OnDisable()
     {
-        Input.location.Stop();
+        try { Input.location.Stop(); } catch {}
         CancelInvoke();
     }
 

@@ -37,12 +37,20 @@ public class UnityLocationService extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent == null) return START_STICKY;
+        if (intent == null) {
+             return START_NOT_STICKY; // Don't restart if killed by OS
+        }
 
         String action = intent.getAction();
 
         if (ACTION_STOP.equals(action)) {
             pauseLocationUpdates();
+            // If the action is STOP, we might want to kill the service entirely if coming from Unity's KillService
+            if (intent.getBooleanExtra("kill", false)) {
+                stopForeground(true);
+                stopSelf();
+                return START_NOT_STICKY;
+            }
             return START_STICKY;
         }
 
@@ -63,9 +71,10 @@ public class UnityLocationService extends Service implements LocationListener {
 
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
+            if (locationManager != null) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 5, this);
+            }
             
-            // ATENÇÃO: Verifique se o nome aqui é BackgroundManager ou LocationManager conforme o Checkpoint anterior
             UnityPlayer.UnitySendMessage("BackgroundManager", "OnServiceStatusChanged", "Running");
         } catch (SecurityException e) { e.printStackTrace(); }
     }
@@ -102,7 +111,11 @@ public class UnityLocationService extends Service implements LocationListener {
                 .addAction(icon, buttonText, pendingAction)
                 .setPriority(NotificationCompat.PRIORITY_LOW);
 
-        startForeground(12345, builder.build());
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            startForeground(12345, builder.build(), android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION);
+        } else {
+            startForeground(12345, builder.build());
+        }
     }
 
     // --- MÉTODOS DE NOTIFICAÇÃO DE ALERTA (RECOLOCADOS AQUI) ---
@@ -158,7 +171,7 @@ public class UnityLocationService extends Service implements LocationListener {
         Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         PendingIntent pending = null;
         if (intent != null) {
-            int flags = android.os.Build.VERSION.SDK_INT >= 30 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
+            int flags = android.os.Build.VERSION.SDK_INT >= 31 ? PendingIntent.FLAG_IMMUTABLE : PendingIntent.FLAG_UPDATE_CURRENT;
             pending = PendingIntent.getActivity(this, (int)System.currentTimeMillis(), intent, flags);
         }
 
@@ -179,7 +192,7 @@ public class UnityLocationService extends Service implements LocationListener {
     private void parsePointsSafe(String data) {
         points.clear();
         if (data == null || data.isEmpty()) return;
-        String cleanData = data.replaceAll("[^a-zA-Z0-9|;.\\- ]", ""); 
+        String cleanData = data.replaceAll("[^a-zA-Z0-9|;.\\-]", "");
 
         String[] entries = cleanData.split(";");
         for (String entry : entries) {
@@ -234,7 +247,19 @@ public class UnityLocationService extends Service implements LocationListener {
     @Override
     public void onDestroy() {
         if (locationManager != null) locationManager.removeUpdates(this);
+        try { stopForeground(true); } catch (Exception e) {}
         super.onDestroy();
+    }
+
+    @Override
+    public void onTaskRemoved(Intent rootIntent) {
+        // Called when user swipes the app away from recents
+        if (locationManager != null) {
+            locationManager.removeUpdates(this);
+        }
+        stopForeground(true);   // removes the notification
+        stopSelf();             // kills the service
+        super.onTaskRemoved(rootIntent);
     }
 
     @Override public IBinder onBind(Intent intent) { return null; }
