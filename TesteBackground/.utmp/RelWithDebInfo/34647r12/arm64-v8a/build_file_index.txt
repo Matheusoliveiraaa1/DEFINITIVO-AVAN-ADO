@@ -1,0 +1,3 @@
+C:\Users\mathe\Documents\GitHub\PROJETO-FLORESTASC-NA-TRILHA\TesteBackground\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\CMakeLists.txt
+C:\Users\mathe\Documents\GitHub\PROJETO-FLORESTASC-NA-TRILHA\TesteBackground\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\FramePacing\CMakeLists.txt
+C:\Users\mathe\Documents\GitHub\PROJETO-FLORESTASC-NA-TRILHA\TesteBackground\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\src\main\cpp\GameActivity\CMakeLists.txt

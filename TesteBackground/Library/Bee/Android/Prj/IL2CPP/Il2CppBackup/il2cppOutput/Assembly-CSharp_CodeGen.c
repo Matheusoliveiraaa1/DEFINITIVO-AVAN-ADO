@@ -1,0 +1,96 @@
+﻿#include "pch-c.h"
+
+
+#include "codegen/il2cpp-codegen-metadata.h"
+
+
+
+
+
+extern void Waypoint__ctor_m6DE0E34AE59F18AB7F0BFCCD477772876C4CBD2C (void);
+extern void LocationBridge_Start_mC93083C192D53853DC9FD9E9D571204CCC3C256C (void);
+extern void LocationBridge_RequestPermissionsSequence_m47C7187DCA68246853B487F520648FAB74BEF7CE (void);
+extern void LocationBridge_StartLocationService_mEA93F58F27201C1B9A0675A16C0EC6A7D3312BDD (void);
+extern void LocationBridge_UpdateLocation_m9DCC5146477513B384C30CE60A013607122BEC99 (void);
+extern void LocationBridge_OnPointReached_mC1E32B868511B2F032CF3B1C76B91973FD49558F (void);
+extern void LocationBridge_BuildWaypointsJson_mDA36FB17292A69AD6267DB3210A5E7752166757F (void);
+extern void LocationBridge__ctor_m506C2C42A973B5371FB2EEE15B296FF7CBBA437F (void);
+extern void U3CU3Ec__cctor_m2BD8F4FC233FC86EDE8E85D9DB02BC19871C3D8E (void);
+extern void U3CU3Ec__ctor_m902E33F89E3727996B26294379FAD995E4FC4F89 (void);
+extern void U3CU3Ec_U3CRequestPermissionsSequenceU3Eb__4_0_mAFE202766E4915B9C1DD4FBF5C72FD169352D571 (void);
+extern void U3CU3Ec_U3CRequestPermissionsSequenceU3Eb__4_1_m0085480BB2143CD0DA9875E399CAE65383B997E0 (void);
+extern void U3CRequestPermissionsSequenceU3Ed__4__ctor_m5D2C0EAFB2805139F6B2E30B8995EF58073955E3 (void);
+extern void U3CRequestPermissionsSequenceU3Ed__4_System_IDisposable_Dispose_m5D09C1AEEAF1E16F283BD1481E91094E5EA2BFBE (void);
+extern void U3CRequestPermissionsSequenceU3Ed__4_MoveNext_m86C8998AB40CF5AFA9F7F31C79C40C2B65C23649 (void);
+extern void U3CRequestPermissionsSequenceU3Ed__4_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mEBDD5259D8FD1F259BC02A86806239A8B0CFDBAF (void);
+extern void U3CRequestPermissionsSequenceU3Ed__4_System_Collections_IEnumerator_Reset_mFD0FDA3159125A4959AA408E1D6C1146DB81F10E (void);
+extern void U3CRequestPermissionsSequenceU3Ed__4_System_Collections_IEnumerator_get_Current_m114CD5301543F44B529F41080A239F340C1F4980 (void);
+extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033 (void);
+extern void UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1 (void);
+static Il2CppMethodPointer s_methodPointers[20] = 
+{
+	Waypoint__ctor_m6DE0E34AE59F18AB7F0BFCCD477772876C4CBD2C,
+	LocationBridge_Start_mC93083C192D53853DC9FD9E9D571204CCC3C256C,
+	LocationBridge_RequestPermissionsSequence_m47C7187DCA68246853B487F520648FAB74BEF7CE,
+	LocationBridge_StartLocationService_mEA93F58F27201C1B9A0675A16C0EC6A7D3312BDD,
+	LocationBridge_UpdateLocation_m9DCC5146477513B384C30CE60A013607122BEC99,
+	LocationBridge_OnPointReached_mC1E32B868511B2F032CF3B1C76B91973FD49558F,
+	LocationBridge_BuildWaypointsJson_mDA36FB17292A69AD6267DB3210A5E7752166757F,
+	LocationBridge__ctor_m506C2C42A973B5371FB2EEE15B296FF7CBBA437F,
+	U3CU3Ec__cctor_m2BD8F4FC233FC86EDE8E85D9DB02BC19871C3D8E,
+	U3CU3Ec__ctor_m902E33F89E3727996B26294379FAD995E4FC4F89,
+	U3CU3Ec_U3CRequestPermissionsSequenceU3Eb__4_0_mAFE202766E4915B9C1DD4FBF5C72FD169352D571,
+	U3CU3Ec_U3CRequestPermissionsSequenceU3Eb__4_1_m0085480BB2143CD0DA9875E399CAE65383B997E0,
+	U3CRequestPermissionsSequenceU3Ed__4__ctor_m5D2C0EAFB2805139F6B2E30B8995EF58073955E3,
+	U3CRequestPermissionsSequenceU3Ed__4_System_IDisposable_Dispose_m5D09C1AEEAF1E16F283BD1481E91094E5EA2BFBE,
+	U3CRequestPermissionsSequenceU3Ed__4_MoveNext_m86C8998AB40CF5AFA9F7F31C79C40C2B65C23649,
+	U3CRequestPermissionsSequenceU3Ed__4_System_Collections_Generic_IEnumeratorU3CSystem_ObjectU3E_get_Current_mEBDD5259D8FD1F259BC02A86806239A8B0CFDBAF,
+	U3CRequestPermissionsSequenceU3Ed__4_System_Collections_IEnumerator_Reset_mFD0FDA3159125A4959AA408E1D6C1146DB81F10E,
+	U3CRequestPermissionsSequenceU3Ed__4_System_Collections_IEnumerator_get_Current_m114CD5301543F44B529F41080A239F340C1F4980,
+	UnitySourceGeneratedAssemblyMonoScriptTypes_v1_Get_mBEB95BEB954BB63E9710BBC7AD5E78C4CB0A0033,
+	UnitySourceGeneratedAssemblyMonoScriptTypes_v1__ctor_mE70FB23ACC1EA12ABC948AA22C2E78B2D0AA39B1,
+};
+static const int32_t s_InvokerIndices[20] = 
+{
+	6980,
+	6980,
+	6852,
+	6980,
+	5567,
+	5567,
+	6852,
+	6980,
+	9803,
+	6980,
+	6730,
+	6730,
+	5522,
+	6980,
+	6730,
+	6852,
+	6980,
+	6852,
+	9812,
+	6980,
+};
+IL2CPP_EXTERN_C const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule;
+const Il2CppCodeGenModule g_AssemblyU2DCSharp_CodeGenModule = 
+{
+	"Assembly-CSharp.dll",
+	20,
+	s_methodPointers,
+	0,
+	NULL,
+	s_InvokerIndices,
+	0,
+	NULL,
+	0,
+	NULL,
+	0,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+	NULL,
+};

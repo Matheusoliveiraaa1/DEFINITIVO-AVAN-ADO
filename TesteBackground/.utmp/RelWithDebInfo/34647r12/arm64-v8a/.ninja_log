@@ -1,0 +1,23 @@
+# ninja log v5
+245	1582	7992060771371881	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	fe2e05e54861a158
+68	5825	7992060813969914	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	c31b439715c8d1b3
+95	4960	7992060805294083	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	8e0e74df1ba0b0e2
+156	5209	7992060807699097	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	b761218d62c1e0e
+217	4879	7992060804421332	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	cfa21ca79321d45a
+131	4755	7992060803125640	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	5c6f53a2daf1052a
+1584	2714	7992060781856464	C:/Users/mathe/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/TesteBackground/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/34647r12/obj/arm64-v8a/libswappywrapper.so	ad847b95fdca330d
+234	5562	7992060811319117	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	2cfb92b9095459d7
+170	4707	7992060802294984	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	5305f57e2bc806af
+204	5400	7992060809713716	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	f6db932577397431
+5826	6223	7992060818039220	C:/Users/mathe/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/TesteBackground/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/34647r12/obj/arm64-v8a/libgame.so	b29875879184cde8
+1660	2226	7992764569679481	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	fe2e05e54861a158
+253	2761	7992764574916742	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	b761218d62c1e0e
+449	2877	7992764575994832	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	8e0e74df1ba0b0e2
+633	3084	7992764578228118	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	5c6f53a2daf1052a
+2227	3166	7992764578703567	C:/Users/mathe/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/TesteBackground/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/34647r12/obj/arm64-v8a/libswappywrapper.so	ad847b95fdca330d
+43	3371	7992764580928880	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	c31b439715c8d1b3
+1010	3526	7992764582685906	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	cfa21ca79321d45a
+1444	3753	7992764584949920	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	5305f57e2bc806af
+816	3784	7992764585328025	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	2cfb92b9095459d7
+1231	3842	7992764585869513	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	f6db932577397431
+3843	4263	7992764589956402	C:/Users/mathe/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/TesteBackground/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/34647r12/obj/arm64-v8a/libgame.so	b29875879184cde8

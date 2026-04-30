@@ -1,0 +1,19 @@
+# ninja log v5
+146	3317	7992767887509253	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	8811febd22b1e102
+157	3196	7992767886230289	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	7b7338a33b4997a7
+136	3128	7992767885601971	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	2d1960fba8281f3c
+195	3506	7992767889341614	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	3eaff9d5a0a4f41b
+4171	4576	7992767900104988	C:/Users/mathe/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1l2p3k68/obj/arm64-v8a/libgame.so	ef9f23894cb4ba5c
+99	3124	7992767885309115	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	9d0fc49e695de11d
+69	4170	7992767895820636	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	233b7c66f486d5a8
+171	3100	7992767885190158	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	a48dc57ee540dea3
+182	3736	7992767891606744	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	f8f6af29d95dad99
+139	4179	7992809991095916	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	9d0fc49e695de11d
+154	4188	7992809991095916	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	a48dc57ee540dea3
+95	4199	7992809991671900	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	8811febd22b1e102
+196	4210	7992809991516650	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	7b7338a33b4997a7
+127	4214	7992809991532267	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	2d1960fba8281f3c
+187	4397	7992809993463195	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	3eaff9d5a0a4f41b
+207	4794	7992809997574468	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	f8f6af29d95dad99
+69	5053	7992810000121282	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	233b7c66f486d5a8
+5054	5467	7992810004339605	C:/Users/mathe/Documents/GitHub/PROJETO-FLORESTASC-NA-TRILHA/DEFINITIVO/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/1l2p3k68/obj/arm64-v8a/libgame.so	ef9f23894cb4ba5c

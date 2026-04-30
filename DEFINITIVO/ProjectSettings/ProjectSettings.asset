@@ -80,7 +80,7 @@ PlayerSettings:
   androidFullscreenMode: 1
   androidAutoRotationBehavior: 1
   androidPredictiveBackSupport: 0
-  androidApplicationEntry: 2
+  androidApplicationEntry: 3
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
   runInBackground: 0
@@ -273,7 +273,7 @@ PlayerSettings:
   AndroidAllowedArchitectures: -1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{dedicated}: FlorestaSCRVAltKey.keystore'
+  AndroidKeystoreName: C:/Users/mathe/Downloads/FlorestaSCRVAltKey (1).keystore
   AndroidKeyaliasName: florestascrvalt
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0
