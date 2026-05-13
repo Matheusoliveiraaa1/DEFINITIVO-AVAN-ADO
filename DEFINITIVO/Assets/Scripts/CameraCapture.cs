@@ -1158,7 +1158,7 @@ public class NativeCameraExample : MonoBehaviour
         }
 
         StartCoroutine(WriteTextLetterByLetter(
-            "Parabéns, você concluiu todas as áreas! Volte novamente ao parque para explorar novamente!",
+            "Parabéns, você concluiu todas as áreas! Volte ao parque para explorar de novo!!",
             cursoDaguaPanelText));
 
         StartCoroutine(MoveImageMaisVivo(cursoDaguaPanelImage));

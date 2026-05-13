@@ -273,7 +273,7 @@ PlayerSettings:
   AndroidAllowedArchitectures: -1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/mathe/Downloads/FlorestaSCRVAltKey (1).keystore
+  AndroidKeystoreName: C:/Users/mathe/Downloads/FlorestaSCRVAltKey.keystore
   AndroidKeyaliasName: florestascrvalt
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0

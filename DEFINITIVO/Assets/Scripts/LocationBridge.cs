@@ -5,6 +5,13 @@ using System.Collections;
 using System.Globalization;
 using System.Text;
 
+public enum WaypointTipo
+{
+    Especie,
+    AreaFoto,
+    AreaVideo
+}
+
 [System.Serializable]
 public class Waypoint
 {
@@ -12,6 +19,7 @@ public class Waypoint
     public double lat;
     public double lng;
     public float radius = 50f;
+    public WaypointTipo tipo = WaypointTipo.Especie;
 }
 
 public class LocationBridge : MonoBehaviour
@@ -26,7 +34,6 @@ public class LocationBridge : MonoBehaviour
 
     void Start()
     {
-        // Garantindo que o nome do objeto está correto para receber mensagens do Java
         if (gameObject.name != "LocationManager")
         {
             gameObject.name = "LocationManager";
@@ -35,7 +42,6 @@ public class LocationBridge : MonoBehaviour
 
         if (locationText != null) locationText.text = "Checando permissões...";
 
-        // Inicia a sequência que pede permissão e liga o serviço no final
         StartCoroutine(RequestPermissionsSequence());
     }
 
@@ -43,7 +49,6 @@ public class LocationBridge : MonoBehaviour
     {
         if (Application.platform != RuntimePlatform.Android) yield break;
 
-        // 1. Localização Precisa (Obrigatório)
         if (!Permission.HasUserAuthorizedPermission(Permission.FineLocation))
         {
             Debug.Log($"[{UNITY_TAG}] Solicitando FineLocation...");
@@ -51,7 +56,6 @@ public class LocationBridge : MonoBehaviour
             yield return new WaitUntil(() => Permission.HasUserAuthorizedPermission(Permission.FineLocation));
         }
 
-        // 2. Notificações (Android 13+)
         if (!Permission.HasUserAuthorizedPermission("android.permission.POST_NOTIFICATIONS"))
         {
             Debug.Log($"[{UNITY_TAG}] Solicitando permissão de Notificação...");
@@ -59,20 +63,14 @@ public class LocationBridge : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
         }
 
-        // 3. Localização em Segundo Plano (Android 11+)
-        // Nota: Isso abre o menu de configurações do celular
         if (!Permission.HasUserAuthorizedPermission("android.permission.ACCESS_BACKGROUND_LOCATION"))
         {
             Debug.Log($"[{UNITY_TAG}] Solicitando Background Location (abrindo configurações)...");
             Permission.RequestUserPermission("android.permission.ACCESS_BACKGROUND_LOCATION");
-
-            // Espera o usuário voltar para o app e decidir
             yield return new WaitUntil(() => Permission.HasUserAuthorizedPermission("android.permission.ACCESS_BACKGROUND_LOCATION"));
         }
 
         Debug.Log($"[{UNITY_TAG}] Todas as permissões concedidas! Iniciando serviço automaticamente...");
-
-        // CHAMA O INÍCIO DO SERVIÇO AUTOMATICAMENTE AQUI
         StartLocationService();
     }
 
@@ -134,7 +132,17 @@ public class LocationBridge : MonoBehaviour
         {
             if (i > 0) sb.Append(",");
             var wp = waypoints[i];
-            sb.Append($"{{\"lat\":{wp.lat.ToString(CultureInfo.InvariantCulture)},\"lng\":{wp.lng.ToString(CultureInfo.InvariantCulture)},\"radius\":{wp.radius.ToString(CultureInfo.InvariantCulture)},\"nome\":\"{wp.nome}\"}}");
+
+            // Converte o enum para string para enviar ao Java
+            string tipoStr = wp.tipo.ToString(); // "Especie", "AreaFoto" ou "AreaVideo"
+
+            sb.Append($"{{" +
+                $"\"lat\":{wp.lat.ToString(CultureInfo.InvariantCulture)}," +
+                $"\"lng\":{wp.lng.ToString(CultureInfo.InvariantCulture)}," +
+                $"\"radius\":{wp.radius.ToString(CultureInfo.InvariantCulture)}," +
+                $"\"nome\":\"{wp.nome}\"," +
+                $"\"tipo\":\"{tipoStr}\"" +
+                $"}}");
         }
         sb.Append("]");
         return sb.ToString();

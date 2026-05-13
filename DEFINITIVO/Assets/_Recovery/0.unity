@@ -12670,33 +12670,33 @@ MonoBehaviour:
   stickerNotificationImage: {fileID: 1323261248}
   areaTeste: 0
   detectionRadius: 0
-  entryDetectionRadius: 1e+13
+  entryDetectionRadius: 1e+19
   notificationDuration: 3
   accuracyMultiplier: 0.8
   maxGpsRadius: 30
   areaPoints:
-  - latitude: -26.92104
-    longitude: -49.07204
+  - latitude: -26.91225
+    longitude: -49.07356
     message: 
     areaName: CursoDagua
-    detectionRadius: 12
-  - latitude: -26.92128
-    longitude: -49.07336
+    detectionRadius: 20
+  - latitude: -27.13918
+    longitude: -48.51205
     message: 
     areaName: Epifitas
-    detectionRadius: 15
-  - latitude: -26.92136
-    longitude: -49.07263
+    detectionRadius: 30
+  - latitude: -26.912189
+    longitude: -49.07368
     message: 
     areaName: Serrapilheira
     detectionRadius: 15
-  - latitude: -26.921367
-    longitude: -49.075164
+  - latitude: -26.90568
+    longitude: -49.07918
     message: 
     areaName: Dossel
     detectionRadius: 15
-  - latitude: -26.921064
-    longitude: -49.07395
+  - latitude: -26.90567
+    longitude: -49.07948
     message: 
     areaName: Subosque
     detectionRadius: 15
@@ -12740,7 +12740,7 @@ MonoBehaviour:
     areaName: Subosque
     stickerIndex: 3
     entryMode: 0
-    detectionRadius: 12
+    detectionRadius: 15
   - ID: Coleta6
     latitude: -26.920925
     longitude: -49.074908
@@ -12782,8 +12782,8 @@ MonoBehaviour:
     entryMode: 0
     detectionRadius: 10
   - ID: Coleta11
-    latitude: 0
-    longitude: 0
+    latitude: 1
+    longitude: 1
     message: 
     areaName: CursoDagua
     stickerIndex: 5
@@ -12801,7 +12801,7 @@ MonoBehaviour:
   gpsDisabledPanel: {fileID: 1725178816}
   videoLatitude: -26.92052
   videoLongitude: -49.07589
-  videoDetectionRadius: 12
+  videoDetectionRadius: 15
   videoFileName: PosBambuzal.mp4
 --- !u!224 &1103364858
 RectTransform:
@@ -13009,7 +13009,7 @@ MonoBehaviour:
   epifitasStickers:
   - {fileID: 21300000, guid: de4020fb064351d4daa74a0c4a1d1bd4, type: 3}
   - {fileID: 21300000, guid: d5ceaec2e53b50e4d8e9223562ce42b2, type: 3}
-  - {fileID: 21300000, guid: b5be9746e13ed2b498a727f9bde535f1, type: 3}
+  - {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
   - {fileID: 21300000, guid: c7746fad7647b4140adbcb6622f425b9, type: 3}
   - {fileID: 21300000, guid: 65f3d4eca75ff6c45b5ee82457e6527b, type: 3}
   serrapilheiraStickers:
@@ -13154,13 +13154,12 @@ MonoBehaviour:
     stickerSprite: {fileID: 21300000, guid: c7746fad7647b4140adbcb6622f425b9, type: 3}
     description: "Vive em brom\xE9lias e nelas cria seus filhotes. \xC9 sens\xEDvel
       \xE0s mudan\xE7as do ambiente e indica equil\xEDbrio ecol\xF3gico."
-  - commonName: "L\xEDquen"
+  - commonName: Musgo
     scientificName: 
-    realPhoto: {fileID: 21300000, guid: 7fec57bc58beeee41ae2df39d15a81d2, type: 3}
-    stickerSprite: {fileID: 21300000, guid: b5be9746e13ed2b498a727f9bde535f1, type: 3}
-    description: "Organismos formados pela uni\xE3o (simbiose) entre fungos e algas.
-      Por serem sens\xEDveis \xE0 polui\xE7\xE3o, funcionam como bioindicadores,
-      revelando a qualidade do ar e a umidade de ambientes preservados."
+    realPhoto: {fileID: 21300000, guid: 68cb51f1529b32c46b7ada2e599b7b7f, type: 3}
+    stickerSprite: {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
+    description: "Pequeno e delicado, cresce onde h\xE1 umidade. Ret\xE9m \xE1gua
+      e prepara o solo para novas plantas. "
   - commonName: "Orqu\xEDdea"
     scientificName: Cattleya purpurata
     realPhoto: {fileID: 21300000, guid: b1ca91e7902d56143ace7e13be2b9029, type: 3}
@@ -13252,7 +13251,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 05bfde42574703c4998b6ad56d2ee4c8, type: 3}
   - {fileID: 21300000, guid: bb4dba59b6181f4478ed055e6020ceb4, type: 3}
   - {fileID: 21300000, guid: e10c79eb4ebc0c2459ee7202c6b93836, type: 3}
-  - {fileID: 21300000, guid: b5be9746e13ed2b498a727f9bde535f1, type: 3}
+  - {fileID: 21300000, guid: 0f91da6d00148574f9a5104cdac10ef1, type: 3}
   - {fileID: 21300000, guid: de4020fb064351d4daa74a0c4a1d1bd4, type: 3}
   - {fileID: 21300000, guid: e7218cacb5d2d434880bb7afd2ef0d7e, type: 3}
   - {fileID: 21300000, guid: 29b44e0a7e9c1754685e543ca52e05b3, type: 3}
@@ -15438,86 +15437,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LocationBridge
   waypoints:
-  - nome: CursoDagua
-    lat: -26.92104
-    lng: -49.07204
-    radius: 22
-    tipo: 1
-  - nome: Epifitas
-    lat: -26.92128
-    lng: -49.07336
-    radius: 22
-    tipo: 1
-  - nome: Serrapilheira
-    lat: -26.92136
-    lng: -49.07263
-    radius: 22
-    tipo: 1
-  - nome: Dossel
-    lat: -26.921367
-    lng: -49.075164
-    radius: 22
-    tipo: 1
-  - nome: Subosque
-    lat: -26.921064
-    lng: -49.07395
-    radius: 22
-    tipo: 1
-  - nome: coleta1
-    lat: -26.921272
-    lng: -49.071814
+  - nome: TestePraia
+    lat: -26.90556
+    lng: -49.07983
     radius: 20
-    tipo: 0
-  - nome: coleta2
-    lat: -26.921447
-    lng: -49.072914
-    radius: 22
-    tipo: 0
-  - nome: coleta3
-    lat: -26.921339
-    lng: -49.073961
-    radius: 22
-    tipo: 0
-  - nome: coleta4
-    lat: -26.921347
-    lng: -49.074342
-    radius: 22
-    tipo: 0
-  - nome: coleta5
-    lat: -26.920503
-    lng: -49.075869
-    radius: 22
-    tipo: 0
-  - nome: coleta6
-    lat: -26.920925
-    lng: -49.074908
-    radius: 22
-    tipo: 0
-  - nome: coleta7
-    lat: 26.921083
-    lng: -49.073208
-    radius: 22
-    tipo: 0
-  - nome: coleta8
-    lat: -26.921039
-    lng: -49.072347
-    radius: 22
-    tipo: 0
-  - nome: coleta9
-    lat: -26.921297
-    lng: -49.072281
-    radius: 22
-    tipo: 0
-  - nome: coleta10
-    lat: -26.921389
-    lng: -49.073169
-    radius: 22
-    tipo: 0
-  - nome: VideoArea
-    lat: -26.92052
-    lng: -49.07589
-    radius: 22
-    tipo: 2
+    tipo: 1
   locationText: {fileID: 0}
 --- !u!1 &1303499750
 GameObject:
@@ -18732,7 +18656,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1448855984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22808,7 +22732,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1848800779
 MonoBehaviour:
   m_ObjectHideFlags: 0
